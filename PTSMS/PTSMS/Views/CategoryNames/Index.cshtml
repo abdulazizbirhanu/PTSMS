@@ -1,0 +1,93 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.References.CategoryName>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Category Name List";
+    ViewBag.TableId = "tblCategoryName";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dataTables_length" id="example1_length">
+                <label>
+                    Show
+                    <select name="example1_length" aria-controls="example1" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries
+                </label>
+            </div>
+        </div><div class="col-sm-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="example1"></label></div></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+
+            <table id="tblCategoryName" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+                <thead>
+                    <tr>
+                        <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">
+                            No.
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">
+                            Previous @Html.DisplayNameFor(model => model.PreviousCategoryName.Name)
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">
+                            @Html.DisplayNameFor(model => model.EffectiveDate)
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">
+                            @Html.DisplayNameFor(model => model.RevisionNo)
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr role="row" class="odd">
+                                <td>
+                                    @(i++)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PreviousCategoryName.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EffectiveDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RevisionNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.CategoryNameId }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.CategoryNameId }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.CategoryNameId })
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

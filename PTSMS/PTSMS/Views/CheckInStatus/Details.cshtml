@@ -1,0 +1,59 @@
+﻿@model PTSMSDAL.Models.Dispatch.Master.CheckInStatus
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CheckInStatus</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PreviousCheckInStatus.CheckInStatusName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousCheckInStatus.CheckInStatusName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckInStatusName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckInStatusName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CheckInStatusId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

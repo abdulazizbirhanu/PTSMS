@@ -1,0 +1,125 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Dispatch.Master.OverallGradeUpdateRequest>
+@using PTSMSDAL.Models.Dispatch.Master
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Overall Grade Update Request";
+    ViewBag.TableId = "tblOverallGradeUpdateRequest";
+    ViewBag.DefualtSortingColumnIndex = 1;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            @{
+                 if (ViewBag.OverallGradeUpdateRequest != null)
+                 {
+                     <text>
+                          bootbox.alert('@ViewBag.OverallGradeUpdateRequest');
+                     </text>
+                     ViewBag.OverallGradeUpdateRequest = null;
+                 }
+             }
+
+            $('body').on('click', ".btnApprove", function () {
+
+                var OverallGradeUpdateRequestId = $(this).data('id');
+                alert('OverallGradeUpdateRequestId' + OverallGradeUpdateRequestId);
+                var IsApprove = true;
+                var URL = "/OverallGradeUpdateRequest/OverallGradeUpdateRequestApproval";
+                URL = URL + "?OverallGradeUpdateRequestId=" + OverallGradeUpdateRequestId + "&IsApprove=" + IsApprove;
+                location.href = URL;
+            });
+
+
+            $('body').on('click', ".btnReject", function () {
+
+                var OverallGradeUpdateRequestId = $(this).data('id');
+                alert('OverallGradeUpdateRequestId' + OverallGradeUpdateRequestId);
+                var IsApprove = false;
+                var URL = "/OverallGradeUpdateRequest/OverallGradeUpdateRequestApproval";
+                URL = URL + "?OverallGradeUpdateRequestId=" + OverallGradeUpdateRequestId + "&IsApprove=" + IsApprove;
+                location.href = URL;
+            });
+        });
+    </script>
+}
+
+<div class="box-body table-responsive no-padding">
+    <table id="tblOverallGradeUpdateRequest" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+        <thead>
+            <tr>
+                <th>SNo.</th>
+                <th>
+                    Trainee
+                </th>
+                <th>
+                    Instructor
+                </th>
+                <th>
+                    Lesson
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NewOverallGrade.OverallGradeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RequestedDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(i++)</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FlyingFTDSchedule.Trainee.Person.FirstName)  @Html.DisplayFor(modelItem => item.FlyingFTDSchedule.Trainee.Person.MiddleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FlyingFTDSchedule.Instructor.Person.FirstName)  @Html.DisplayFor(modelItem => item.FlyingFTDSchedule.Instructor.Person.MiddleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FlyingFTDSchedule.Lesson.LessonName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NewOverallGrade.OverallGradeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RequestedDate)
+                        </td>
+                        <td>
+                            @if (item.Status == Enum.GetName(typeof(OverallGradeUpdateRequestStatus), 0))
+                            {
+                                <input type="button" value="Approve" id="btnApprove" class="btn btn-info btnApprove" data-id="@item.OverallGradeUpdateRequestId" />
+                                <input type="button" value="Reject" id="btnReject" class="btn btn-warning btnReject" data-id="@item.OverallGradeUpdateRequestId" />
+                            }
+                            else if (item.Status == Enum.GetName(typeof(OverallGradeUpdateRequestStatus), 1))
+                            {
+                                <input type="button" value="Reject" class="btn btn-warning btnReject" data-id="@item.OverallGradeUpdateRequestId" />
+                            }
+                            else if (item.Status == Enum.GetName(typeof(OverallGradeUpdateRequestStatus), 2))
+                            {
+                                <input type="button" value="Approve" id="btnApprove" class="btn btn-info btnApprove" data-id="@item.OverallGradeUpdateRequestId" />
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

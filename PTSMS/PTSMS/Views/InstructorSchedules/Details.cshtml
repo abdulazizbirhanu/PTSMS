@@ -1,0 +1,34 @@
+﻿@model PTSMSDAL.Models.Scheduling.Relations.ModuleInstructorSchedule
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Module Instructor Schedule Details.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div>
+    <h4>InstructorSchedule</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Instructor.Person.CompanyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Instructor.Person.CompanyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Module.ModuleCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Module.ModuleCode)
+        </dd>       
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ModuleInstructorScheduleId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

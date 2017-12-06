@@ -1,0 +1,107 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.Category>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Category List.";
+    ViewBag.TableId = "tblCategories";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="table-responsive">
+    <table id="tblCategories" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+        <thead>
+            <tr>
+                <th>
+                    No.
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CategoryType.Type)
+                </th>
+                <th>
+                    Previous @Html.DisplayNameFor(model => model.PreviousCategory.CategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TimeAircraftDual)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TimeAircraftSolo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FTDTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PilotFlying)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PilotMonitoring)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EffectiveDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RevisionNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    string effectiveDate = item.EffectiveDate.ToString("dd/MM/yyyy");
+                    <tr role="row" class="odd">
+                        <td>@(i++)</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryType.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreviousCategory.CategoryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TimeAircraftDual)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TimeAircraftSolo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FTDTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PilotFlying)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PilotMonitoring)
+                        </td>
+                        <td>
+                            @effectiveDate
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RevisionNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.CategoryId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.CategoryId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

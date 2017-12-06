@@ -1,0 +1,250 @@
+﻿@model PTSMSDAL.Models.Scheduling.References.EquipmentMaintenance
+@using PTSMSDAL.Models.Scheduling.References;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+@section scripts{
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+
+        
+        //////////////////////////////////
+        var formattedDate = new Date();
+        var d = formattedDate.getDate();
+        var m = formattedDate.getMonth();
+        m += 1;  // JavaScript months are 0-11
+        var y = formattedDate.getFullYear();
+        var formatedDate = m + "/" + d + "/" + y;
+        var endDate = "12/31/9999";
+
+        $("#EventType").val(1);
+        debugger;
+
+        if ($("#EventType").val() == "0") {
+            $(".NextMaintenanceHourform").hide();
+            $("#ScheduledMaintenanceHour").val("");
+
+            $("#ParameterType option[value='0']").remove();
+            
+            $("#ScheduledCalanderStartDate").val(formatedDate);
+            $("#ScheduledCalanderEndDate").val(endDate);
+        }
+        if ($("#EventType").val() == "1") {
+            $(".NextMaintenanceHourform").show();
+            //$('#ParameterType').append('<option selected="selected" value="0">Hour</option>')
+        }
+
+        if ($("#ParameterType").val() == "0") {
+            $(".PTSMSDatepickerForm").hide();
+            //$("#CalanderEndDate").val("");
+            $("#ScheduledCalanderStartDate").val("");
+            $("#ScheduledCalanderEndDate").val("");
+
+            $(".NextMaintenanceHourform").show();
+        }
+
+        if ($("#ParameterType").val() == "1") {
+            $(".PTSMSDatepickerForm").show();
+
+            $(".NextMaintenanceHourform").hide();
+            $("#ScheduledMaintenanceHour").val("");
+        }
+
+        $("#EventType").change(function () {
+
+            if (this.value == "0") {
+                $(".NextMaintenanceHourform").hide();
+                $("#ScheduledMaintenanceHour").val("");
+
+                $(".PTSMSDatepickerForm").show();
+
+                $("#ParameterType option[value='0']").remove();
+            }
+            if (this.value == "1") {
+                $(".NextMaintenanceHourform").show();
+
+                $(".PTSMSDatepickerForm").hide();
+                //$("#CalanderEndDate").val("");
+                $("#ScheduledCalanderStartDate").val("");
+                $("#ScheduledCalanderEndDate").val("");
+
+                $('#ParameterType').append('<option selected="selected" value="0">Hour</option>');
+            }
+        });
+
+        $("#ParameterType").change(function () {
+            if (this.value == "0") {
+                $(".NextMaintenanceHourform").show();
+
+                $(".PTSMSDatepickerForm").hide();
+                //$("#CalanderEndDate").val("");
+                $("#ScheduledCalanderStartDate").val("");
+                $("#ScheduledCalanderEndDate").val("");
+            }
+            if (this.value == "1") {
+                $(".NextMaintenanceHourform").hide();
+                $("#ScheduledMaintenanceHour").val("");
+
+                $(".PTSMSDatepickerForm").show();
+            }
+        });
+
+
+    </script>
+}
+
+
+<h2>Create Equipment Maintenance</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.EquipmentId, "EquipmentId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.DropDownList("EquipmentId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EquipmentId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaintenanceName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.MaintenanceName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MaintenanceName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EventType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EnumDropDownListFor(model => model.EventType, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EventType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ParameterType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EnumDropDownListFor(model => model.ParameterType, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ParameterType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group PTSMSDatepickerForm">
+            @Html.LabelFor(model => model.ScheduledCalanderStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.ScheduledCalanderStartDate, new { htmlAttributes = new { @class = "form-control PTSMSDatepicker" } })
+                @Html.ValidationMessageFor(model => model.ScheduledCalanderStartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group PTSMSDatepickerForm">
+            @Html.LabelFor(model => model.ScheduledCalanderEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.ScheduledCalanderEndDate, new { htmlAttributes = new { @class = "form-control PTSMSDatepicker" } })
+                @Html.ValidationMessageFor(model => model.ScheduledCalanderEndDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group NextMaintenanceHourform">
+            @Html.LabelFor(model => model.ScheduledMaintenanceHour, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.ScheduledMaintenanceHour, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ScheduledMaintenanceHour, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.ActualCalanderStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.ActualCalanderStartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ActualCalanderStartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ActualCalanderEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.ActualCalanderEndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ActualCalanderEndDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ActualMaintenanceHour, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.ActualMaintenanceHour, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ActualMaintenanceHour, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", @style = "width: 100%; max-width: 100%;" })@*htmlAttributes = new { @class = "form-control"} })*@
+                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*@{ // you can put the following in a back-end method and pass through ViewBag
+            var selectList = Enum.GetValues(typeof())
+                                 .Cast<StatusType>()
+                                 .Where(e => e != UserStatus.Pending)
+                                 .Select(e => new SelectListItem
+                                 {
+                                     Value = ((int)e).ToString(),
+                                     Text = e.ToString()
+                                 });
+        }*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @{ // you can put the following in a back-end method and pass through ViewBag
+                    var selectList = Enum.GetValues(typeof(StatusType))
+                                         .Cast<StatusType>()
+                                         .Where(e => e != StatusType.Completed)
+                                         .Select(e => new SelectListItem
+                                         {
+                                             Value = ((int)e).ToString(),
+                                             Text = e.ToString()
+                                         });
+                }
+                @Html.DropDownListFor(model => model.Status, selectList,  htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+            
+            
+           
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-6">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

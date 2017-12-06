@@ -1,0 +1,113 @@
+﻿@model PTSMSDAL.Models.Scheduling.References.EquipmentMaintenance
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>EquipmentMaintenance</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Equipment.NameOrSerialNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Equipment.NameOrSerialNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaintenanceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaintenanceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EventType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EventType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParameterType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParameterType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ScheduledCalanderStartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ScheduledCalanderStartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ScheduledMaintenanceHour)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ScheduledMaintenanceHour)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualCalanderStartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualCalanderStartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualCalanderEndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualCalanderEndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualMaintenanceHour)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualMaintenanceHour)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

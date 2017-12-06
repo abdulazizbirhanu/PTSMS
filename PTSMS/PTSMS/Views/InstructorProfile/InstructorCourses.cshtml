@@ -1,0 +1,377 @@
+﻿
+@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.Course>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Course List.";
+    ViewBag.TableId = "tblCourse";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<style>
+    #ModuleListModalPopup .modal-dialog {
+        width: 75%;
+    }
+</style>
+
+<link href="~/Content/BootstrapDataTable/BootstrapDataTableCSS.css" rel="stylesheet" />
+
+@section scripts
+    {
+     
+    <script src="~/Scripts/BootstrapDataTables/BootstrapDataTables.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('body').on('click', ".moduleList", function () {
+
+                var courseId = $(this).attr("data-id");
+
+                $('#myEditModalLabel').html('Module List');
+
+                var url = "/InstructorProfile/ModuleList";
+
+                url = url + '?courseId=' + courseId;
+
+                $.get(url, function (data) {
+
+                    $('#moduleList-container').empty();
+                    $('#moduleList-container').html(data);
+                    $('#ModuleListModalPopup').modal('show');
+
+                });
+            });
+
+            $('body').on('click', ".moduleExamList", function () {
+
+                var moduleId = $(this).attr("data-id");
+
+                $('#myEditModalLabel').html('Module Exam List');
+
+                var url = "/InstructorProfile/ModuleExamList";
+
+                url = url + '?moduleId=' + moduleId;
+
+                $.get(url, function (data) {
+
+                    $('#moduleList-container').empty();
+                    $('#moduleList-container').html(data);
+                    $('#ModuleListModalPopup').modal('show');
+
+                });
+            });
+
+            $('body').on('click', ".moduleExamDetail", function () {
+
+                var moduleExamId = $(this).attr("data-id");
+
+                $('#myEditModalLabel').html('Module Exam Detail');
+
+                var url = "/InstructorProfile/ModuleExamDetails";
+
+                url = url + '?moduleExamId=' + moduleExamId;
+
+                $.get(url, function (data) {
+
+                    $('#moduleList-container').empty();
+                    $('#moduleList-container').html(data);
+                    $('#ModuleListModalPopup').modal('show');
+
+                });
+            });
+
+            $('body').on('click', ".moduleDetail", function () {
+
+                var moduleId = $(this).attr("data-id");
+
+                $('#myEditModalLabel').html('Module Detail');
+
+                var url = "/InstructorProfile/ModuleDetails";
+
+                url = url + '?moduleId=' + moduleId;
+                $.get(url, function (data) {
+                    $('#moduleList-container').empty();
+                    $('#moduleList-container').html(data);
+                    $('#ModuleListModalPopup').modal('show');
+                });
+            });
+
+            $('body').on('click', ".courseExamList", function () {
+
+                var courseId = $(this).attr("data-id");
+
+                $('#myEditModalLabel').html('Course Exam List');
+
+                var url = "/InstructorProfile/CourseExamList";
+
+                url = url + '?courseId=' + courseId;
+
+                $.get(url, function (data) {
+
+                    $('#moduleList-container').empty();
+                    $('#moduleList-container').html(data);
+                    $('#ModuleListModalPopup').modal('show');
+
+                });
+            });
+
+            $('body').on('click', ".courseExamDetail", function () {
+
+                var courseExamId = $(this).attr("data-id");
+
+                $('#myEditModalLabel').html('Course Exam Detail');
+
+                var url = "/InstructorProfile/CourseExamDetails";
+
+                url = url + '?courseExamId=' + courseExamId;
+
+                $.get(url, function (data) {
+                    $('#moduleList-container').empty();
+                    $('#moduleList-container').html(data);
+                    $('#ModuleListModalPopup').modal('show');
+                });
+            });
+
+            //// new 
+
+            $('body').on('click', ".moduleActivityList", function () {
+                var moduleId = $(this).data('id');
+                var url = "/ModuleActivity/ModuleActivityList?moduleId=" + moduleId;
+
+                $('#moduleActivityModalPopupTitle').html("Module Activity List");
+
+                $.get(url, function (data) {
+                    $('#ModuleActivity-Container').html(data);
+                    $('#AddModuleActivity').modal('show'); ///
+                });
+            });
+
+            $('body').on('click', ".createModuleActivity", function () {
+                var moduleId = $(this).data('id');
+                var url = "/ModuleActivity/CreateModuleActivity?moduleId=" + moduleId;
+                $('#moduleActivityModalPopupTitle').html("Create Module Activity");
+
+                $.get(url, function (data) {
+                    $('#ModuleActivity-Container').html(data);
+                    $('#AddModuleActivity').modal('show');
+                });
+            });
+
+            $('body').on('click', ".deleteModuleActivity", function () {
+
+                $('#moduleActivityModalPopupTitle').html("Delete Module Activity");
+                var moduleActivityId = $(this).attr("data-id");
+
+                var url = "/ModuleActivity/DeleteModuleActivity";
+
+                url = url + '?moduleActivityId=' + moduleActivityId;
+                $.get(url, function (data) {
+                    $('#ModuleActivity-Container').html(data);
+                    $('#AddModuleActivity').modal('show');
+                });
+            });
+
+            $('body').on('click', ".editModuleActivity", function () {
+
+                $('#moduleActivityModalPopupTitle').html("Edit Module Activity");
+                var moduleActivityId = $(this).attr("data-id");
+
+                var url = "/ModuleActivity/EditModuleActivity";
+
+                url = url + '?moduleActivityId=' + moduleActivityId;
+                $.get(url, function (data) {
+                    $('#ModuleActivity-Container').html(data);
+                    $('#AddModuleActivity').modal('show');
+                });
+            });
+
+
+            $('body').on('click', "#btnAdd", function () {
+
+
+                var addedRowCounter = parseInt($('#txtNumberOfModuleActivityNameAndDurationAdded').val());
+                var removedRowCounter = parseInt($('#txtNumberOfModuleActivityNameAndDurationRemoved').val());
+                var rowCounter = addedRowCounter + removedRowCounter + 1;
+                var moduleActivityDuration = 'txtModuleActivityDuration' + rowCounter;
+                var moduleActivityName = 'txtModuleActivityName' + rowCounter;
+
+                //HOLD only the exact amount of existing rows (Trainee Lesson Association)
+                $('#txtNumberOfModuleActivityNameAndDurationAdded').val(addedRowCounter + 1);
+
+                var rowClass = "form-group row div" + rowCounter;
+                var newDivElement = $("#ModuleActivityNameAndDurationContainer");
+
+                var newFlight = "<div class='" + rowClass + "'> " +
+                    "<div class='col-md-1'> </div><div class='col-md-6'><input class='form-control input-sm' type='text' data-id = '" + rowCounter + "' name='" + moduleActivityName + "' id='" + moduleActivityName + "' width='300' style='width: 100%;' />"
+                + "</div><div class='col-md-4'>" + "<input class='form-control input-sm' type='number' min='1' value = '1' data-id = '" + rowCounter + "' name='" + moduleActivityDuration + "' id='" + moduleActivityDuration + "' width='300' style='width: 100%;'/>"
+                + "</div><div class='col-md-1'><button type='button' class='btn btn-sm btn-warning btn-flat RemoveButton' data-id = '" + rowCounter + "' id='btnRemove'" + rowCounter + " name='btnRemove''" + rowCounter + ">" +
+                "<i class='fa fa-minus'></i></button></div></div>";
+
+                newDivElement = $(newFlight).attr({ id: "ModuleActivityNameAndDurationContainer" });
+                newDivElement.appendTo("#ModuleActivityNameAndDurationContainer");
+
+                $('#btnRemove').removeAttr('disabled');
+            });
+
+            $('body').on('click', ".RemoveButton", function () {
+
+                var addedRowCounter = parseInt($('#txtNumberOfModuleActivityNameAndDurationAdded').val());
+                var buttonIndex = $(this).data("id");
+
+                if (addedRowCounter > 1) {
+                    $('#ModuleActivityNameAndDurationContainer > .div' + buttonIndex).remove();
+                    //Substract from added Row Counter
+                    addedRowCounter = addedRowCounter - 1;
+                    $('#txtNumberOfModuleActivityNameAndDurationAdded').val(addedRowCounter);
+
+                    //Add removed Row Counter
+                    var removedRowCounter = parseInt($('#txtNumberOfModuleActivityNameAndDurationRemoved').val());
+                    removedRowCounter = removedRowCounter + 1;
+                    $('#txtNumberOfModuleActivityNameAndDurationRemoved').val(removedRowCounter);
+                }
+            });
+
+            $('body').on('submit', "#btnAddEvent", function () {
+                event.preventDefault();
+
+                var moduleId = $('#txtModuleId').val();
+
+                var addedRowCounter = parseInt($('#txtNumberOfModuleActivityNameAndDurationAdded').val());
+                var removedRowCounter = parseInt($('#txtNumberOfModuleActivityNameAndDurationRemoved').val());
+                var rowCounter = addedRowCounter + removedRowCounter;
+
+                //Collect Trainee-Lesson association
+                var moduleActivityList = '';
+                for (var i = 1; i <= rowCounter; i++) {
+                    //Useful if any of the tarinee lesson row is removed in between
+                    if ($('#txtModuleActivityName' + i).val() != "" && $('#txtModuleActivityName' + i).val() != null && $('#txtModuleActivityDuration' + i).val() != "" && $('#txtModuleActivityDuration' + i).val() != null) {
+                        moduleActivityList = moduleActivityList + $('#txtModuleActivityName' + i).val() + "-" + $('#txtModuleActivityDuration' + i).val() + "~";
+                    }
+                    else {
+                        //alert('Row (trainee Lesson association) at this Index at ' + i + ' has removed');
+                    }
+                }
+
+                $('#txtTraineeLesson').val(moduleActivityList);
+
+                /////////////////////////////////////////////////// Save Activities ///////////////////////////////////
+                var SaveUrl = "/ModuleActivity/SaveModuleActivity?moduleId=" + moduleId + "&moduleActivityList=" + moduleActivityList;
+                location.href = SaveUrl;
+            });
+        });
+    </script>
+}
+
+<div class="table-responsive">
+
+    @if (Model.Count() == 0)
+    {
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+            <h5>No scheduled course found.</h5>
+        </div>
+    }
+
+    <table id="tblCourse" class="table table-responsive display dataTable" cellspacing="0" role="grid" width="100%">
+        <thead>
+            <tr>
+                <th>
+                    No.
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseTitle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TheoreticalDuration)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PracticalDuration)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreditHour)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.CoursePassingMark)
+                </th>
+                <th>Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    string EffectiveDate = item.EffectiveDate.ToString("dd/MM/yyyy");
+                    <tr role="row" class="odd">
+                        <td>@(i++)</td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TheoreticalDuration)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PracticalDuration)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreditHour)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CoursePassingMark)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("CourseDetails", new { id = item.CourseId })" title="DETAILS"><i class="fa fa-list-ul text-green"></i></a>&nbsp;&nbsp;| &nbsp;&nbsp;
+                            <a href="#" title="INSTRUCTOR MODULE LIST" class="moduleList" data-id="@item.CourseId">Modules</a>&nbsp;&nbsp;| &nbsp;&nbsp;
+                            <a href="#" title="INSTRUCTOR COURSE EXAMS" class="courseExamList" data-id="@item.CourseId">Exams</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal modal-fade" id="ModuleListModalPopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" id="editModalPopup" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myEditModalLabel">Course Module List</h4>
+            </div>
+            <div class="modal-body" id="editModalBody">
+                @*Press ESC button to exit.*@
+                <div style="color:red"><lable class="control-label" name="lblMessage" id="lblMessage"></lable></div>
+                <div id="moduleList-container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal modal-fade" id="AddModuleActivity" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="moduleActivityModalPopupTitle">Module Activity List</h4>
+            </div>
+            <div class="modal-body">
+                <div id="ModuleActivity-Container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

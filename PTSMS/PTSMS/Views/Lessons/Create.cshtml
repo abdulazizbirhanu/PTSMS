@@ -1,0 +1,410 @@
+﻿@model PTSMSDAL.Models.Curriculum.Operations.Lesson
+
+@{
+    ViewBag.Title = "Create";
+    ViewBag.Name = "Create Lesson.";
+}
+
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+@section scripts{
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            //File View Event handler
+            $('#FileContainer').on('click', '.File-Link', function (event) {
+
+                var dataIds = $(this).attr('data-id');
+                var dataArray = dataIds.split('~');
+
+                var lessonCode = dataArray[0];
+                var fileName = dataArray[1];
+                //alert('lessonCode = ' + lessonCode + ' fileName=' + fileName);
+
+                //FilesView(string lessonCode, string fileName)
+                var url = "/Lessons/FilesView";
+                location.href = url + "?lessonName=" + lessonCode + "&fileName=" + fileName;
+            });
+
+            //By defualt invisible others time
+            $('#TimeAircraftSoloRow').addClass('hide');
+            $('#TimeAircraftDualRow').addClass('hide');
+            $('#PilotFlyingRow').addClass('hide');
+            $('#PilotMonitoringRow').addClass('hide');
+
+            $('#InstructorPrebriefRow').addClass('hide');
+            $('#RequiredInstructionDuringFlightRow').removeClass('hide');
+            $('#TraineeCompetencyCriteriaRow').removeClass('hide');
+
+            $('#CheckRidePassingMark').attr('disabled', 'disabled');
+
+            var index = 1;
+            $('#dpdEquipmentTypeId option').each(function () {
+                if (index == 1) {
+                    if ($(this).text().toUpperCase() === "FTD") {
+
+                        $('#TimeAircraftSoloRow').addClass('hide');
+                        $('#TimeAircraftDualRow').addClass('hide');
+                        $('#FTDTimeRow').removeClass('hide');
+                    }
+                    else {
+                        $('#TimeAircraftSoloRow').removeClass('hide');
+                        $('#TimeAircraftDualRow').removeClass('hide');
+                        $('#FTDTimeRow').addClass('hide');
+                    }
+                }
+                index = index + 1;
+            });
+
+            $('#dpdEquipmentTypeId').on('change', function () {
+
+                var equipmentTypeValue = $(this).val();
+                var equipmentTypeText = "";
+
+                $('#dpdEquipmentTypeId option').each(function () {
+                    if (equipmentTypeValue == $(this).val()) {
+                        equipmentTypeText = $(this).text();
+                    }
+                });
+
+                if (equipmentTypeText.toUpperCase() == "FTD") {
+
+                    $('#TimeAircraftSoloRow').addClass('hide');
+                    $('#TimeAircraftDualRow').addClass('hide');
+                    $('#PilotFlyingRow').addClass('hide');
+                    $('#PilotMonitoringRow').addClass('hide');
+                    $('#FTDTimeRow').removeClass('hide');
+                }
+                else {
+                    //alert("Other than FTD");
+                    $('#TimeAircraftSoloRow').removeClass('hide');
+                    $('#TimeAircraftDualRow').removeClass('hide');
+                    $('#PilotFlyingRow').addClass('hide');
+                    $('#PilotMonitoringRow').addClass('hide');
+                    $('#FTDTimeRow').addClass('hide');
+                }
+            });
+            //New
+            $('#IsTypeRating').click(function () {
+                //alert('IsTypeRating');
+                //$('#dpdEquipmentTypeId').text('FTD');
+                var check = document.getElementById("IsTypeRating").checked;
+
+                if (check) {
+                    //Filter Lesson Equipment Type
+                    $('#dpdEquipmentTypeId option').each(function () {
+                        if ($(this).val() != "") {
+
+                            $(this).removeClass('hide');
+                            if ($(this).text().toUpperCase() === "FTD") {
+                                var equipmentTypeId = $(this).val();
+                                $('#dpdEquipmentTypeId').val(equipmentTypeId);
+                            }
+                            else {
+                                $(this).addClass('hide');
+                            }
+                        }
+                    });
+
+                    //Filter Lesson Category Type
+                    $('#dpdCategoryType').empty();
+                    var URL = "/CategoryTypes/GetTypeRateCategoryTypes";
+                    var data = {
+                        'isTypeRating': true
+                    };
+                    $.ajax({
+                        url: URL,
+                        data: data,
+                        type: 'POST',
+                        success: function (result) {
+                            if (result.hasList) {
+
+                                jQuery.each(result.resultData, function (index, item) {
+                                    //option = option + '<option value="' + item.Id + '">' + item.Name + '</option>';
+                                    $('#dpdCategoryType').append($('<option>', {
+                                        value: item.Id,
+                                        text: item.Name
+                                    }));
+                                });
+                            }
+                            else {
+                                bootbox.alert("There is no type rating categories.");
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured!!!.");
+                        }
+                    });
+
+                    //Make visible Time inputs
+                    $('#PilotFlyingRow').removeClass('hide');
+                    $('#PilotMonitoringRow').removeClass('hide');
+
+                    $('#InstructorPrebriefRow').removeClass('hide');
+                    $('#RequiredInstructionDuringFlightRow').addClass('hide');
+                    $('#TraineeCompetencyCriteriaRow').addClass('hide');
+
+                    $('#TimeAircraftSoloRow').addClass('hide');
+                    $('#TimeAircraftDualRow').addClass('hide');
+                    $('#FTDTimeRow').addClass('hide');
+                    //InstructorPrebriefRow,RequiredInstructionDuringFlightRow,TraineeCompetencyCriteriaRow
+                }
+                else {
+                    $('#dpdEquipmentTypeId option').each(function () {
+                        $(this).removeClass('hide');
+                    });
+
+                    $('#InstructorPrebriefRow').addClass('hide');
+                    $('#RequiredInstructionDuringFlightRow').removeClass('hide');
+                    $('#TraineeCompetencyCriteriaRow').removeClass('hide');
+
+                    //Filter Lesson Category Type
+                    $('#dpdCategoryType').empty();
+                    var URL = "/CategoryTypes/GetTypeRateCategoryTypes";
+                    var data = {
+                        'isTypeRating': false
+                    };
+                    $.ajax({
+                        url: URL,
+                        data: data,
+                        type: 'POST',
+                        success: function (result) {
+                            if (result.hasList) {
+
+                                jQuery.each(result.resultData, function (index, item) {
+                                    //option = option + '<option value="' + item.Id + '">' + item.Name + '</option>';
+                                    $('#dpdCategoryType').append($('<option>', {
+                                        value: item.Id,
+                                        text: item.Name
+                                    }));
+                                });
+                            }
+                            else {
+                                bootbox.alert("There is no type rating categories.");
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured!!!.");
+                        }
+                    });
+                }
+            });
+
+            $('#IsCheckRide').click(function () {
+
+                var check = document.getElementById("IsCheckRide").checked;
+
+                if (!check) {
+                    $('#CheckRidePassingMark').attr('disabled', 'disabled');
+                }
+                else {
+                    $('#CheckRidePassingMark').removeAttr('disabled');
+                }
+            });
+        });
+    </script>
+}
+@using (Html.BeginForm("Create", "Lessons", FormMethod.Post, new { enctype = "multipart/form-data", id = "CreateModuleForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-lg-6 col-xs-12">
+                <br />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsTypeRating, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.IsTypeRating, new { htmlAttributes = new { id = "IsTypeRating", name = "IsTypeRating" } })
+                            @Html.ValidationMessageFor(model => model.IsTypeRating, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EquipmentTypeId, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DropDownList("EquipmentTypeId", (IEnumerable<SelectListItem>)ViewBag.EquipmentTypeId, htmlAttributes: new { id = "dpdEquipmentTypeId", name = "dpdEquipmentTypeId", @class = "form-control" })
+                        @*@Html.EditorFor(model => model.CategoryTypeId, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.EquipmentTypeId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CategoryTypeId, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DropDownList("CategoryTypeId", (IEnumerable<SelectListItem>)ViewBag.CategoryType, htmlAttributes: new { id = "dpdCategoryType", name = "dpdCategoryType", @class = "form-control" })
+                        @*@Html.EditorFor(model => model.CategoryTypeId, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.CategoryTypeId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LessonName, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.LessonName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.LessonName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="TimeAircraftDualRow">
+                    @Html.LabelFor(model => model.TimeAircraftDual, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.TimeAircraftDual, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TimeAircraftDual, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="TimeAircraftSoloRow">
+                    @Html.LabelFor(model => model.TimeAircraftSolo, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.TimeAircraftSolo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TimeAircraftSolo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="PilotFlyingRow">
+                    @Html.LabelFor(model => model.PilotFlying, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.PilotFlying, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PilotFlying, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="PilotMonitoringRow">
+                    @Html.LabelFor(model => model.PilotMonitoring, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.PilotMonitoring, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PilotMonitoring, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="FTDTimeRow">
+                    @Html.LabelFor(model => model.FTDTime, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.FTDTime, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FTDTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsCheckRide, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.IsCheckRide, new { htmlAttributes = new { id = "IsCheckRide", name = "IsCheckRide" } })
+                            @Html.ValidationMessageFor(model => model.IsCheckRide, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CheckRidePassingMark, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.CheckRidePassingMark, new { id = "CheckRidePassingMark", name = "CheckRidePassingMark", htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CheckRidePassingMark, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.LessonPassingMark, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.LessonPassingMark, new { id = "LessonPassingMark", name = "LessonPassingMark", htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LessonPassingMark, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EffectiveDate, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        <div class="input-group date">
+                            @Html.EditorFor(model => model.EffectiveDate, new { htmlAttributes = new { @class = "form-control PTSMSDatepicker" } })
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar PTSMSDatepicker"></i>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.EffectiveDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-5">Lesson File/s</label>
+                    <div class="col-lg-4">
+                        <input type="file" class="btn btn-sm" id="LessonReferenceFiles" multiple="multiple" name="LessonReferenceFiles" placeholder="Upload Lesson Reference Files" rel="txtTooltip" title="Browse Lesson file/s" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12 col-lg-6 col-xs-12">
+                <br />
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Topic, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Topic, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Topic, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Objective, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Objective, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Objective, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reference, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Reference, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Reference, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="InstructorPrebriefRow">
+                    @Html.LabelFor(model => model.InstructorPrebrief, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.InstructorPrebrief, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.InstructorPrebrief, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="RequiredInstructionDuringFlightRow">
+                    @Html.LabelFor(model => model.RequiredInstructionDuringFlight, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.RequiredInstructionDuringFlight, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RequiredInstructionDuringFlight, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="TraineeCompetencyCriteriaRow">
+                    @Html.LabelFor(model => model.TraineeCompetencyCriteria, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.TraineeCompetencyCriteria, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TraineeCompetencyCriteria, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <input type="submit" value="Create" class="btn btn-info" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

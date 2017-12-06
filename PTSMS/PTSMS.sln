@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTSMS", "PTSMS\PTSMS.csproj", "{A0C0AF01-5E8C-499B-8B80-138AC091EC08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTSMSBAL", "..\PTSMSBAL\PTSMSBAL.csproj", "{77C1B39A-D673-4094-93C5-E413E2FCCB23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTSMSDAL", "..\PTSMSDAL\PTSMSDAL.csproj", "{2E2BAEA9-3167-4846-AD8F-AAC4AD2B9F3C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0C0AF01-5E8C-499B-8B80-138AC091EC08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0C0AF01-5E8C-499B-8B80-138AC091EC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0C0AF01-5E8C-499B-8B80-138AC091EC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0C0AF01-5E8C-499B-8B80-138AC091EC08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C1B39A-D673-4094-93C5-E413E2FCCB23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C1B39A-D673-4094-93C5-E413E2FCCB23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C1B39A-D673-4094-93C5-E413E2FCCB23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C1B39A-D673-4094-93C5-E413E2FCCB23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E2BAEA9-3167-4846-AD8F-AAC4AD2B9F3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E2BAEA9-3167-4846-AD8F-AAC4AD2B9F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E2BAEA9-3167-4846-AD8F-AAC4AD2B9F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E2BAEA9-3167-4846-AD8F-AAC4AD2B9F3C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

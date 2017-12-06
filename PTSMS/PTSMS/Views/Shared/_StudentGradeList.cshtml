@@ -1,0 +1,123 @@
+﻿@model  IEnumerable<PTSMSDAL.Models.Grading.GradingFilterList>
+
+@{
+
+    ViewBag.TableId = "StudentResult";
+    ViewBag.DefualtSortingColumnIndex = 0;
+}
+
+
+<script>
+    //////////////////
+    $('#' + '@ViewBag.TableId').DataTable({
+        "order": [[@ViewBag.DefualtSortingColumnIndex, "asc"]]
+    });
+    function SaveAllStudentRecord(traineeIdList) {
+        debugger;
+
+        var traineeIdList=""
+        var model = @Html.Raw(Json.Encode(Model));
+        jQuery.each(model, function (index, item) {
+            debugger;
+            var grade = $("#Grade_" +  item.TraineeID).val();
+            var passFailExamResult = $("#PassFailExamResultId_" +  item.TraineeID).val()?$("#PassFailExamResultId_" +  item.TraineeID).val():0;
+            if(traineeIdList=="") 
+                traineeIdList=item.TraineeCourseId+"-"+item.TraineeModuleId+"-"+ item.TraineeID+"-"+item.ExamId+"-"+item.IsPassFailExam+"-"+ grade+"-"+passFailExamResult;
+       else
+                traineeIdList=traineeIdList+"~"+item.TraineeCourseId+"-"+item.TraineeModuleId+"-"+ item.TraineeID+"-"+item.ExamId+"-"+item.IsPassFailExam+"-"+ grade+"-"+passFailExamResult;
+       
+        });
+
+
+        SaveAllStudentRecord1(traineeIdList);
+    }
+</script>
+
+
+
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="StudentResult">
+    @Html.AntiForgeryToken()
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Student ID</th>
+            <th>Full Name</th>
+            <th>Recount</th>
+            @if (Model != null && Model.Count() > 0)
+            {
+                if (!Model.FirstOrDefault().IsPassFailExam)
+                {
+                    <th>Grade</th>
+                }
+                else
+                {
+                    <th>Pass/Fail</th>
+                }
+            }
+
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            List<string> traineeIDList = new List<string>();
+            if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    traineeIDList.Add(item.TraineeID);
+                    <tr role="row" class="odd">
+                        <td>@(i++) </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TraineeID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReExamCount)
+                        </td>
+                        @if (!Model.FirstOrDefault().IsPassFailExam)
+                        {
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Grade, new { @class = "form-control", @id = "Grade_" + item.TraineeID, type = "number", min = "0", max = "100", maxlength = "3" })
+                            </td>
+                        }
+                        else
+                        {
+
+                            <td>
+                                @Html.DropDownListFor(modelItem => item.PassFailExamResultId, (List<SelectListItem>)item.PassFailExamResult, "Select One", htmlAttributes: new { @class = "form-control", @id = "PassFailExamResultId_" + @item.TraineeID })
+                            </td>
+                        }
+                        <td>
+                            @if (item.TraineeModuleId != 0 && item.TraineeCourseId == 0)
+                            {
+                                <a class="btn btn-success" id="Save_" @item.TraineeID onclick="SaveStudentRecord('@item.TraineeCourseId','@item.TraineeModuleId','@item.TraineeID','@item.ExamId','@item.IsPassFailExam');">Save</a>
+                            }
+                            @if (item.TraineeCourseId != 0 && item.TraineeModuleId == 0)
+                            {
+                                <a class="btn btn-success" id="Save_" @item.TraineeID onclick="SaveStudentRecord('@item.TraineeCourseId','@item.TraineeModuleId','@item.TraineeID','@item.ExamId','@item.IsPassFailExam');">Save</a>
+                            }
+                        </td>
+                    </tr>
+                }
+               
+
+                    }
+                    }
+</tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a class="btn btn-warning" id="SaveAll" onclick="SaveAllStudentRecord('@Model');">Save All</a></td>
+        </tr>
+    </tfoot>
+
+</table>

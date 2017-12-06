@@ -1,0 +1,79 @@
+﻿@model PTSMSDAL.Models.Scheduling.Operations.Day
+
+@{
+    ViewBag.Title = "Edit";
+    ViewBag.Name = "Edit Day";
+}
+@section scripts{
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+    </script>
+}
+
+<br />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.DayId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DayTemplateId, "DayTemplateId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("DayTemplateId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DayTemplateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.DayName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+               
+                @Html.DropDownListFor(model => model.DayName, new SelectList(
+    new List<SelectListItem>
+    {
+            new SelectListItem { Selected = true, Text = "Monday", Value = "Monday"},
+            new SelectListItem { Selected = false, Text = "Tuesday", Value = "Tuesday"},
+            new SelectListItem { Selected = false, Text = "Wednesday", Value = "Wednesday"},
+            new SelectListItem { Selected = false, Text = "Thursday", Value = "Thursday"},
+            new SelectListItem { Selected = false, Text = "Friday", Value = "Friday"},
+            new SelectListItem { Selected = false, Text = "Saturday", Value = "Saturday"},
+            new SelectListItem { Selected = false, Text = "Sunday", Value = "Sunday"}
+            }, "Value", "Text", 1), new { @class = "form-control" }
+    )
+                @Html.ValidationMessageFor(model => model.DayName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EffectiveDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.EffectiveDate, new { htmlAttributes = new { @class = "form-control PTSMSDatepicker" } })
+                @Html.ValidationMessageFor(model => model.EffectiveDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

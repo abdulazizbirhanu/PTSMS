@@ -1,0 +1,160 @@
+﻿@model PTSMSDAL.Models.Enrollment.Relations.BatchClass
+@using PTSMSDAL.Models.Enrollment.Relations;
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Batch Class Details.";
+    ViewBag.TableId = "tblBatchClass";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+@section scripts
+    {
+    @*<script src="~/Scripts/jquery-1.10.2.js"></script>*@
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#tblBatchClass').on('click', '.Add-Student', function () {
+        
+                var TraineeId = $(this).attr('data-id');
+                var BatchClassId = $('#BatchClassId' + TraineeId).val();
+                var ShortName = $('#ShortName' + TraineeId).val();
+                //AddTraineeToBatchClass(int traineeId, int batchClassId
+                var AddTraineeUrl = "/Batches/AddTraineeToBatchClass";
+                $.ajax({
+                    url: AddTraineeUrl,
+                    type: 'GET',
+                    data: {
+                        'traineeId': TraineeId,
+                        'batchClassId': BatchClassId,
+                        'ShortName': ShortName
+                    },
+                    success: function (result) {
+                        if (result) {
+                            if (result.Result.status) {
+                                bootbox.alert("Trainee Successfully added into the selected batch class!");
+                            }
+                            else {
+                                bootbox.alert("unable to add trainee into the selected batch class due to : " + result.Result.message);
+                            }
+                        }
+                        else {
+
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+ 
+<div>
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Batch.BatchName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Batch.BatchName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BatchClassName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BatchClassName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BatchClassId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+
+<h3>List of trainees</h3>
+
+<table class="table table-bordered table-hover dataTable" id="tblBatchClass">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Company Id
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Call Name
+            </th>
+            <th>
+                Assign Batch Class
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{   //ViewBag.BatchClassSelectList
+            if (ViewBag.TraineeList != null)
+            {
+                int i = 1;
+                List<TraineeBatchClass> traineeList = (List<TraineeBatchClass>)ViewBag.TraineeList;
+                foreach (TraineeBatchClass item in traineeList)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Trainee.Person.CompanyId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Trainee.Person.FirstName)  @Html.DisplayFor(modelItem => item.Trainee.Person.MiddleName)
+                        </td>
+                        <td>
+                            @Html.TextBox("ShortName", item.Trainee.Person.ShortName, htmlAttributes: new { id = "ShortName" + item.Trainee.TraineeId, name = "ShortName", @class = "form-control" })
+                        </td>
+                        <td style="width:200px;">
+                            <div class="form-group has-feedback">
+                                <div class="input-group">
+                                    @Html.DropDownList("BatchClassId", (IEnumerable<SelectListItem>)ViewBag.BatchClassSelectList, htmlAttributes: new { id = "BatchClassId"+ item.Trainee.TraineeId, name = "BatchClassId", @class = "form-control" })
+                                    <span class="input-group-addon btn-default Add-Student" data-id="@item.Trainee.TraineeId">
+                                        <span class="fa fa-plus bg-info">
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            @*@Html.ActionLink("Delete", "DeleteBatchTrainee", new { id = item.BatchClassId }, new { })*@
+                        </td>
+                    </tr>
+                    i = i + 1;
+                }
+                if (traineeList.Count() == 0)
+                {
+                    <div style="color:red">@Html.Raw("The is no tainee in this batch.")</div>
+                }
+            }
+            else
+            {
+                <div style="color:red">@Html.Raw("The is no tainee in this batch.")</div>
+            }
+        }
+    </tbody>
+</table>
+
+
+

@@ -1,0 +1,64 @@
+﻿@model PTSMSDAL.Models.Curriculum.Operations.Reference
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Program Details.";
+}
+ 
+<div>
+  <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PreviousReference.ReferenceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousReference.ReferenceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReferenceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReferenceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReferenceLocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReferenceLocation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ReferenceId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

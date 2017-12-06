@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@ViewBag.Title | EAATMS</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    
+    <!---->
+    <style>
+        .Container-custom {
+            padding: 15px 15px 15px 15px;
+        }
+
+        .box.box-info {
+            padding-left: 10px;
+            padding-right: 15px;
+        }
+
+        .content-wrapper, .right-side {
+            min-height: 560px;
+        }
+
+        .table > tbody > tr > th {
+            background-color: #468847;
+        }
+
+        .table-hover > tbody > tr:hover > th {
+            background-color: #468847;
+        }
+
+        .datepicker table tr td, .datepicker table tr th {
+            background-color: azure;
+        }
+    </style>
+</head>
+<body class="skin-blue sidebar-mini" id="PTSHtmlBodyTag">
+    <div class="wrapper">
+        @Html.Partial("_header")
+        <!-- Left side column. contains the logo and sidebar -->
+        @Html.Partial("_sideBarLeft")
+        <div class="content-wrapper">
+            <div class="Container-custom">
+              
+                <div class="box box-info">
+                    @if (ViewBag.Name != null && ViewBag.Name != "")
+                    {
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><lable class="control-label" id="PageTitle">@ViewBag.Name</lable></h3>
+                    </div>
+                    }
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_footer")
+        <!-- Control Sidebar -->
+        @*@Html.Partial("_sideBarRight")*@
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+
+    @Html.Partial("ErrorMessageBox")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/AdminLTE")
+
+    <link href="~/Content/BootstrapDataTable/BootstrapDataTableCSS.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/BootstrapDataTables/BootstrapDataTables.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            if (@Session["account"] != null) {
+                if(Number('@Session["account"]') == 0){
+                    $('.accountMenu').addClass('hide');
+                }
+            }
+            if (@Session["report"] != null) {
+                if(Number('@Session["report"]') == 0){
+                    $('.reportMenu').addClass('hide');
+                }
+            }
+            if (@Session["traineeProfile"] != null) {
+                if(Number('@Session["traineeProfile"]') == 0){
+                    $('.traineeProfileMenu').addClass('hide');
+                }
+            }
+            if (@Session["curriculum"] != null) {
+                if(Number('@Session["curriculum"]') == 0){
+                    $('.curriculumMenu').addClass('hide');
+                }
+            }
+            if (@Session["curriculumMaster"] != null) {
+                if(Number('@Session["curriculumMaster"]') == 0){
+                    $('.curriculumMasterMenu').addClass('hide');
+                }
+            }
+            if (@Session["enrollment"] != null) {
+                if(Number('@Session["enrollment"]') == 0){
+                    $('.enrollmentMenu').addClass('hide');
+                }
+            }
+            if (@Session["enrollmentMaster"] != null) {
+                if(Number('@Session["enrollmentMaster"]') == 0){
+                    $('.enrollmentMasterMenu').addClass('hide');
+                }
+            }
+            if (@Session["scheduling"] != null) {
+                if(Number('@Session["scheduling"]') == 0){
+                    $('.schedulingMenu').addClass('hide');
+                }
+            }
+            if (@Session["schedulingMaster"] != null) {
+                if(Number('@Session["schedulingMaster"]') == 0){
+                    $('.schedulingMasterMenu').addClass('hide');
+                }
+            }
+            if (@Session["grading"] != null) {
+                if(Number('@Session["grading"]') == 0){
+                    $('.gradingMenu').addClass('hide');
+                }
+            }
+
+            if (@Session["enrollmentMaster"] != null && @Session["curriculumMaster"] != null&& @Session["schedulingMaster"] != null ) {
+                if((Number('@Session["enrollmentMaster"]') + Number('@Session["curriculumMaster"]')+Number('@Session["schedulingMaster"]')) == 0){
+                    $('.masterMenu').addClass('hide');
+                }
+            }
+
+            $('body').on('click', '.notification', function (event) {
+
+                var notificationCounter =  $('#notificationCounter').html();
+                if(notificationCounter != "" && notificationCounter != null)
+                {
+                    if(Number(notificationCounter) > 0)
+                    {
+                        //Change the NOTIFICATION STATE
+                        $.ajax({
+                            url: "/Notification/NotificationHasSeen",
+                            type: 'POST',
+                            success: function (result) {
+                                if(result.isSuccess){
+                                    //Delete the notification counter
+                                    $('#notificationCounter').html('');
+                                    $('#notificationCounter').addClass('hide');
+                                }
+                            },
+                            error: function () {
+                                bootbox.alert("Error has occured!!!.");
+                            }
+                        });
+                    }
+                }
+            });
+            //IndividualNotification
+            $('body').on('click', '.IndividualNotification', function (event) {
+
+                var userNotificationUrl =  $(this).data('id');
+                alert(userNotificationUrl);
+                if(userNotificationUrl != "" && userNotificationUrl != null)
+                {
+                    location.href = userNotificationUrl;
+                }
+            });
+
+            //////////////////
+            $('#' + '@ViewBag.TableId').DataTable({
+                "order": [[@ViewBag.DefualtSortingColumnIndex, "asc"]]
+            });
+            //MenuState-Management,Curriculum-MenuState-Management,References-MenuState-Management,Operations-MenuState-Management
+            @if (ViewBag.ErrorMessage != null)
+            {
+                 <text>
+            $('#Message').html('@ViewBag.ErrorMessage');
+            $('#Error').modal('show');
+            </text>
+                ViewBag.ErrorMessage = null;
+            }
+
+            //Set the State of the tree
+            debugger;
+            SetTreeState();
+            ////
+            var menuTreeActionType = '';
+            $('#LeftMenuTree').on('click', '.MenuState-Management', function (event) {
+                debugger;
+
+                if (event.target.tagName == 'SPAN' && menuTreeActionType == '') {
+                    debugger;
+                    var leafId = $(this).attr('id');
+                    menuTreeActionType = leafId;
+                    SaveTreeState(leafId);
+                }
+                else {
+                    if (menuTreeActionType != '') {
+                        menuTreeActionType = '';
+                    }
+                }
+            });
+            $('#LeftMenuTree').on('click', '.Curriculum-MenuState-Management', function (event) {
+                debugger;
+
+                if (event.target.tagName == 'SPAN' && menuTreeActionType == '') {
+                    debugger;
+                    var leafId = $(this).attr('id');
+                    menuTreeActionType = leafId;
+                    SaveTreeState(leafId);
+                }
+            });
+            $('#LeftMenuTree').on('click', '.References-MenuState-Management', function (event) {
+                debugger;
+                if (event.target.tagName == 'SPAN' && menuTreeActionType == '') {
+                    debugger;
+                    var leafId = $(this).attr('id');
+                    menuTreeActionType = leafId;
+                    SaveTreeState(leafId);
+                }
+            });
+            $('#LeftMenuTree').on('click', '.Operations-MenuState-Management', function (event) {
+                debugger;
+                if (event.target.tagName == 'SPAN' && menuTreeActionType == '') {
+                    debugger;
+                    var leafId = $(this).attr('id');
+                    menuTreeActionType = leafId;
+                    SaveTreeState(leafId);
+                }
+            });
+
+            //Code to Set State of the Menu tree
+            function SetTreeState() {
+                debugger;
+                var treeStateIdsString = $.cookie("LeftMenuTreeState");
+                if (treeStateIdsString != null && treeStateIdsString != 'undefined' && treeStateIdsString != "") {
+
+                    var treeLeafIdsArray = treeStateIdsString.split(',');
+                    for (var i = 0; i < treeLeafIdsArray.length; i++) {
+                        $('#' + treeLeafIdsArray[i]).addClass('active');
+                    }
+                }
+                else {
+                    treeStateIdsString = "InitialID";
+                    $.removeCookie('LeftMenuTreeState', { path: '/' });
+                    $.cookie("LeftMenuTreeState", treeStateIdsString, { path: '/' });
+                }
+            }
+
+
+            function SaveTreeState(leafId) {
+                debugger;
+                var treeState = $.cookie("LeftMenuTreeState");
+                if (treeState != null && treeState != 'undefined' && treeState != '') {
+
+                    treeLeafIdsArray = treeState.split(',');
+                    var index = $.inArray(leafId, treeLeafIdsArray);
+
+                    if (index == -1) {
+                        //Leaf Id is not in the list
+                        if (!($('#' + leafId).hasClass("active"))) {
+                            treeLeafIdsArray.push(leafId);
+                            $.removeCookie('LeftMenuTreeState', { path: '/' });
+                            $.cookie("LeftMenuTreeState", treeLeafIdsArray.join(","), { path: '/' });
+                        }
+                    }
+                    else {
+                        if (($('#' + leafId).hasClass("active"))) {
+                            treeLeafIdsArray.splice(index, 1);
+                            $.removeCookie('LeftMenuTreeState', { path: '/' });
+                            $.cookie("LeftMenuTreeState", treeLeafIdsArray.join(","), { path: '/' });
+                        }
+                    }
+                    //event
+                }
+                else {
+                    //The array is not initialized yet.
+                    if (!$("#" + leafId).hasClass("active")) {
+                        $.removeCookie('LeftMenuTreeState', { path: '/' });
+                        $.cookie("LeftMenuTreeState", leafId, { path: '/' });
+                    }
+                }
+            }
+
+            ////Get User Previleged Controller and Action
+            //$.ajax({
+            //    url: "/Account/GetMenuList",
+            //    type: 'GET',
+            //    success: function (result) {
+            //        alert(result.resultData);
+            //    },
+            //    error: function () {
+            //        bootbox.alert("Error has occured!!!.");
+            //    }
+            //});
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

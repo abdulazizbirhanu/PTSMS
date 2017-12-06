@@ -1,0 +1,2053 @@
+﻿@using PTSMSDAL.Models.Scheduling.View
+@using PTSMSDAL.Models.Grading
+@{
+	ViewBag.Title = "GroundClassSchedule";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Name = "Ground Class Schedule";    
+}
+
+
+<link href="~/Content/FullCalendar/jquery-ui.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/qtip/jquery.qtip.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/ajax-progress-bar/css/jquery.progressTimer.css" rel="stylesheet" />
+
+<style>
+	#editScheduledEventModel .modal-dialog {
+	}
+
+	.add-event {
+		border-radius: 10px;
+		display: block;
+		border: solid;
+		border-color: #517842;
+	}
+
+	.custom-Col {
+		border-right: 3px solid;
+		border-color: #517842;
+	}
+	/*#addScheduledEventModel*/
+	#editScheduledEventModel .modal-dialog {
+		width: 60%;
+	}
+
+	#addScheduledEventModel .modal-dialog {
+		width: 60%;
+	}
+
+	.datepicker {
+		z-index: 1151 !important;
+	}
+
+	.ui-widget-header {
+		border: 1px solid #aed0ea;
+		background: #deedf7 url(images/ui-bg_highlight-soft_100_deedf7_1x100.png) 50% 50% repeat-x;
+		color: #222;
+		font-weight: bold;
+		font-size: x-small;
+	}
+</style>
+
+@section scripts
+	{
+	<script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/lib/moment.min.js"></script>
+
+	<script src="~/Content/AdminLTE/plugins/fullcalendar/fullcalendar.min.js"></script>
+	<script src="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.js"></script>
+	<script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.js"></script>
+
+	<script src="~/Scripts/jquery.validate.min.js"></script>
+	<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/Scripts/validator.js"></script>
+
+	<script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+	<script src="~/Content/AdminLTE/plugins/qtip/jquery.qtip.js"></script>
+	<script src="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+	<script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="~/Content/AdminLTE/plugins/ajax-progress-bar/js/jquery.progressTimer.js"></script>
+
+	<script type="text/javascript">
+
+		$(function () {
+			//////////////////////////Begin, Get Current date //////////////////////////
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth() + 1; //January is 0!
+			var yyyy = today.getFullYear();
+
+			if (dd < 10) {
+				dd = '0' + dd
+			}
+			if (mm < 10) {
+				mm = '0' + mm
+			}
+			today = mm + '/' + dd + '/' + yyyy;
+			//////////////////////////End, Get Current date //////////////////////////////
+
+			//variable to hold the free resource to the reschedule event for a specific module
+			var unAssigned = null;
+
+			//////////////////////////////////Begin, Make event color Batch Class Specific////////////////////////////////////////
+			var InstructorsColorList = null;
+			$.ajax({
+				url: "/Scheduler/InstructorColorList",
+				type: 'GET',
+				success: function (result) {
+					if (result.hasList) {
+						InstructorsColorList = result.resultData;
+					}
+				},
+				error: function () {
+					bootbox.alert("Error has occured while coloring the event.");
+				}
+			});
+
+			//Get List of event to be diplayed in the Calendar
+			var sources = {
+				sourceone: {
+					url: "/Scheduler/getScheduledEvent/",
+					type: 'GET',
+					data: function () {
+						debugger;
+						var currentDate = $('#calendar').fullCalendar('getDate');
+						if (currentDate) {
+
+							var clickedDateTime = new Date(currentDate.toString());
+							var convertedDateTime = new Date(clickedDateTime - 3 * 60 * 60 * 1000);
+
+							var day = convertedDateTime.getDate();
+							var month = convertedDateTime.getMonth() + 1;
+							var year = convertedDateTime.getFullYear();
+
+							return {
+								month: month,
+								year: year
+							}
+						}
+					},
+					cache: false,       //this is optional
+					color: '#6C92A8',   //this is optional
+					textColor: 'white'  //this is optional
+				}
+			}
+
+			$('#calendar').fullCalendar({
+				theme: true,
+				resourceAreaWidth: 230,
+				editable: true,
+				aspectRatio: 1.5,
+				scrollTime: '00:00',
+				header: {
+					left: 'promptResource today prev,next',
+					center: 'title',
+					right: 'timelineDay,timelineFiveDays,timelineFiftinDays,timelineMonthDays'
+				},
+				schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+				customButtons: {
+					promptResource: {
+						text: '+ Batch Class',
+						click: function () {
+							var title = prompt('batch Class Name');
+							if (title) {
+								$('#calendar').fullCalendar(
+									'addResource',
+									{ title: title },
+									true // scroll to the new resource?
+								);
+							}
+						}
+					}
+				},
+				defaultView: 'timelineMonthDays',
+				views: {
+					timelineDay: {
+						type: 'timeline',
+						duration: { days: 1 }
+					},
+					timelineFiveDays: {
+						type: 'timeline',
+						duration: { days: 5 }
+					},
+					timelineFiftinDays: {
+						type: 'timeline',
+						duration: { days: 15 }
+					},
+					timelineMonthDays: {
+						type: 'timeline',
+						duration: { month: 1 }
+					},
+				},
+				resourceLabelText: '',//'Batch Based Scheduler',
+				resourceColumns: [
+				//{
+				//    labelText: 'No.',
+				//    field: 'SerialNumber'
+				//},
+				{
+					labelText: 'Batch Class',
+					field: 'BatchClassName'
+				}],
+				//resourceGroupField: 'BatchName',
+				resources: '/Scheduler/GetGroundSchedulerResource/',
+				//events: [sources.sourceone],
+				eventSources: [sources.sourceone],
+				//eventSources: [{
+				//    url: '/Scheduler/GetFTDandFlyingScheduledEvent/',
+				//    type: 'GET',
+				//    data: function () {
+				//        debugger;
+				//        var currentDate = $('#calendar').fullCalendar('getDate');
+				//        if (currentDate) {
+
+				//            var clickedDateTime = new Date(currentDate.toString());
+				//            var convertedDateTime = new Date(clickedDateTime - 3 * 60 * 60 * 1000);
+
+				//            var day = convertedDateTime.getDate();
+				//            var month = convertedDateTime.getMonth() + 1;
+				//            var year = convertedDateTime.getFullYear();
+
+				//            return {
+				//                month: month,
+				//                year: year
+				//            }
+				//        }
+				//    }
+				//}],
+				eventRender: function (event, element, view) {
+
+					//var clickedDateTime = new Date(date.toString());
+					var date = new Date();
+
+					//if (new Date(event.start.toString()) > date)
+					//    $(element).css("borderColor", "green");
+					//if (new Date(event.start.toString()) == date)
+					//    $(element).css("borderColor", "yellow");
+					//if (new Date(event.start.toString()) < date)
+					//    $(element).css("borderColor", "red");
+
+					//Assign equipment specific event background color
+					if (InstructorsColorList != null) {
+						jQuery.each(InstructorsColorList, function (index, item) {
+							if (event.title.substr(event.title.indexOf("~") + 1) == item.InstructorId) {
+								//if (event.title.indexOf(item.InstructorId) >= 0) {
+								$(element).css("backgroundColor", item.Color);
+							}
+						});
+					}
+
+				   /* if (event.description.toLowerCase().indexOf("canceled") > 0) {
+						$(element).css("backgroundColor", "red");
+						setInterval(function () {
+							element.fadeOut(900).delay(300).fadeIn(800);
+						}, 2000);
+					} */
+
+					element.qtip({
+						content: {
+							text: event.description
+						},
+						style: {
+							classes: 'qtip-green qtip-shadow qtip-youtube'
+						},
+						position: {
+							my: 'top left',  // Position my top left...
+							at: 'bottom right', // at the bottom right of...
+							//target: $('.selector') // my target
+						}
+						//content: event.description,
+						//style: {
+						//        width: 250,
+						//        tip: 'leftMiddle',
+						//        color: 'white',
+						//        background:'#66CC33',
+						//        name: 'green'
+						//    }
+					});
+				},
+				dayClick: function (date, jsEvent, view, resourceObj) {
+
+					//alert('Clicked on: ' + date.format());
+					//alert(resourceObj.id);
+					$('#dpdAddBatchClass').val(resourceObj.id);
+					//lblMyModalTitleBatchClassName,lblMyModalTitleTime
+					$("#btnAddEvent").removeAttr('disabled');
+
+					//Begin, Get exact clicked date and time
+					var clickedDateTime = new Date(date.toString());
+					var convertedDateTime = new Date(clickedDateTime - 3 * 60 * 60 * 1000);
+
+					//var hour = convertedDateTime.getHours();
+					//var min = convertedDateTime.getMinutes();
+					//var sec = convertedDateTime.getSeconds();
+
+					//if (hour.toString().length == 1)
+					//    hour = "0" + hour;
+					//if (min.toString().length == 1)
+					//    min = "0" + min;
+					//var time = hour + ":" + min;
+
+					//$('#txtAddStartingTime').val(time);
+
+
+					var dd1 = convertedDateTime.getDate();
+					var mm1 = convertedDateTime.getMonth() + 1;
+					var yyyy1 = convertedDateTime.getFullYear();
+
+					if (dd1 < 10) {
+						dd1 = '0' + dd1
+					}
+					if (mm1 < 10) {
+						mm1 = '0' + mm1
+					}
+					//End, Get extructed and exact clicked date and time
+
+					var ActualclickedDate = new Date(mm1 + '/' + dd1 + '/' + yyyy1 + ' 12:00' + ' AM');
+
+					//Do not add event to the already passed date.
+					if (!(ActualclickedDate < new Date((mm + '/' + dd + '/' + yyyy)))) {
+
+						$("#lblAddAvailabilityMessage").html("");
+						$('#txtAddDate').val(mm1 + '/' + dd1 + '/' + yyyy1);
+
+						$('#lblMyModalTitleBatchClassName').html(resourceObj.BatchClassName);
+						$('#lblMyModalTitleTime').html(mm1 + '/' + dd1 + '/' + yyyy1);
+						PopulateFreeInstructors();
+					}
+					else {
+						bootbox.alert("It is impossible to add event for the already passed date.");
+						// $('#lblAddAvailabilityMessage').html('It is not possible to add');
+						return false;
+					}
+				},
+				eventClick: function (event, jsEvent, view, resourceObj) {
+
+					$("#progressBarDiv").hide().fadeIn('fast');
+					debugger;
+					unAssigned = null;
+					//Assign the detail to view
+					$("#lblAvailabilityMessage").html("");
+					$("#btnEdit").removeAttr("disabled");
+					$("#lblAttendAvailabilityMessage").html("");
+					$("#btnAttenSave").removeAttr("disabled");
+
+					$('#txtAttenModuleScheduleId').val(event.id);
+					$('#cancelModuleScheduleId').val(event.id);
+
+					$('#txtEventID').val(event.id);
+					$('#txtTitle').html(event.title);
+					$('#txtDescription').html(event.description);
+
+
+
+
+					$('#ModuleID').val(event.moduleID);
+					$('#ModuleName').val(event.ModuleName);
+					//// bach class info save
+					//$('#BatchClassID').val(event.batchClassID);
+					//$('#BatchClassName').val(event.batchClassName);
+
+					
+					//$(this).css('background-color', 'blue'); //To indicate visited/rescheduled events.
+					var getListUrl = "/Scheduler/get_FreeTimeSlotAndRoom";
+					var postData = {
+						'ModuleScheduleId': event.id
+					};
+
+					///////////////////////CLEAR THE EXISTING DROPDOWN OPTION OF DAY, PERIOD, CLASS ROOM AND INSTRUCTOR///////////////
+					var DateDropdown = $('#dpdDate');
+					DateDropdown.empty();
+					var ClassRoomDropdown = $('#dpdClassRoom');
+					ClassRoomDropdown.empty();
+					var InstructorDropdown = $('#dpdInstructor');
+					InstructorDropdown.empty();
+					var PeriodDropdown = $('#dpdPeriod');
+					PeriodDropdown.empty();
+
+					//For Attendance
+					$('#txtAttenTakenDate').val('');
+					$('#txtAttenNote').val('');
+
+					var AttendInstructorDropdown = $('#dpdAttenInstructor');
+					AttendInstructorDropdown.empty();
+					var AttendClassRoomDropdown = $('#dpdAttenClassRoom');
+					AttendClassRoomDropdown.empty();
+					//$("#dpdAttenAbsentTrainee").select2("val", "");
+					//jQuery.noConflict();
+					//$('#dpdAttenAbsentTrainee').select2('data', null);
+					//$remote.select2('dpdAttenAbsentTrainee', { id: null, text: null });
+
+					//And Initialize the first/defualt option for all of those elements
+					$('#dpdDate').append($('<option>', {
+						value: '',
+						text: 'Select Date'
+					}));
+					$('#dpdPeriod').append($('<option>', {
+						value: '',
+						text: 'Select Period'
+					}));
+					$('#dpdClassRoom').append($('<option>', {
+						value: '',
+						text: 'Select Class Room'
+					}));
+					$('#dpdInstructor').append($('<option>', {
+						value: '',
+						text: 'Select Instructor'
+					}));
+					//For Attendance
+					$('#dpdAttenInstructor').append($('<option>', {
+						value: '',
+						text: 'Select Instructor'
+					}));
+					$('#dpdAttenClassRoom').append($('<option>', {
+						value: '',
+						text: 'Select Class Room'
+					}));
+					//$('#dpdAttenAbsentTrainee').append($('<option>', {
+					//    value: '',
+					//    text: 'Select Absent Trainee/s'
+					//}));
+
+					////////////////////////GET DATA(FREE TIMESLOT AND ROOM) FROM THE SERVER FOR THE MODULE ITS EVENT TRIGGERED////////////////////////
+					jQuery.ajax({
+						url: getListUrl,
+						type: 'POST',
+						data: postData,
+						success: function (result) {
+							
+							debugger;
+							if (result.hasList) {  //dpdDate,dpdPeriod,dpdClassRoom
+
+								$("#btnEdit").removeAttr("disabled");
+
+								unAssigned = result.resultData;//Golobally Hold the cascade List for furture utility
+								jQuery.each(result.resultData, function (index, InstructorItem) {
+									$('#dpdInstructor').append($('<option>', {
+										value: InstructorItem.FreeInstructor.InstructorId + '',
+										text: InstructorItem.FreeInstructor.NameAndCompanyId + ''
+									}));
+								});
+							}
+							else {
+								$("#lblAvailabilityMessage").html("There is no appropriate resource to edit the selected event.");
+								//$("#btnEdit").attr("disabled", "disabled");
+							}
+							progress.progressTimer('complete', {
+								successText: 'Fetching data is completed, get started!',
+								onFinish: function () {
+
+								}
+							});
+							///////////////////////////////GET SCHEDULE DETAIL TO BE EDITED//////////////////////////////////////////////
+
+							////save the jQuery XHR object from your $.getJSON request
+							//var jqXHR = my_change();
+
+							////when the above jQuery XHR object resolves, it will fire the second console.log
+							//$.when(jqXHR).then(function () {
+							//    console.log('second' + someVar);
+							//});
+							var getGroundScheduleDetailUrl = "/Scheduler/GetGroundScheduleDetail";
+
+							var groundDetailPostData = {
+								'moduleScheduleId': event.id
+							};
+
+							jQuery.ajax({
+								url: getGroundScheduleDetailUrl,
+								type: 'POST',
+								data: groundDetailPostData,
+								success: function (result) {
+									if (result.hasValue) {
+
+										var isInstructorAlreadyIncluded = false;
+										//Add instructor to dropdown list if it doesn't exist
+										$('#dpdInstructor option').each(function () {
+
+											if ($(this).val() == result.resultData.Instructor.InstructorId) {
+												isInstructorAlreadyIncluded = true;
+											}
+										});
+
+										if (!isInstructorAlreadyIncluded) {
+											$('#dpdInstructor').append($('<option>', {
+												value: result.resultData.Instructor.InstructorId,
+												text: result.resultData.Instructor.Person.FirstName + ' ' + result.resultData.Instructor.Person.MiddleName + ''
+											}));
+										}
+										$('#dpdInstructor').val(result.resultData.Instructor.InstructorId);
+
+
+										var date = new Date(parseInt(result.resultData.Date.substr(6)));
+
+										var dd1 = date.getDate();
+										var mm1 = date.getMonth() + 1;
+										var yyyy1 = date.getFullYear();
+
+										if (dd1 < 10) {
+											dd1 = '0' + dd1
+										}
+										if (mm1 < 10) {
+											mm1 = '0' + mm1
+										}
+										var editDate = dd1 + '/' + mm1 + '/' + yyyy1;
+										//editDateHideValue,editPeriodHideValue,editClassRoomHideValue
+										//editPeriodHideText,editClassRoomHideText
+
+										//Include the default Values to be edited
+										$('#dpdDate').append($('<option>', {
+											value: editDate + '',
+											text: editDate + ''
+										}));
+										$('#dpdDate').val(editDate);
+										$('#editDateHideValue').val(editDate);
+
+										$('#dpdPeriod').append($('<option>', {
+											value: result.resultData.PeriodId + '',
+											text: result.resultData.Period.StartTime + '-' + result.resultData.Period.EndTime
+										}));
+										$('#dpdPeriod').val(result.resultData.PeriodId);
+										//Store data inside hidden fields
+										$('#editPeriodHideValue').val(result.resultData.PeriodId);
+										$('#editPeriodHideText').val(result.resultData.Period.StartTime + '-' + result.resultData.Period.EndTime);
+
+										$('#dpdClassRoom').append($('<option>', {
+											value: result.resultData.ClassRoomId + '',
+											text: result.resultData.ClassRoom.Building.BuildingName + '-' + result.resultData.ClassRoom.RoomNo + ''
+										}));
+										$('#dpdClassRoom').val(result.resultData.ClassRoomId);
+										$('#editClassRoomHideValue').val(result.resultData.ClassRoomId);
+										$('#editClassRoomHideText').val(result.resultData.ClassRoom.Building.BuildingName + '-' + result.resultData.ClassRoom.RoomNo);
+
+										jQuery.each(unAssigned, function (index, instructorItem) {
+
+
+											if (instructorItem.FreeInstructor.InstructorId == result.resultData.Instructor.InstructorId) {
+
+												//Populate approprate date for instructor of the event to be edited
+												jQuery.each(instructorItem.FreeDates, function (index, dateItem) {
+													///////////start, //Check if Date doesn't already included in the the dropdown, otherwise leave it./////////////////
+													var isDateDoesntIncluded = true;
+													$('#dpdDate option').each(function () {
+
+														if ($(this).val() === dateItem.Date) {
+															isDateDoesntIncluded = false;
+														}
+													});
+													if (isDateDoesntIncluded == true) {
+														$('#dpdDate').append($('<option>', {
+															value: dateItem.Date + '',
+															text: dateItem.Date + ''
+														}));
+													}
+													///////////end, Check if Date doesn't already included in the the dropdown, otherwise leave it./////////////////
+
+													//Populate approprate periods for Date of the event to be edited
+													if (dateItem.Date === editDate) {
+
+														jQuery.each(dateItem.FreePeriods, function (index, periodItem) {
+
+															//Check if Period doesn't already included in the the dropdown, otherwise leave it.
+															var isPeriodDoesntIncluded = true;
+															$('#dpdPeriod option').each(function () {
+
+																if ($(this).val() == periodItem.Period.PeriodId) {
+																	isPeriodDoesntIncluded = false;
+																}
+															});
+															if (isPeriodDoesntIncluded == true) {
+																$('#dpdPeriod').append($('<option>', {
+																	value: periodItem.Period.PeriodId + '',
+																	text: periodItem.Period
+																}));
+															}
+															//Populate approprate class rooms for period of the event to be edited
+															if (periodItem.Period.PeriodId == result.resultData.PeriodId) {
+
+																jQuery.each(periodItem.ClassRooms, function (index, roomItem) {
+
+																	//Check if Class Room doesn't already included in the the dropdown, otherwise leave it.
+																	var isClassRoomDoesntIncluded = true;
+																	$('#dpdClassRoom option').each(function () {
+																		if ($(this).val() == roomItem.ClassRoomId) {
+																			isClassRoomDoesntIncluded = false;
+																		}
+																	});
+
+																	if (isClassRoomDoesntIncluded == true) {
+																		$('#dpdClassRoom').append($('<option>', {
+																			value: roomItem.ClassRoomId + '',
+																			text: roomItem.Building.BuildingName + '-' + roomItem.RoomNo + ''
+																		}));
+																	}
+																});
+															}
+														});
+													}
+												});
+											}
+										});
+
+									}
+								},
+								error: function () {
+									bootbox.alert("Error has occured while reading event detail!");
+								}
+							});
+
+							///////////////////////////GET ATTENDANCE DATA FROM THE SERVER////////////////////////////////////////
+							var URL = "/Scheduler/GetAttendaceData";
+							var URLData = {
+								'moduleScheduleId': event.id
+							};
+
+							jQuery.ajax({
+								url: URL,
+								type: 'POST',
+								data: URLData,
+								success: function (result) {
+									if (result.hasList) {
+
+										$("#btnAttenSave").removeAttr("disabled");
+										$("#lblAttendAvailabilityMessage").html('');
+										$('#dpdAttenInstructor').empty();
+										$('#dpdAttenClassRoom').empty();
+
+										var $AttenAbsentTrainee = $('#dpdAttenAbsentTrainee');
+										$AttenAbsentTrainee.val(null).trigger("change");
+										$AttenAbsentTrainee.empty();
+
+										$('#dpdAttenInstructor').append($('<option>', {
+											value: '',
+											text: 'Select Instructor'
+										}));
+										$('#dpdAttenClassRoom').append($('<option>', {
+											value: '',
+											text: 'Select Class Room'
+										}));
+										//$('#dpdAttenAbsentTrainee').trigger()
+
+										//Initialize all dropdown lists.
+										jQuery.each(result.resultData.PotentialInstructors, function (index, instructorItem) {
+											$('#dpdAttenInstructor').append($('<option>', {
+												value: instructorItem.InstructorId + '',
+												text: instructorItem.NameAndCompanyId + ''
+											}));
+										});
+										jQuery.each(result.resultData.ClassRooms, function (index, classRoomItem) {
+											$('#dpdAttenClassRoom').append($('<option>', {
+												value: classRoomItem.ClassRoomId + '',
+												text: classRoomItem.Building.BuildingName + '-' + classRoomItem.RoomNo + ''
+											}));
+										});
+										jQuery.each(result.resultData.Trainees, function (index, traineeItem) {
+											$('#dpdAttenAbsentTrainee').append($('<option>', {
+												value: traineeItem.TraineeId + '',
+												text: traineeItem.TraineeNameAndCompanyId + ''
+											}));
+										});
+									}
+									else {
+										$("#lblAttendAvailabilityMessage").html("There is no resource available to fill the dropdown list.");
+										$("#btnAttenSave").attr("disabled", "disabled");
+									}
+								},
+								error: function () {
+									bootbox.alert("Error has occured!!!.");
+								}
+							});
+						},
+						error: function (ev) {
+							bootbox.alert("Error has occured!!!. In getting DATA(FREE TIMESLOT AND ROOM)  ");
+
+							progress.progressTimer('error', {
+								errorText: 'ERROR!',
+								onFinish: function () {
+								}
+							});
+						}
+					});
+					$('#editScheduledEventModel').modal('show');
+					return false;
+				},
+				eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
+					//alert(event.title + " was dropped on " + event.start.format());
+
+					bootbox.confirm("Are you sure you want to change <b>" + event.title + "</b> to <b>" + event.start.format() + "-" + event.end.format() + "</b>?", function (result) {
+						bootbox.alert("Confirm result: " + result);
+					});
+				}
+			});
+			/////////////////////////////////End, Make event color Batch Class Specific/////////////////////////////////////////
+			$("#dpdAssociateList").select2();//dpdAttenAbsentTrainee
+
+			$("#dpdAttenAbsentTrainee").select2();
+			$('#txtFilterDateRange').daterangepicker();
+			$('#txtAttenTakenDate').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' });
+			//window.rel
+
+
+
+			$('.PTSMSDatepicker').datepicker({
+				autoclose: true,
+				todayHighlight: true
+			});
+
+			//Event handler when schedule date is changed
+			$('.PTSMSDatepicker').on('changeDate', function (event) {
+				PopulateFreeInstructors();
+			});
+
+
+			//Create an instance of progress bar
+			var progress = $(".loading-progress").progressTimer({
+				timeLimit: 30,
+				onFinish: function () {
+				}
+			});
+
+			/* Begin: Event handler For Editing Schedule Event*/
+			$('.SchedulingContainer').on('change', "#dpdInstructor", function () {
+
+				var instructorId = $('#dpdInstructor').val();
+				var date = $('#editDateHideValue').val();
+
+				var DateDropdown = $('#dpdDate');
+				DateDropdown.empty();
+
+				//And Initialize the first/defualt option for all of those elements
+				$('#dpdDate').append($('<option>', {
+					value: '',
+					text: 'Select Date'
+				}));
+
+				if (instructorId != "") {
+
+					jQuery.each(unAssigned, function (index, instructorItem) {
+
+						if (instructorItem.FreeInstructor.InstructorId == instructorId) {
+
+							jQuery.each(instructorItem.FreeDates, function (index, dateItem) {
+								$('#dpdDate').append($('<option>', {
+									value: dateItem.Date + '',
+									text: dateItem.Date + ''
+								}));
+							});
+						}
+					});
+
+					//Add date that is existed before edited into the dropdown if it doen't exist
+					var isDateDoesntIncluded = true;
+					$('#dpdDate option').each(function () {
+
+						if ($(this).val() === date) {
+							isDateDoesntIncluded = false;
+						}
+					});
+					if (isDateDoesntIncluded == true) {
+						$('#dpdDate').append($('<option>', {
+							value: date + '',
+							text: date + ''
+						}));
+					}
+				}
+			});
+
+			$('.SchedulingContainer').on('change', "#dpdDate", function () {
+
+				var instructorId = $('#dpdInstructor').val();
+				var date = $('#dpdDate').val();
+
+				var periodValue = $('#editPeriodHideValue').val();
+				var periodText = $('#editPeriodHideText').val();
+
+				var PeriodDropdown = $('#dpdPeriod');
+				PeriodDropdown.empty();
+
+				//And Initialize the first/defualt option for all of those elements
+				$('#dpdPeriod').append($('<option>', {
+					value: '',
+					text: 'Select Period'
+				}));
+
+				if (date != "") {
+
+					jQuery.each(unAssigned, function (index, InstructorItem) {
+
+						if (InstructorItem.FreeInstructor.InstructorId == instructorId) {
+
+							jQuery.each(InstructorItem.FreeDates, function (index, DateItem) {
+
+								if (DateItem.Date === date) {
+									jQuery.each(DateItem.FreePeriods, function (index, periodItem) {
+
+										$('#dpdPeriod').append($('<option>', {
+											value: periodItem.Period.PeriodId + '',
+											text: periodItem.Period.Period + ''
+										}));
+									});
+								}
+							});
+						}
+					});
+
+					//Add Period that is existed before edited into the dropdown if it doen't exist
+					var isPeriodDoesntIncluded = true;
+					$('#dpdPeriod option').each(function () {
+
+						if ($(this).val() == periodValue) {
+							isPeriodDoesntIncluded = false;
+						}
+					});
+					if (isPeriodDoesntIncluded == true) {
+						$('#dpdPeriod').append($('<option>', {
+							value: periodValue + '',
+							text: periodText + ''
+						}));
+					}
+				}
+			});
+
+			$('.SchedulingContainer').on('change', "#dpdPeriod", function () {
+
+
+				var periodId = $('#dpdPeriod').val();
+
+				if (periodId != "") {
+					var date = $('#dpdDate').val();
+					var instructorId = $('#dpdInstructor').val();
+					//editInstructorHideValue,editDateHideValue,editPeriodHideValue,editClassRoomHideValue
+					//editInstructorHideText,editPeriodHideText,editClassRoomHideText
+
+					var classRoomValue = $('#editClassRoomHideValue').val();
+					var classRoomText = $('#editClassRoomHideText').val();
+
+					var ClassromDropdown = $('#dpdClassRoom');
+					ClassromDropdown.empty();
+
+					//And Initialize the first/defualt option for all of those elements
+					$('#dpdClassRoom').append($('<option>', {
+						value: '',
+						text: 'Select Class Room'
+					}));
+
+					jQuery.each(unAssigned, function (index, InstructorItem) {
+
+						if (InstructorItem.FreeInstructor.InstructorId == instructorId) {
+
+							jQuery.each(InstructorItem.FreeDates, function (index, DateItem) {
+								if (DateItem.Date == date) {
+
+									jQuery.each(DateItem.FreePeriods, function (index, periodItem) {
+
+										if (periodItem.Period.PeriodId == periodId) {
+
+											jQuery.each(periodItem.ClassRooms, function (index, roomItem) {
+
+												$('#dpdClassRoom').append($('<option>', {
+													value: roomItem.ClassRoomId + '',
+													text: roomItem.Building.BuildingName + '-' + roomItem.RoomNo + ''
+												}));
+											});
+										}
+									});
+								}
+							});
+						}
+					});
+
+					//Add Period that is existed before edited into the dropdown if it doen't exist
+					var isClassRoomDoesntIncluded = true;
+					$('#dpdClassRoom option').each(function () {
+
+						if ($(this).val() == classRoomValue) {
+							isClassRoomDoesntIncluded = false;
+						}
+					});
+
+					//alert('classRoomText=' + classRoomText + ' classRoomValue = ' + classRoomValue)
+					if (isClassRoomDoesntIncluded == true) {
+						$('#dpdClassRoom').append($('<option>', {
+							value: classRoomValue + '',
+							text: classRoomText + ''
+						}));
+					}
+				}
+			});
+			/* End: Event handler For Editing Schedule Event*/
+
+
+			///////////////////////////////////BEGIN EVENT HANDLER FOR SEARCHING SCHEDULE EVENT ///////////////////////////////////
+			$('.SearchEventContainer').on("click", "#btnSearch", function () {
+
+				var filterBy = $('#dpdFilterBy').val();
+				var filterBy1 = document.getElementById('dpdFilterBy');
+				var filterValue1 = document.getElementById('dpdFilterValue');
+
+				if (filterBy == 'Date') {
+					filterValue = $('#txtFilterDateRange').val();
+				}
+				else {
+					filterValue = $('#dpdFilterValue').val();
+				}
+				//string FilterBy, int FilterValue
+				var date = {
+					'FilterBy': filterBy,
+					'FilterValue': filterValue
+				};
+				//alert('filterBy=' + filterBy + ' & filterValue= ' + filterValue);
+				if (filterBy1.selectedIndex > 0 && (filterValue1.selectedIndex > 0 || filterValue != null)) {
+
+					//used to remove calendar event with same sourse.
+					$('#calendar').fullCalendar('removeEventSource', sources.sourceone);
+					sources = {
+						sourceone: {
+							url: "/Scheduler/Filter",
+							data: date,
+							type: 'POST',
+							cache: false,       //this is optional
+							color: '#6C92A8',   //this is optional
+							textColor: 'white'  //this is optional
+						}
+					}
+					$('#calendar').fullCalendar('addEventSource', sources.sourceone);
+				}
+				else {
+					bootbox.alert("Please provide all search inputs.");
+				}
+			});
+
+			$('.SchedulingContainer').on('change', "#dpdFilterBy", function () {
+				var filterBy = $('#dpdFilterBy').val();//dpdFilterValue
+				var filterValue = $('#dpdFilterValue').val();
+
+				if (!(filterBy == 'Date')) {
+
+					$('#dpdFilterValue').removeClass('hide');
+					$('#txtFilterDateRange').addClass('hide');
+
+					var Url = "/Scheduler/GetFilterValue";//string filterBy, int filterValue
+					var Data = {
+						'filterBy': filterBy
+					};
+
+					////BatchClass,Instructor,Program
+					var FilterDropdown = $('#dpdFilterValue');
+					FilterDropdown.empty();
+
+					$('#dpdFilterValue').append($('<option>', {
+						value: '',
+						text: '--Select ' + filterBy + "--"
+					}));
+
+					$.ajax({
+						url: Url,
+						type: 'GET',
+						data: Data,
+						success: function (result) {
+							if (result.hasList) {
+
+								jQuery.each(result.resultData, function (index, item) {
+									$('#dpdFilterValue').append($('<option>', {
+										value: item.Id + '',
+										text: item.Name + ''
+									}));
+								});
+							}
+						},
+						error: function () {
+							bootbox.alert("Error has occured!!!.");
+						}
+					});
+				}
+				else {
+					//txtFilterDateRange,dpdFilterValue
+					$('#txtFilterDateRange').removeClass('hide');
+					$('#dpdFilterValue').addClass('hide');
+				}
+
+			});
+			///////////////////////////////////END EVENT HANDLER FOR SEARCHING SCHEDULE EVENT ////////////////////////////////////
+
+
+			/* Begin Event handler For Adding Schedule Event */
+			$('.SchedulingContainer').on('change', "#dpdAddBatchClass", function () {
+
+				var BatchClassId = $('#dpdAddBatchClass').val();
+
+				if (BatchClassId != "") {
+
+					$("#lblAddAvailabilityMessage").html("");
+					var date = $('#txtAddDate').val();
+
+					//Clear the existing dropdown option of Day, Period, Class Room and instructor
+					var InstructorDropDown = $('#dpdAddInstructor');
+					InstructorDropDown.empty();
+					var phaseCourseDropDown = $('#dpdAddPhaseCourses');
+					phaseCourseDropDown.empty();
+					var CourseModulesDropDown = $('#dpdAddModules');
+					CourseModulesDropDown.empty();
+					var PeriodDropDown = $('#dpdAddPeriod');
+					PeriodDropDown.empty();
+					var classRoomDropdown = $('#dpdAddClassRoom');
+					classRoomDropdown.empty();
+
+
+					//And Initialize the first/defualt option for all of those elements
+					$('#dpdAddInstructor').append($('<option>', {
+						value: '',
+						text: '--Select Instructor--'
+					}));
+					$('#dpdAddPhaseCourses').append($('<option>', {
+						value: '',
+						text: '--Select Batch Course--'
+					}));
+					$('#dpdAddModules').append($('<option>', {
+						value: '',
+						text: '--Select Course Modules--'
+					}));
+					$('#dpdAddPeriod').append($('<option>', {
+						value: '',
+						text: '--Select Period--'
+					}));
+					$('#dpdAddClassRoom').append($('<option>', {
+						value: '',
+						text: 'Select Class Room'
+					}));
+
+
+					var Url = "/Scheduler/GetFreeInstructorForSpecificDate";
+					//Populate Free Instructors of this specific date from the server
+					$.ajax({
+						url: Url,
+						type: 'POST',
+						data: {
+							'date': date,
+							'batchClassId': BatchClassId
+						},
+						success: function (result) {
+							if (result.hasList) {
+								///////
+								jQuery.each(result.resultData, function (index, instructor) {
+									$('#dpdAddInstructor').append($('<option>', {
+										value: instructor.InstructorId + '',
+										text: instructor.NameAndCompanyId + ''
+									}));
+								});
+							}
+							else {
+								$("#lblAddAvailabilityMessage").html("There is no resource to schedule the selected module.");
+								$("#btnAddEvent").attr("disabled", "disabled");
+							}
+						},
+						error: function () {
+							bootbox.alert("Error has occured!!!.");
+						}
+					});
+
+				}
+			});
+
+			$('.SchedulingContainer').on('change', "#dpdAddInstructor", function () {
+
+				var InstructorId = $('#dpdAddInstructor').val();
+
+				if (InstructorId != "") {
+
+					$("#lblAddAvailabilityMessage").html("");
+					var BatchClassId = $('#dpdAddBatchClass').val();
+
+					//Clear the existing dropdown option of Day, Period, Class Room and instructor
+					var phaseCourseDropDown = $('#dpdAddPhaseCourses');
+					phaseCourseDropDown.empty();
+					var CourseModulesDropDown = $('#dpdAddModules');
+					CourseModulesDropDown.empty();
+					var PeriodDropDown = $('#dpdAddPeriod');
+					PeriodDropDown.empty();
+					var classRoomDropdown = $('#dpdAddClassRoom');
+					classRoomDropdown.empty();
+
+
+					//And Initialize the first/defualt option for all of those elements
+					$('#dpdAddPhaseCourses').append($('<option>', {
+						value: '',
+						text: '--Select Batch Course--'
+					}));
+					$('#dpdAddModules').append($('<option>', {
+						value: '',
+						text: '--Select Course Modules--'
+					}));
+					$('#dpdAddPeriod').append($('<option>', {
+						value: '',
+						text: '--Select Period--'
+					}));
+					$('#dpdAddClassRoom').append($('<option>', {
+						value: '',
+						text: 'Select Class Room'
+					}));
+
+					var Url = "/Scheduler/ListPhaseCourses";
+
+					//Populate Free Courses and Modules  that the instructor can teach in a this specific date from the server
+					$.ajax({
+						url: Url,
+						type: 'GET',
+						data: {
+							'instructorId': InstructorId,
+							'batchClassId': BatchClassId
+						},
+						success: function (result) {
+							if (result.hasList) {
+								jQuery.each(result.resultData, function (index, item) {
+									$('#txtPhaseScheduleId').val(item.PhaseScheduleId);
+
+									$('#dpdAddPhaseCourses').append($('<option>', {
+										value: item.CourseId + '_' + item.PhaseScheduleId,
+										text: item.PhaseAndCourseName + ''
+									}));
+								});
+							}
+							else {
+								$("#lblAddAvailabilityMessage").html("No course/s are ready to schedule for the selected instructor. Possible causes: <ul><li>The selected instructor may not be assigned to teach course modules of the selected batch class.</li><li>Course modules for the selected batch class may not be scheduled in the phase schedule. </li></ul> ");
+								$("#btnAddEvent").attr("disabled", "disabled");
+							}
+						},
+						error: function () {
+							bootbox.alert("Error has occured!!!.");
+						}
+					});
+				}
+			});
+
+			$('.SchedulingContainer').on('change', "#dpdAddPhaseCourses", function () {
+
+			   // var PhaseCourseId = $('#dpdAddPhaseCourses').val();
+
+				if (PhaseCourseId != "") {
+
+					$("#lblAddAvailabilityMessage").html("");
+
+					var InstructorId = $('#dpdAddInstructor').val();
+					var ComingValue = $('#dpdAddPhaseCourses').val();
+					var ValueArray= ComingValue.split('_');
+					var PhaseCourseId = ValueArray[0];
+					var phaseScheduleId = ValueArray[1];
+					var noOfDays = $('#noOfDays').val();
+
+					if (!jQuery.isNumeric(noOfDays) || noOfDays < 1) {
+						bootbox.alert("Specify the number of days!!!.");
+						$('#dpdAddInstructor').val("");
+						$('#txtPhaseScheduleId').val("")
+						$('#dpdAddPhaseCourses').val("");
+					}
+
+					var CourseModulesDropDown = $('#dpdAddModules');
+					CourseModulesDropDown.empty();
+					var PeriodDropDown = $('#dpdAddPeriod');
+					PeriodDropDown.empty();
+					var classRoomDropdown = $('#dpdAddClassRoom');
+					classRoomDropdown.empty();
+
+					$('#dpdAddModules').append($('<option>', {
+						value: '',
+						text: '--Select Modules--'
+					}));
+					$('#dpdAddPeriod').append($('<option>', {
+						value: '',
+						text: '--Select Period--'
+					}));
+					$('#dpdAddClassRoom').append($('<option>', {
+						value: '',
+						text: 'Select Class Room'
+					}));
+
+
+
+					//int instructorId, int phaseCourseId
+					var Url = "/Scheduler/GetPhaseModules";
+					var Data = {
+						'instructorId': InstructorId,
+						'phaseCourseId': PhaseCourseId,
+						'phaseScheduleId': phaseScheduleId
+					};
+				  //  alert(phaseScheduleId);
+					$.ajax({
+						url: Url,
+						type: 'POST',
+						data: Data,
+						success: function (result) {
+							if (result.hasList) {
+								$('#lblAddAvailabilityMessage').html('');
+								jQuery.each(result.resultData, function (index, item) {
+									$('#dpdAddModules').append($('<option>', {
+										value: item.ModuleId + '',
+										text: item.ModuleName + ''
+									}));
+								});
+							}
+							else {
+								$('#lblAddAvailabilityMessage').html('No modules found. Possible causes: <ul><li>Module/s of the selected course are scheduled enough.</li></ul>');
+							}
+						},
+						error: function () {
+							bootbox.alert("Error has occured!!!.");
+						}
+					});
+				}
+
+			});
+
+			$('.SchedulingContainer').on('change', "#dpdAddModules", function () {
+
+				var moduleId = $('#dpdAddModules').val();
+
+				if (moduleId != "") {
+
+					$("#lblAddAvailabilityMessage").html("");
+
+					var date = $('#txtAddDate').val();
+					var phaseCourseId = $('#dpdAddPhaseCourses').val();
+					var phaseScheduleId = $('#txtPhaseScheduleId').val();
+					var instructorId = $('#dpdAddInstructor').val();
+					var noOfDays = $("#noOfDays").val();
+
+					//Clear the existing dropdown option of Class room and instructor
+					var dpdAddClassRoomDropDown = $('#dpdAddClassRoom');
+					dpdAddClassRoomDropDown.empty();
+					var dpdAddPeriodDropDown = $('#dpdAddPeriod');
+					dpdAddPeriodDropDown.empty();
+
+					$('#dpdAddClassRoom').append($('<option>', {
+						value: '',
+						text: '--Select Class Room--'
+					}));
+
+					$('#dpdAddPeriod').append($('<option>', {
+						value: '',
+						text: '--Select Period--'
+					}));
+
+
+					//(string date, int phaseCourseId, int phseModuleId)
+					var Url = "/Scheduler/get_FreeTimeSlotAndRoomForSpecificDate";
+					var Data = {
+						'date': date,
+						'instructorId': instructorId,
+						'phaseScheduleId': phaseScheduleId,
+						'phseModuleId': moduleId,
+						'noOfDays': noOfDays
+					};
+
+					var errorMessage = "<ul>";//initalization
+					var errorFlag = false;
+
+					$.ajax({
+						url: Url,
+						type: 'POST',
+						data: Data,
+						success: function (result) {
+							if (result.hasList) {
+								$('#lblAddAvailabilityMessage').html('');
+								unAssigned = result.resultData;
+
+								jQuery.each(result.resultData, function (index, periodItem) {
+									//debugger;
+									if (periodItem.Message != "OK") {
+										errorMessage += "<li>" + periodItem.Message + "</li>";
+										errorFlag = true;
+									}
+								});// only for error message
+								if (errorFlag)
+									$('#lblAddAvailabilityMessage').html(errorMessage + '</ul>');
+
+								var continueFlag = true;
+								$.each(result.resultData, function (index, periodListItems) {
+									//debugger;
+									var period = periodListItems.FreePeriod;
+									if (period.length > 0 && continueFlag) {
+										$.each(period, function (index, periodItems) {
+											//debugger;
+											continueFlag = false;
+											$('#dpdAddPeriod').append($('<option>', {
+												value: periodItems.Period.PeriodId + '',
+												text: periodItems.Period.Period + ''
+											}));
+										});
+									}
+
+								});
+							}
+							else {
+								$('#lblAddAvailabilityMessage').html('Resource shortage found. Possible causes: <ul><li>Instructor may not be free at the selected date and in the predefined batch period template.</li> <li>There may not be any free Class Rooms in the selected date and batch period template.</li></ul>');
+							}
+						},
+						error: function () {
+							bootbox.alert("Error has occured!!!.");
+						}
+					});
+				}
+			});
+
+			$('.SchedulingContainer').on('change', "#dpdAddPeriod", function () {
+
+
+				//var date = $('#dpdDate').val();
+				var periodId = $('#dpdAddPeriod').val();
+				//debugger;
+				if (periodId != "") {
+
+					//$("#lblAddAvailabilityMessage").html("");
+					//Clear the existing dropdown option of Class room and instructor
+					var classRoomDropdown = $('#dpdAddClassRoom');
+					classRoomDropdown.empty();
+
+					//Initialize the first/defualt option
+					$('#dpdAddClassRoom').append($('<option>', {
+						value: '',
+						text: 'Select Class Room'
+					}));
+					//debugger;
+					var continueFlag = true;
+					jQuery.each(unAssigned, function (index, periodListItems) {
+						var period = periodListItems.FreePeriod;
+						if (period.length > 0) {
+							$.each(period, function (index, periodItems) {
+								if (periodItems.Period.PeriodId == periodId && continueFlag) {
+									//debugger;
+									continueFlag = false;
+									jQuery.each(periodItems.ClassRooms, function (index, roomItem) {
+										//debugger;
+										$('#dpdAddClassRoom').append($('<option>', {
+											value: roomItem.ClassRoomId + '',
+											text: roomItem.Building.BuildingName + '-' + roomItem.RoomNo + ''
+										}));
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+
+			$('.SchedulingContainer').on("click", "#btnAddEvent", function () {
+
+				//Value to be posted
+				var phaseScheduleId = $('#txtPhaseScheduleId').val();
+				var phaseCourseId = $('#dpdAddPhaseCourses').val();
+				var moduleId = $('#dpdAddModules').val();
+				var date = $('#txtAddDate').val();
+				var noOfDays = $('#noOfDays').val();
+				var periodId = $('#dpdAddPeriod').val();
+				var classRoomId = $('#dpdAddClassRoom').val();
+				var instructorId = $('#dpdAddInstructor').val();
+
+
+				//alert('SC=' + phaseCourseId + ' M=' + moduleId + ' D=' + date + ' P=' + periodId + ' CR=' + classRoomId + ' I=' + instructorId);
+				var Url = "/Scheduler/AddNewModuleSchedule";
+				//window.location.href = Url + "?moduleScheduleId=" + moduleScheduleId + "&periodId=" + periodId + "&classRoomId=" + classRoomId + "&date=" + date + "&instructorId=" + instructorId;
+				//int phaseCourseId, int moduleId, string date,int periodId, int classRoomId, int instructorId
+				var postData = {
+					'phaseScheduledId': phaseScheduleId,
+					'moduleId': moduleId,
+					'date': date,
+					'noOfDays': noOfDays,
+					'periodId': periodId,
+					'classRoomId': classRoomId,
+					'instructorId': instructorId
+				};
+
+				var errorMessage = "<ul>";
+				$.ajax({
+					url: Url,
+					type: 'POST',
+					data: postData,
+					success: function (result) {
+						//jQuery.noConflict();
+
+						if (result.isSuccess) {
+							debugger;
+							bootbox.alert("Added sucessfully!!!.");
+
+
+							$('#addScheduledEventModel').modal('hide');
+
+							//bootbox.alert("Event successfully added..");//Should be at the end of this brace
+							window.location.href = "/Scheduler/GroundClassSchedule";
+							//Remove the prevouse data source from the calandar
+							//$('#calendar').fullCalendar('removeEventSource', sources.sourceone);
+
+							////Add a new data Source
+							//sources = {
+							//    sourceone: {
+							//        url: "/Scheduler/getScheduledEvent",
+							//        type: 'POST',
+							//        cache: false,       //this is optional
+							//        color: '#6C92A8',   //this is optional
+							//        textColor: 'white'  //this is optional
+							//    }
+							//}
+							//$('#calendar').fullCalendar('addEventSource', sources.sourceone);
+						}
+						else {
+							$("#lblAvailabilityMessage").html("Unable to update module schedule.");
+						}
+
+					},
+					error: function () {
+						bootbox.alert("Error has occured!!!.");
+					}
+				});
+			});
+			/* End Event handler For Adding Schedule Event  */
+
+
+
+			$('.SchedulingContainer').on("click", "#btnAttenSave", function () {
+				//Get data to be posted
+				var ModuleSchedule = $('#txtAttenModuleScheduleId').val();
+				var TakenDate = $('#txtAttenTakenDate').val();
+				var Instructor = $('#dpdAttenInstructor').val();
+				var ClassRoom = $('#dpdAttenClassRoom').val();
+				var AbsentTrainee = $('#dpdAttenAbsentTrainee').val();
+				var Note = $('#txtAttenNote').val();
+				//alert('MS= ' + ModuleSchedule + ' TD=' + TakenDate + ' I=' + Instructor + ' CR=' + ClassRoom + ' AT' + AbsentTrainee + ' N' + Note);
+				var Url = "/Scheduler/AddAttendance";
+
+				var postData = {
+					'moduleSchedule': ModuleSchedule,
+					'takenDate': TakenDate,
+					'instructorId': Instructor,
+					'classRoomId': ClassRoom,
+					'trainees': AbsentTrainee,
+					'Note': Note
+				};
+
+				//Save Attendance
+				$.ajax({
+					url: Url,
+					type: 'POST',
+					data: postData,
+					success: function (result) {
+						//jQuery.noConflict();
+						$('#editScheduledEventModel').modal('hide');
+						if (result.isSuccess) {
+							bootbox.alert("Attendance successfuly Added.");
+						}
+						else {
+							bootbox.alert("Unable to add attendance.");
+						}
+					},
+					error: function () {
+						bootbox.alert("Error has occured!!!.");
+					}
+				});
+			});
+
+			function PopulateFreeInstructors() {
+				//alert('PopulateFreeInstructors');
+				$("#lblAddAvailabilityMessage").html("");
+				var date = $('#txtAddDate').val();
+				var BatchClassId = $('#dpdAddBatchClass').val();
+
+				//Clear the existing dropdown option of Day, Period, Class Room and instructor
+				var InstructorDropDown = $('#dpdAddInstructor');
+				InstructorDropDown.empty();
+				var phaseCourseDropDown = $('#dpdAddPhaseCourses');
+				phaseCourseDropDown.empty();
+				var CourseModulesDropDown = $('#dpdAddModules');
+				CourseModulesDropDown.empty();
+				var PeriodDropDown = $('#dpdAddPeriod');
+				PeriodDropDown.empty();
+				var classRoomDropdown = $('#dpdAddClassRoom');
+				classRoomDropdown.empty();
+
+
+				//And Initialize the first/defualt option for all of those elements
+				$('#dpdAddInstructor').append($('<option>', {
+					value: '',
+					text: '--Select Instructor--'
+				}));
+				$('#dpdAddPhaseCourses').append($('<option>', {
+					value: '',
+					text: '--Select Batch Course--'
+				}));
+				$('#dpdAddModules').append($('<option>', {
+					value: '',
+					text: '--Select Course Modules--'
+				}));
+				$('#dpdAddPeriod').append($('<option>', {
+					value: '',
+					text: '--Select Period--'
+				}));
+				$('#dpdAddClassRoom').append($('<option>', {
+					value: '',
+					text: 'Select Class Room'
+				}));
+
+				var Url = "/Scheduler/GetFreeInstructorForSpecificDate";
+				//Populate Free Instructors of this specific date from the server
+				$.ajax({
+					url: Url,
+					type: 'POST',
+					data: {
+						'date': date,
+						'batchClassId': BatchClassId
+					},
+					success: function (result) {
+						if (result.hasList) {
+							///////
+							jQuery.each(result.resultData, function (index, instructor) {
+								$('#dpdAddInstructor').append($('<option>', {
+									value: instructor.InstructorId + '',
+									text: instructor.NameAndCompanyId + ''
+								}));
+							});
+						}
+						else {
+							$("#lblAddAvailabilityMessage").html("No instructor available. Possible causes : <ul> <li>Potential instructor/s assigned to teach modules of the selected batch class are busy in the selected date and predefined period template.</li> <li>No instructor/s assigned to teach modules of the selected batch class. </li>  </ul>");
+							$("#btnAddEvent").attr("disabled", "disabled");
+						}
+					},
+					error: function () {
+						bootbox.alert("Error has occured!!!.");
+					}
+				});
+				$('#addScheduledEventModel').modal('show');
+			}
+			/////////////////////////Merge Schedule//////////////////////
+			$('a[data-toggle="tab"]').on('click', function (e) {
+
+				$('#myModalLabel').html('');
+				$('#lblMergeBatchClass').html('');
+
+				var target = $(e.target).attr("href");
+
+				if ((target == '#Grade_tab')) {
+					$('#myEditModalLabel').html('Grading System.');
+
+				}
+
+				if ((target == '#mergeSchedule_tab')) {
+					var $SelectedBatchClass = [];
+
+					$('#myEditModalLabel').html('Merge Schedule.');
+					var $AddDpdMergeBatchClass = $('#dpdMergeBatchClass').val(null).trigger("change");
+					var moduleScheduleId = $('#txtEventID').val();
+
+					var Url = "/Scheduler/GetValidBatchClassToBeMerged";
+					var postDataForBatchClassList = {
+						'moduleScheduleId': moduleScheduleId
+					};
+					debugger;
+
+					$.ajax({
+						url: Url,
+						data: postDataForBatchClassList,
+						type: 'POST',
+						success: function (result) {
+							if (result.hasList) {
+								jQuery.each(result.resultData, function (index, lnItem) {
+									debugger;
+									$('#dpdMergeBatchClass').append($('<option>', {
+										value: lnItem.Id,
+										text: lnItem.Name
+									}));
+								});
+							}
+							else {
+								$("#lblMergeBatchClass").html("There is no available batch class/s. Possible causes: <ul><li>Batch Class to be merged is not eligible for the scheduled module. </li> <li>All Batch Classes are busy at the time where this event is scheduled.</li></ul>");
+								$("#btnAddEvent").attr("disabled", "disabled");
+							}
+						},
+						error: function () {
+							bootbox.alert("Error has occured!!!.");
+						}
+					});
+				}
+			});
+			$dpdMergeBatchClassValues = [];//global variable to hold all selected merg schedules
+
+			$('body #mergeSchedule_tab').on("submit", "#btnMergeSchedule", function (event) {
+				debugger;
+				event.preventDefault();
+				//Get data to be posted
+				var moduleScheduleId = $('#txtEventID').val();
+				var moduleId = $('#ModuleID').val();
+				var batchClassID = $('#BatchClassID').val();
+
+				
+				var batchClassList = $dpdMergeBatchClassValues;
+				//var batchClassList = $('#dpdMergeBatchClass').val();
+				var Url = "/Scheduler/MergeBatchClass?" + "moduleScheduleId=" + moduleScheduleId + "&batchClassList=" + batchClassList +
+					"&moduleId=" + moduleId;
+				location.href = Url;
+			});
+
+
+		});
+		//read just sizing after font load
+		$(window).on('load', function () {
+			$('#calendar').fullCalendar('render');
+		});
+
+		$(document).ready(function () {
+			$('#PTSHtmlBodyTag').addClass("sidebar-collapse");
+
+			var $AddDropDownMergeBatchClass = $("#dpdMergeBatchClass").select2({
+				maximumSelectionLength: 1//works only form single merg
+			});
+
+			@{
+				if (ViewBag.ScheduleMessage != null)
+				{
+					<text> bootbox.alert('@ViewBag.ScheduleMessage');</text>
+					ViewBag.ScheduleMessage = null;
+				}
+			}
+
+			$("#dpdMergeBatchClass").on("select2:select select2:unselect", function (e) {
+				debugger;
+				//this returns all the selected item
+				var items = $(this).val();
+				$dpdMergeBatchClassValues = items;
+				//Gets the last selected item
+				var lastSelectedItem = e.params.data.id;
+
+			});
+
+			
+		});
+		
+	</script>
+}
+
+
+<div class="SchedulingContainer">
+
+
+	<div class="section SearchEventContainer">
+		<div class="form-horizontal">
+			@Html.AntiForgeryToken()
+			<div style="color:red">@Html.ValidationSummary()</div>
+			<div class="form-group">
+				<lable class="control-label col-md-2"><strong>Filter</strong> </lable>
+				<div class="col-md-3">
+					<select class="form-control input-sm" type="text" name="dpdFilterBy" id="dpdFilterBy" width="300"
+							data-val="true"
+							data-val-required="Filter option is required." required>
+						<option value="">--Select Filter Option--</option>
+						<option value="BatchClass">Batch Class</option>
+						<option value="Instructor">Instructor</option>
+						<option value="Program">Program</option>
+						<option value="Date">Date</option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<select class="form-control input-sm" type="text" name="dpdFilterValue" id="dpdFilterValue" width="300"
+							data-val="true"
+							data-val-required="Filter value is required." required>
+						<option value="">--Select Filter Option--</option>
+					</select>
+					<input type="text" class="form-control hide" name="txtFilterDateRange" id="txtFilterDateRange" width="300" />
+				</div>
+				<div class="col-md-3">
+					<button class="btn-sm btn-success" type="submit" id="btnSearch" name="btnSearch">Search</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+
+
+
+	<div id='calendar'></div>
+
+	<div class="modal modal-fade" id="editScheduledEventModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Scheduled Class</h4>
+				</div>
+				<div class="hidden">
+					<input type="text" id="BatchClassName" />
+					<input type="text" id="BatchClassID" />
+					<input type="text" id="ModuleID" />
+					<input type="text" id="ModuleName" />
+				</div>
+				<div class="modal-body">
+					<div class="loading-progress" id="progressBarDiv"></div>
+
+					Press ESC button to exit.
+					<div class="add-event">
+						<br />
+						<div class="nav-tabs-custom">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#detail_tab" data-toggle="tab" aria-expanded="true">Detail</a></li>
+								<li class=""><a href="#update_tab" data-toggle="tab" aria-expanded="false">Update</a></li>
+								<li class=""><a href="#mergeSchedule_tab" data-toggle="tab" aria-expanded="false">Merge Schedule</a></li>
+							  
+								@*<li class=""><a href="#attendance_tab" data-toggle="tab" aria-expanded="false">Attendance</a></li>*@
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active" id="detail_tab">
+									<div class="form-horizontal">
+										@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+										<div class="row">
+											<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 custom-Col">
+												<lable class="control-label" name="txtDescription" id="txtDescription"></lable>
+											</div>
+
+											<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+												@using (Html.BeginForm("CancelGroundSchedule", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data" }))
+												{
+
+													<div class="alert alert-warning alert-dismissible">
+														<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+														<h4><i class="icon fa fa-warning"></i> Note!</h4>
+														Do you need to cancel schedule?
+													</div>
+													@Html.AntiForgeryToken()
+													<div style="color:red"> @Html.ValidationSummary()</div>
+
+													<div class="form-group">
+														<lable class="control-label col-md-4">Reason</lable>
+														<div class="col-md-8">
+															<select class="form-control input-sm" type="text" name="cancelReason" id="cancelReason" width="300" style="width: 100%;" data-val="true" data-val-required="Reason is required.">
+																<option value="">--Select Reason--</option>
+																<option value="Weather Condition">Weather Condition </option>
+																<option value="Schedule clash">Schedule Clash</option>
+																<option value="Maintenance">Maintenance </option>
+																<option value="Others">Others</option>
+															</select>
+														</div>
+													</div>
+													<div class="form-group">
+														<lable class="control-label col-md-4">Remark</lable>
+														<div class="col-md-8">
+															<textarea class="form-control" name="cancelRemark" id="cancelRemark" rows="7" placeholder="Write remark" data-val="true" data-val-required="Remark is required."></textarea>
+														</div>
+													</div>
+													<div class="form-group hide">
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="cancelModuleScheduleId" id="cancelModuleScheduleId" rows="7" placeholder="Write remark" data-val="true" data-val-required="schedule id is required." />
+														</div>
+													</div>
+													<div class="form-group">
+														<div class="col-md-6 pull-right">
+															<button class="btn btn-warning btn-sm" type="submit" id="btnCancel"><span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Cancel</button>
+														</div>
+													</div>
+												}
+											</div>
+
+										</div>
+									</div>
+								</div>
+							   
+								
+								 <!-- /.tab-pane -->
+								<div class="tab-pane" id="update_tab">
+									<div class="form-horizontal">
+
+										@using (Html.BeginForm("UpdateModuleSchedule", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnUpdateModuleSchedule" }))
+										{
+											@Html.AntiForgeryToken()
+											<div style="color:red"> @Html.ValidationSummary()</div>
+											<div style="color:red"><lable class="control-label" name="lblAvailabilityMessage" id="lblAvailabilityMessage"></lable></div>
+
+											<div class="form-group hide">
+												<lable class="control-label   col-md-4"><strong>Event Id</strong> </lable>
+												<div class="col-md-6">
+													<input type="text" class="form-control" name="txtEventID" id="txtEventID" />
+													@*<lable class="control-label" name="txtEventID" id="txtEventID"></lable>*@
+												</div>
+											</div>
+
+											<div class="form-group">
+												<lable class="control-label col-md-4">Instructor</lable>
+												<div class="col-md-6">
+													<select class="form-control input-sm" type="text" name="dpdInstructor" id="dpdInstructor" width="300" data-val="true" data-val-required="Instructor is required." required>
+														<option value="">Select Instructor</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<lable class="control-label col-md-4">Date</lable>
+												<div class="col-md-6">
+													<select class="form-control  input-sm" type="text" name="dpdDate" id="dpdDate" width="300" data-val="true" data-val-required="Date is required." required>
+														<option value="">Select Date</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<lable class="control-label col-md-4">Period</lable>
+												<div class="col-md-6">
+													<select class="form-control input-sm" type="text" name="dpdPeriod" id="dpdPeriod" width="300" data-val="true" data-val-required="Period is required." required>
+														<option value="">Select Period</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<lable class="control-label col-md-4">Class Room</lable>
+												<div class="col-md-6">
+													<select class="form-control input-sm" type="text" name="dpdClassRoom" id="dpdClassRoom" width="300" data-val="true" data-val-required="Class room is required." required>
+														<option value="">Select Class Room</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<div class="col-md-6">
+													<button class="btn btn-success btn-sm" type="submit" id="btnEdit"><span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Edit Event</button>
+												</div>
+											</div>
+
+											<div class="form-group hide">
+												<input type="text" name="editDateHideValue" id="editDateHideValue" />
+												<input type="text" name="editPeriodHideValue" id="editPeriodHideValue" />
+												<input type="text" name="editClassRoomHideValue" id="editClassRoomHideValue" />
+												<input type="text" name="editPeriodHideText" id="editPeriodHideText" />
+												<input type="text" name="editClassRoomHideText" id="editClassRoomHideText" />
+											</div>
+										}
+									</div>
+								</div>
+
+
+								<div class="tab-pane" id="mergeSchedule_tab">
+									@using (Html.BeginForm("MergeBatchClass", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnMergeSchedule" }))
+									{
+										@Html.AntiForgeryToken()
+										<div style="color:red"> @Html.ValidationSummary()</div>
+
+										<div style="color:red"> <label id="lblMergeBatchClass" name="lblMergeBatchClass"></label></div>
+										<br />
+										<div class="row">
+											<div class="col-md-6">
+												<lable class="control-label">Batch Class</lable>
+												<select class="form-control input-sm select2" type="text" name="dpdMergeBatchClass" data-id="1" id="dpdMergeBatchClass" width="300" multiple="multiple" style="width: 100%;" data-val="true" data-val-required="Class room is required." required></select>
+											</div>
+											@*@Html.DropDownList("dpdPersonId", null, htmlAttributes: new { @class = "form-control select2", id = "dpdPersonId", name = "dpdPersonId", multiple = "multiple", Style = "width:100%" })*@
+
+
+										</div>
+										<br />
+										<div class="row">
+											<div class="col-md-6">
+												<button class="btn btn-info btn-sm" type="submit" id="btnMerge" name="btnMerge"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Merge</button>
+											</div>
+										</div>
+									}
+								</div>
+
+								@*
+									<div class="tab-pane" id="attendance_tab">
+										<div class="form-horizontal AttendanceSaveContainer">
+											@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+											<div style="color:red"><lable class="control-label" name="lblAttendAvailabilityMessage" id="lblAttendAvailabilityMessage"></lable></div>
+
+											<div class="form-group hide">
+												<lable class="control-label   col-md-4"><strong>Module Schedule Id</strong> </lable>
+												<div class="col-md-6">
+													<input class="form-control" name="txtAttenModuleScheduleId" id="txtAttenModuleScheduleId" />
+												</div>
+											</div>
+
+											<div class="form-group">
+												<lable class="control-label col-md-4">Taken Date</lable>
+												<div class="col-md-6">
+													<input type="text" class="form-control" name="txtAttenTakenDate" id="txtAttenTakenDate" width="300" />
+												</div>
+											</div>
+
+											<div class="form-group">
+												<lable class="control-label col-md-4">Instructor</lable>
+												<div class="col-md-6">
+													<select class="form-control input-sm" type="text" name="dpdAttenInstructor" id="dpdAttenInstructor" width="300">
+														<option value="">Select Instructor</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<lable class="control-label col-md-4">Class Room</lable>
+												<div class="col-md-6">
+													<select class="form-control input-sm" type="text" name="dpdAttenClassRoom" id="dpdAttenClassRoom" width="300">
+														<option value="">Select Class Room</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<lable class="control-label col-md-4">Absent Trainee/s</lable>
+												<div class="col-md-6">
+													<select class="form-control select2" name="dpdAttenAbsentTrainee" id="dpdAttenAbsentTrainee" multiple="multiple" data-placeholder="Select trainee" data-val="true" data-val-required="Phase is required." style="width: 100%;"></select>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<lable class="control-label col-md-4">Note</lable>
+												<div class="col-md-6">
+													<textarea class="form-control" name="txtAttenNote" id="txtAttenNote" width="300"></textarea>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<div class="col-md-6">
+													<button class="btn btn-success btn-sm" type="submit" id="btnAttenSave"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save</button>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								*@
+							</div>
+							<!-- /.tab-content -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal modal-fade AddEventContainer" id="addScheduledEventModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					@*<h4 class="modal-title" id="myModalLabel">Add Schedule/Event.</h4>*@
+					<h5 class="modal-title">You are trying to schedule <strong><label id="lblMyModalTitleBatchClassName"></label></strong> at <strong><label id="lblMyModalTitleTime"></label></strong></h5>
+				</div>
+				<div class="modal-body">
+					Press ESC button to exit.
+					<div style="color:red"><lable class="control-label" name="lblAddAvailabilityMessage" id="lblAddAvailabilityMessage"></lable></div>
+					<div class="form-horizontal  add-event">
+						<br />
+						@*@using (Html.BeginForm("CreateEvent", "EmployeesToDoList", FormMethod.Post, new { enctype = "multipart/form-data" }))
+							{*@
+						@Html.AntiForgeryToken()
+
+						<div class="form-group">
+							<lable class="control-label col-md-4">Date</lable>
+							<div class="col-md-6">
+								<div class="input-group date">
+									<input type="text" class="form-control input-sm PTSMSDatepicker" name="txtAddDate" id="txtAddDate" />
+									<div class="input-group-addon">
+										<i class="fa fa-calendar PTSMSDatepicker"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<lable class="control-label col-md-4">No. Of Days</lable>
+							<div class="col-md-6">
+								<input type="number" class="form-control" name="noOfDays" id="noOfDays" min="1" value="1" />
+							</div>
+						</div>
+
+						@*<div class="form-group">
+								<lable class="control-label col-md-4">Batch Class</lable>
+								<div class="col-md-6">
+									<select class="form-control input-sm" type="text" name="dpdAddBatchClass" id="dpdAddBatchClass" width="300">
+										<option value="">Select Batch Class</option>
+									</select>
+								</div>
+							</div>*@
+
+						<div class="form-group">
+							<lable class="control-label col-md-4">Instructor</lable>
+							<div class="col-md-6">
+								<select class="form-control input-sm" type="text" name="dpdAddInstructor" id="dpdAddInstructor" width="300">
+									<option value="">Select Instructor</option>
+								</select>
+							</div>
+						</div>
+
+
+
+
+						<div class="form-group">
+							<lable class="control-label col-md-4">Batch Course</lable>
+							<div class="col-md-6">
+								<select class="form-control input-sm" type="text" name="dpdAddPhaseCourses" id="dpdAddPhaseCourses" width="300">
+									<option value="">--Select Batch Course--</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<lable class="control-label col-md-4">Course Modules</lable>
+							<div class="col-md-6">
+								<select class="form-control input-sm" type="text" name="dpdAddModules" id="dpdAddModules" width="300">
+									<option value="">--Select Course Module--</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<lable class="control-label col-md-4">Period</lable>
+							<div class="col-md-6">
+								<select class="form-control input-sm" type="text" name="dpdAddPeriod" id="dpdAddPeriod" width="300">
+									<option value="">Select Period</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<lable class="control-label col-md-4">Class Room</lable>
+							<div class="col-md-6">
+								<select class="form-control input-sm" type="text" name="dpdAddClassRoom" id="dpdAddClassRoom" width="300">
+									<option value="">Select Class Room</option>
+								</select>
+							</div>
+						</div>
+
+						@*<div class="form-group">
+								<lable class="control-label col-md-4">No. Of Days</lable>
+								<div class="col-md-6">
+									<input type="number" class="form-control" name="noOfDays" id="noOfDays" min="1" value="1" />
+								</div>
+							</div>*@
+
+
+						<div class="form-group">
+							<div class="col-md-6">
+								<button class="btn btn-success btn-sm" type="submit" id="btnAddEvent"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Add Event</button>
+							</div>
+						</div>
+
+						@*}*@
+						<div class="form-group hide">
+							<div class="col-md-6">
+								<input class="form-control" type="text" id="txtPhaseScheduleId" name="txtPhaseScheduleId" />
+								<input class="form-control" type="text" id="dpdAddBatchClass" name="dpdAddBatchClass" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- /.modal -->
+	@*
+		<script>
+			$(function () {
+				$('#editScheduledEventModel').modal({
+					keyboard: true
+				})
+			});
+		</script>
+	*@
+
+</div>

@@ -1,0 +1,85 @@
+﻿
+@model PTSMSDAL.Models.Scheduling.Relations.FlightLog
+
+
+@{
+
+    if (ViewBag.IsFlightLogRegistered != null)
+    {
+        if (ViewBag.IsFlightLogRegistered == true)
+        {
+            <div>
+                <dl class="dl-horizontal">      
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DayTakeOff)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DayTakeOff)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.NightTakeOff)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.NightTakeOff)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DayLanding)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DayLanding)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.NightLanding)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.NightLanding)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InstrumentApproach.InstrumentApproachName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.InstrumentApproach.InstrumentApproachName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Remark)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Remark)
+                    </dd>
+
+                </dl>
+            </div>
+        }
+        else
+        {
+            <div class="">
+                <div class="alert alert-warning alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                    <h5>Flight log is not registered for this lesson. Flight log will be visible once your instructor registered it.</h5>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="">
+            <div class="alert alert-warning alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                <h5>Flight log is not registered for this lesson. Flight log will be visible once your instructor registered it.</h5>
+            </div>
+        </div>
+    }
+}

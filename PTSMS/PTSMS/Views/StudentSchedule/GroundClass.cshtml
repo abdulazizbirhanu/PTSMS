@@ -1,0 +1,380 @@
+﻿@{
+    ViewBag.Title = "Ground Class Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Name = "Ground Class Schedule";
+}
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+
+<link href="~/Content/FullCalendar/jquery-ui.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/qtip/jquery.qtip.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+
+
+<style>   
+    .event-Detail {
+        border-radius: 10px;
+        display: block;
+        border: solid;
+        border-color: #517842;
+    }
+
+    #DetailScheduledEventModel .modal-dialog {
+       
+    }      
+</style>
+
+@section scripts
+{
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/lib/moment.min.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/qtip/jquery.qtip.js"></script>
+    <script src="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+
+
+
+    <script type="text/javascript">
+       
+
+        $(function () {
+           
+            //////////////////////////Begin, Get Current date //////////////////////////
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            today = mm + '/' + dd + '/' + yyyy;
+            //////////////////////////End, Get Current date //////////////////////////////
+                      
+
+            //////////////////////////////////Begin, Make event color Batch Class Specific////////////////////////////////////////
+            var BatchClassColorList = null;
+            $.ajax({
+                url: "/Scheduler/BatchClassColorList",
+                type: 'GET',
+                success: function (result) {
+                    if (result.hasList) {
+                        BatchClassColorList = result.resultData;
+                    }
+                },
+                error: function () {
+                    bootbox.alert("Error has occured while coloring the event.");
+                }
+            });
+
+            //Get List of event to be diplayed in the Calendar
+            var sources = {
+                sourceone: {
+                    url: "/StudentSchedule/GetScheduledEventForTrainee/",
+                    type: 'GET',
+                    cache: false,       //this is optional
+                    color: '#6C92A8',   //this is optional
+                    textColor: 'white'  //this is optional
+                }
+            };
+
+            $('#calendar').fullCalendar({
+                theme: true,
+                resourceAreaWidth: 230,
+                editable: true,
+                aspectRatio: 1.5,
+                scrollTime: '00:00',
+                header: {
+                    left: 'promptResource today prev,next',
+                    center: 'title',
+                    right: 'timelineDay,timelineThreeDays,agendaWeek,month'
+                },
+                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                customButtons: {
+                    promptResource: {
+                        text: '+ Batch Class',
+                        click: function () {
+                            var title = prompt('batch Class Name');
+                            if (title) {
+                                $('#calendar').fullCalendar(
+                                    'addResource',
+                                    { title: title },
+                                    true // scroll to the new resource?
+                                );
+                            }
+                        }
+                    }
+                },
+                defaultView: 'timelineDay',
+                views: {
+                    timelineThreeDays: {
+                        type: 'timeline',
+                        duration: { days: 5 }
+                    }
+                },
+                resourceLabelText: '',//'Batch Based Scheduler',
+                resourceColumns: [
+				//{
+				//    labelText: 'No.',
+				//    field: 'SerialNumber'
+				//},
+                {
+                    labelText: 'Batch Class',
+                    field: 'BatchClassName'
+                }],
+                //resourceGroupField: 'BatchName',
+                resources: '/StudentSchedule/GetGroundSchedulerResourceForTrainee/',
+                //events: [sources.sourceone],
+                eventSources: [sources.sourceone],
+                eventRender: function (event, element, view) {
+
+                    //var clickedDateTime = new Date(date.toString());
+                    var date = new Date();
+                  
+                    //Assign equipment specific event background color
+                    if (BatchClassColorList != null) {
+                        jQuery.each(BatchClassColorList, function (index, item) {
+
+                            if (event.resourceId == item.BatchClassId) {
+                                $(element).css("backgroundColor", item.Color);
+                            }
+                        });
+                    }
+
+                    if (event.description.toLowerCase().indexOf("canceled") > 0) {
+                        $(element).css("backgroundColor", "red");
+                        setInterval(function () {
+                            element.fadeOut(900).delay(300).fadeIn(800);
+                        }, 2000);
+                    }
+
+                    element.qtip({
+                        content: {
+                            text: event.description
+                        },
+                        style: {
+                            classes: 'qtip-green qtip-shadow qtip-youtube'
+                        },
+                        position: {
+                            my: 'top left',  // Position my top left...
+                            at: 'bottom right', // at the bottom right of...
+                            //target: $('.selector') // my target
+                        }
+                        //content: event.description,
+                        //style: {
+                        //        width: 250,
+                        //        tip: 'leftMiddle',
+                        //        color: 'white',
+                        //        background:'#66CC33',
+                        //        name: 'green'
+                        //    }
+                    });
+                },
+                
+                eventClick: function (event, jsEvent, view, resourceObj) {
+                                        
+                    //Assign the detail to view                  
+                    
+                    $('#txtDescription').html(event.description);
+                     
+                    $('#DetailScheduledEventModel').modal('show');
+                    return false;
+                }                
+            });
+
+            $('#txtFilterDateRange').daterangepicker();
+            ///////////////////////////////////BEGIN EVENT HANDLER FOR SEARCHING SCHEDULE EVENT ///////////////////////////////////
+            $('.SearchEventContainer').on("click", "#btnSearch", function () {
+
+                var filterBy = $('#dpdFilterBy').val();
+                var filterBy1 = document.getElementById('dpdFilterBy');
+                var filterValue1 = document.getElementById('dpdFilterValue');
+
+                if (filterBy == 'Date') {
+                    filterValue = $('#txtFilterDateRange').val();
+                }
+                else {
+                    filterValue = $('#dpdFilterValue').val();
+                }
+                //string FilterBy, int FilterValue
+                var date = {
+                    'FilterBy': filterBy,
+                    'FilterValue': filterValue
+                };
+                //alert('filterBy=' + filterBy + ' & filterValue= ' + filterValue);
+                if (filterBy1.selectedIndex > 0 && (filterValue1.selectedIndex > 0 || filterValue != null)) {
+
+                    //used to remove calendar event with same sourse.
+                    $('#calendar').fullCalendar('removeEventSource', sources.sourceone);
+
+                    sources = {
+                        sourceone: {
+                            url: "/Scheduler/Filter",
+                            data: date,
+                            type: 'POST',
+                            cache: false,       //this is optional
+                            color: '#6C92A8',   //this is optional
+                            textColor: 'white'  //this is optional
+                        }
+                    }
+                    $('#calendar').fullCalendar('addEventSource', sources.sourceone);
+
+                }
+                else {
+                    bootbox.alert("Please provide all search inputs.");
+                }
+            });
+
+            $('.SchedulingContainer').on('change', "#dpdFilterBy", function () {
+                var filterBy = $('#dpdFilterBy').val();//dpdFilterValue
+                var filterValue = $('#dpdFilterValue').val();
+
+                if (!(filterBy == 'Date')) {
+
+                    $('#dpdFilterValue').removeClass('hide');
+                    $('#txtFilterDateRange').addClass('hide');
+
+                    var Url = "/Scheduler/GetFilterValue";//string filterBy, int filterValue
+                    var Data = {
+                        'filterBy': filterBy
+                    };
+
+                    ////BatchClass,Instructor,Program
+                    var FilterDropdown = $('#dpdFilterValue');
+                    FilterDropdown.empty();
+
+                    $('#dpdFilterValue').append($('<option>', {
+                        value: '',
+                        text: '--Select ' + filterBy + "--"
+                    }));
+
+                    $.ajax({
+                        url: Url,
+                        type: 'GET',
+                        data: Data,
+                        success: function (result) {
+                            if (result.hasList) {
+
+                                jQuery.each(result.resultData, function (index, item) {
+                                    $('#dpdFilterValue').append($('<option>', {
+                                        value: item.Id + '',
+                                        text: item.Name + ''
+                                    }));
+                                });
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured!!!.");
+                        }
+                    });
+                }
+                else {
+                    //txtFilterDateRange,dpdFilterValue
+                    $('#txtFilterDateRange').removeClass('hide');
+                    $('#dpdFilterValue').addClass('hide');
+                }
+
+            });
+            ///////////////////////////////////END EVENT HANDLER FOR SEARCHING SCHEDULE EVENT ////////////////////////////////////
+
+        });
+        //read just sizing after font load
+        $(window).on('load', function () {
+           
+            $('#calendar').fullCalendar('render');
+        });
+
+        $(document).ready(function () {
+          
+            $('#PTSHtmlBodyTag').addClass("sidebar-collapse");
+
+            @{
+                if (ViewBag.ScheduleMessage != null)
+                {
+                    <text> bootbox.alert('@ViewBag.ScheduleMessage');</text>
+                    ViewBag.ScheduleMessage = null;
+                }
+            }           
+        });
+    </script>
+}
+
+
+<div class="SchedulingContainer">
+
+
+    <div class="section SearchEventContainer">
+        <div class="form-horizontal">
+            @Html.AntiForgeryToken()
+            <div style="color:red">@Html.ValidationSummary()</div>
+            <div class="form-group">
+                <lable class="control-label col-md-2"><strong>Filter</strong> </lable>
+                <div class="col-md-3">
+                    <select class="form-control input-sm" type="text" name="dpdFilterBy" id="dpdFilterBy" width="300"
+                            data-val="true"
+                            data-val-required="Filter option is required." required>
+                        <option value="">--Select Filter Option--</option>
+                        @*<option value="BatchClass">Batch Class</option>*@
+                        <option value="Instructor">Instructor</option>
+                        @*<option value="Program">Program</option>*@
+                        <option value="Date">Date</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control input-sm" type="text" name="dpdFilterValue" id="dpdFilterValue" width="300"
+                            data-val="true"
+                            data-val-required="Filter value is required." required>
+                        <option value="">--Select Filter Option--</option>
+                    </select>
+                    <input type="text" class="form-control hide" name="txtFilterDateRange" id="txtFilterDateRange" width="300" />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn-sm btn-success" type="submit" id="btnSearch" name="btnSearch">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div id='calendar'></div>    
+
+    <div class="modal modal-fade" id="DetailScheduledEventModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Schedule Detail</h4>
+                </div>
+                <div class="modal-body">     
+                    Press ESC button to exit.
+                    <div class="event-Detail">
+                    
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                                        <lable class="control-label" name="txtDescription" id="txtDescription"></lable>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+</div>

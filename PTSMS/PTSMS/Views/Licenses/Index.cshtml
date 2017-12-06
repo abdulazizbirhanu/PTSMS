@@ -1,0 +1,76 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Enrollment.Operations.License>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LicenseType.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Person.CompanyId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonDocument.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LicenseNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IssueDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExpiryDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Threshold)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.LicenseType.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Person.CompanyId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonDocument.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LicenseNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IssueDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExpiryDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Threshold)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.LicenseId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.LicenseId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.LicenseId })
+        </td>
+    </tr>
+}
+
+</table>

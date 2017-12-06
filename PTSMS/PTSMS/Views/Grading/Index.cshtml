@@ -1,0 +1,313 @@
+﻿@model PTSMSDAL.Models.Grading.GradingFilterBO
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .webgrid-table {
+        font-family: Arial,Helvetica,sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        width: 850px;
+        display: table;
+        border-collapse: collapse;
+        border: solid px #C5C5C5;
+        background-color: white;
+    }
+
+        .webgrid-table td, th {
+            border: 1px solid #C5C5C5;
+            padding: 3px 7px 2px;
+        }
+
+    .webgrid-header, .webgrid-header a {
+        background-color: #0094ff;
+        color: #ffffff;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .webgrid-footer {
+    }
+
+    .webgrid-row-style {
+        padding: 3px 7px 2px;
+    }
+
+    .webgrid-alternating-row {
+        background-color: azure;
+        padding: 3px 7px 2px;
+    }
+
+    .col1Width {
+        width: 55px;
+    }
+
+    .col2Width {
+        width: 220px;
+    }
+
+    .form-group.form-el {
+        width: 18%;
+        float: left;
+        margin: 0 1%;
+    }
+
+    div#CourseModuleForm {
+        display: inline-block;
+        width: 100%;
+    }
+</style>
+
+@section scripts
+    {
+    @*<script src="~/Scripts/jquery-1.10.2.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>*@
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            @{
+                if(ViewBag.GradeMessage != null)
+                {
+                    <text>
+            bootbox.alert('@ViewBag.GradeMessage');
+            </text>
+                    ViewBag.GradeMessage = null;
+                }
+            }
+
+            $('body').on('change', "#dpdCategoryName", function () {
+
+                // alert('hasList');
+                var getListUrl = "";
+                var Selected = $('#dpdCategoryName').val();
+
+                if (Selected == 'Course')
+                    getListUrl = "/Courses/FilteredListCourse";
+                if (Selected == 'Module')
+                    getListUrl = "/Modules/FilteredListModule";
+
+                var data = $("#BatchClassId").val();
+                // alert(data)
+                //
+                $.ajax({
+                    url: getListUrl,
+                    type: 'GET',
+                    data: { BatchClassId: data },
+                    success: function (result) {
+                        // alert('hasList');
+                        if (result.hasList) {
+                            // alert('hasList');
+                            //var selectOption = "";
+                            var option = '<option value="">--Please Select--</option>';
+                            var SelectedList = $('#dpdSelectedListId').empty();
+                            SelectedList.append($('<option></option>').val(null).html(option));
+
+                            jQuery.each(result.resultData, function (index, item) {
+                                SelectedList.append($('<option></option>').val(item.Id).html(item.Name));
+                            });
+
+                        }
+                        else {
+                            bootbox.alert("There is no registered" + Selected);
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+                //////////
+            });
+
+
+            $('body').on('change', "#dpdSelectedListId", function () {
+
+                //alert("1");
+                var getListUrl = "";
+                //  var Selected = $('#dpdSelectedListId').val();
+                var SelectedCatagory = $('#dpdCategoryName').val();
+                if (SelectedCatagory == 'Course')
+                    getListUrl = "/Courses/FilteredCourceExam";
+                if (SelectedCatagory == 'Module')
+                    getListUrl = "/Modules/FilteredModuleExam";
+
+                var data = $("#dpdSelectedListId").val();
+                //alert(data)
+                //
+                $.ajax({
+                    url: getListUrl,
+                    type: 'GET',
+                    data: { CourseId: data },
+                    success: function (result) {
+                        // alert('hasList');
+                        if (result.hasList) {
+                            // alert('hasList');
+                            //var selectOption = "";
+                            var option = '<option value="">--Please Select--</option>';
+                            SelectedList = $('#dpdSelectedExam').empty();
+                            SelectedList.append($('<option></option>').val(null).html(option));
+
+
+                            jQuery.each(result.resultData, function (index, item) {
+                                SelectedList.append($('<option></option>').val(item.Id).html(item.Name));
+                            });
+
+                        }
+                        else {
+                            bootbox.alert("There is no registered" + Selected);
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+                //////////
+            });
+
+
+
+        });
+
+        function OnSaveAll() {
+            $('#GradingMode').val("All");
+        }
+
+        function OnSingleSave(par) {
+            $('#GradingMode').val(par);
+        }
+
+    </script>
+
+
+
+
+
+}
+<div>
+    <h2> Grade Trainee </h2>
+    @using (Html.BeginForm("FindTrainne", "Grading", "POST"))
+    {
+
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal " id="CourseModuleForm">
+
+
+            <div class="form-group form-el">
+                <div>
+                    @Html.DropDownListFor(model => model.BatchClassId, (IEnumerable<SelectListItem>)ViewBag.BatchClass, "Select Batch Class", htmlAttributes: new { id = "BatchClassId", name = "BatchClassName", @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group form-el ">
+                <div>
+                    @Html.DropDownListFor(model => model.CategoryName, (IEnumerable<SelectListItem>)ViewBag.CategoryName, "Select Category", htmlAttributes: new { id = "dpdCategoryName", name = "dpdCategoryName", @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group  form-el">
+                <div>
+                    @Html.DropDownListFor(model => model.SelectedListID, (IEnumerable<SelectListItem>)ViewBag.SelectedList, "Select Cource/Module", htmlAttributes: new { id = "dpdSelectedListId", name = "dpdSelectedList", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group  form-el">
+                <div>
+                    @Html.DropDownListFor(model => model.SelectedExam, (IEnumerable<SelectListItem>)ViewBag.SelectedExam, "Select Exam", htmlAttributes: new { id = "dpdSelectedExam", name = "dpdSelectedExam", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group  form-el">
+                <input type="submit" value="Search" class="btn btn-sm btn-success" />
+                <i class="fa fa-search"></i>
+            </div>
+
+        </div>
+
+    }
+</div>
+<div id="GradingFilterList">
+    <h4>List of Trainee</h4>
+    @{
+        @Html.AntiForgeryToken()
+        var grid = new WebGrid(source: Model.GradingFilterList);
+
+
+
+    }
+    <form method="post" action="/Grading/Save">
+
+        <table id="tblBatchClass" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+            <thead>
+                <tr>
+                    <th> NO </th>
+                    <th> TRAINEE ID </th>
+                    <th> FULL NAME </th>
+                    <th> COURCE/MODULE </th>
+                    <th> EXAM NAME </th>
+                    <th> GRADE </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int rowNum = 1;
+                    foreach (var item in Model.GradingFilterList)
+                    {
+
+                        <tr>
+                            <td>
+                                @rowNum
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TraineeID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExamName)
+                            </td>
+                            <td>
+                                <input type="number" min="0.0" max="100.0" name="GradeValue@(item.TraineeCourseId + "~" + item.TraineeModuleId + "~" + item.ExamId+ "~" + item.TraineeID)" value="@item.Grade" />
+                            </td>
+                            <td>
+                                <input type="submit" value="Grade Student" onclick='OnSingleSave(@("'" + item.TraineeCourseId + "~" + item.TraineeModuleId + "~" + item.ExamId +"~" + item.TraineeID + "'"));' />
+                            </td>
+
+                        </tr>
+                        rowNum = rowNum + 1;
+                    }
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="hidden" name="GradingMode" id="GradingMode" value="" /><input type="submit" id="SaveAll" value="Save All" onclick="OnSaveAll();" /></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+</div>
+
+

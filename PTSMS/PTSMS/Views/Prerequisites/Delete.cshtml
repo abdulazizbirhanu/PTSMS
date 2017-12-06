@@ -1,0 +1,47 @@
+﻿@model PTSMSDAL.Models.Curriculum.Operations.Prerequisite
+
+@{
+    ViewBag.Title = "Delete";
+    ViewBag.Title = "Are you sure you want to delete this Prerequisite?";
+
+}
+
+<div>
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Course.CourseCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Course.CourseCode)
+        </dd>
+
+        <dt>
+            Prerequisite @Html.DisplayNameFor(model => model.PrerequisiteCourse.CourseCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrerequisiteCourse.CourseCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-info" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

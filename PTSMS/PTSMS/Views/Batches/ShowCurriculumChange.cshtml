@@ -1,0 +1,82 @@
+﻿
+@model IEnumerable<PTSMSDAL.Models.Others.View.CurriculumChangeView>
+
+<style type="text/css">
+    .ScrollStyle {
+        max-height: 350px;
+        overflow-y: scroll;
+    }
+</style>
+
+<div class="ScrollStyle">
+
+    @{
+
+        if (Model != null)
+        {
+            <table class="table table-responsive table-bordered">
+                <thead>
+                    <tr style="background-color:#6FA1D2; color:#ffffff;">
+                        <th>No.</th>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Operation</th>
+                        <th>Revision No</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                        foreach (var change in Model)
+                        {
+                            <tr>
+                                <td>@(i++)</td>
+                                <td>@change.Type</td>
+                                <td>@change.Name</td>
+                                <td>@change.Operation</td>
+                                <td>@change.RevisionNo</td>
+                                <td>
+                                    <button type="button" data-curriculumChangeData="@change.ParentId~@change.currentElementId~@change.Type~@change.Operation~@change.Name" class="btn btn-sm btn-info CurriculumChangeClass">Apply Change</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+                        }
+    }
+
+</div>
+
+@{
+    if (Model != null)
+    {
+        if (Model.Count() > 0)
+        {
+            <button type="button" data-id="" class="btn btn-sm btn-info">Apply All Change</button>
+        }
+        else
+        {
+            <div class="alert alert-warning alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                No Curriculum Change Available.
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+            No Curriculum Change Available.
+        </div>
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+</script>

@@ -1,0 +1,83 @@
+﻿@model PTSMSDAL.Models.Scheduling.Operations.Tool
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Tool</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Location.LocationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location.LocationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PreviousTool.ToolName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousTool.ToolName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ToolName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ToolName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ToolDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ToolDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ToolStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ToolStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ToolId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

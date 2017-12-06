@@ -1,0 +1,143 @@
+﻿@model PTSMS.Controllers.Scheduling.InstructorsController.QualificationModel
+
+@{
+    ViewBag.Title = "Create";
+    ViewBag.Name = "Create Instructor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+
+@section scripts
+{
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $('#dpdPersonId').select2();
+            //$("#dpdAttenAbsentTrainee").select2();
+
+            $('.chkclass').click(function () {
+
+                var getchkid = $(this).attr('id');
+                var isChecked = $('#' + getchkid).is(':checked');
+
+                if ($('#' + getchkid).is(':checked') == true) {
+                    $('#td' + $(this).val()).css("color", "white");
+                    $('#td' + $(this).val()).css("background-color", "green");
+                }
+                else {
+                    $('#td' + $(this).val()).css("color", "black");
+                    $('#td' + $(this).val()).css("background-color", "white");
+                }
+            });
+
+
+            $("#CreateInstructorForm").submit(function (event) {
+
+
+                ///////////////////////////////////
+                var typeListVal = "";
+                //QualificationTypes
+
+                $('input:checkbox:checked').each(function () {
+                    typeListVal = typeListVal + "," + $(this).val();
+                });
+                $('#QualificationTypes').val(typeListVal);
+
+                var $CreateInstructorFormInstance = $('#CreateInstructorForm');
+                $CreateInstructorFormInstance.submit();               
+                //var value = $('select#PersonId option:selected').val();
+
+                //var value = $('#PersonId :selected').text();
+                //$.ajax({
+                //    type: "post",
+                //    url: "/Instructors/Create",
+                //    data: { QualificationTypes: typeListVal, personId: value },
+                //    datatype: "json",
+                //    traditional: true,
+                //    success: function (data) {
+
+                //        var selectedIds;
+                //        for (var i = 0; i < data.success.length; i++) {
+                //            if (selectedIds != undefined) {
+                //                selectedIds = selectedIds + " " + data.success[i];
+                //            }
+                //            else {
+                //                selectedIds = data.success[i];
+                //            }
+                //        }
+                //    }
+                //});
+
+            });
+
+        });
+    </script>
+}
+
+
+
+@using System.Web.Mvc.Html
+@using (Html.BeginForm("Create", "Instructors", FormMethod.Post, new { id = "CreateInstructorForm", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="control-label col-md-2">Instructor</label>
+            <div class="col-md-4">
+                @Html.DropDownList("PersonId", null, htmlAttributes: new { @class = "form-control select2", id = "dpdPersonId", name = "dpdPersonId", multiple = "multiple", Style = "width:100%" })
+                @*@Html.ValidationMessageFor(model => model.PersonId, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            
+                <label class="control-label col-md-2">Type</label>
+                <div class="col-md-4">
+                    <div id="divCheckBox" style="height: 100px; overflow: auto;border:solid; width:150px;">
+                        @foreach (var names in @Model.QualificationTypes)
+                        {
+                            var checkBoxId = "chk" + names.Value;
+                            var tdId = "td" + names.Value;
+                            <table width="100%">
+                                <tr>
+                                    <td width="20px">
+                                        <input type="checkbox" id="@checkBoxId" class="chkclass" value="@names.Value" />
+                                    </td>
+                                    <td id="@tdId" width="100px">
+                                        @names.Text
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                        }
+                    </div>  
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                @*<input type="submit" value="Create" class="btn btn-default" />*@
+                <input type="submit" value="Save" id="btnSave" class="btn btn-success" />
+            </div>
+        </div>
+
+        <div class="form-group hide">
+            <div class="col-md-offset-2 col-md-4">
+                <input type="text" name="QualificationTypes" id="QualificationTypes" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

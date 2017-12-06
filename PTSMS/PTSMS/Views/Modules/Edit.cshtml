@@ -1,0 +1,248 @@
+﻿@model PTSMSDAL.Models.Curriculum.Operations.Module
+
+@{
+    ViewBag.Title = "Edit";
+    ViewBag.Name = "Edit Module.";
+}
+
+
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/ckeditor/ckeditor.js"></script>
+    <script src="~/Content/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            var muduleObjective = $('#MuduleObjective').val();
+            $("#MuduleObjective").html(muduleObjective).text();
+
+            $('#FileContainer').on('click', '.File-Link', function (event) {
+
+                var dataIds = $(this).attr('data-id');
+                var dataArray = dataIds.split('~');
+
+                var moduleId = dataArray[0];
+                var fileName = dataArray[1];
+                //alert('moduleCode = ' + moduleCode + ' fileName=' + fileName);
+
+                //FilesView(string moduleCode, string fileName)
+                var url = "/Modules/FilesView";
+                location.href = url + "?fileName=" + fileName + "&moduleId=" + moduleId;
+            });
+        });
+        $(window).on('load', function () {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('MuduleObjective', { toolbar: '1', htmlEncodeOutput: true });
+            //CKEDITOR.editorConfig = function (config) {
+            //CKEDITOR.config.autoParagraph = false;
+            //};
+
+            CKEDITOR.editorConfig = function (config) {
+                config.language = 'en',
+                ignoreEmptyParagraph = true,
+                config.autoParagraph = false,
+                config.allowedContent = true
+            };
+
+            $(".textarea").wysihtml5();
+        });
+    </script>
+
+}
+
+
+@using (Html.BeginForm("Edit", "Modules", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-lg-6 col-xs-12">
+                <br />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group hide">
+                    @Html.LabelFor(model => model.ModuleId, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.ModuleId, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ModuleId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CourseId, "CourseId", htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.DropDownList("CourseId", null, htmlAttributes: new { id = "dpdCourseId", name = "dpdCourseId", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ModuleCode, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.ModuleCode, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ModuleCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ModuleTitle, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.ModuleTitle, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ModuleTitle, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TheoreticalDuration, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.TheoreticalDuration, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TheoreticalDuration, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PracticalDuration, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.PracticalDuration, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PracticalDuration, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ExternalChapter, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.ExternalChapter, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ExternalChapter, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ExternalReference, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.ExternalReference, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ExternalReference, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.HasExam, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.HasExam)
+                            @Html.ValidationMessageFor(model => model.HasExam, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ModuleWeight, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.ModuleWeight, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ModuleWeight, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EffectiveDate, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-7">
+                        <div class="input-group date">
+                            @Html.EditorFor(model => model.EffectiveDate, new { htmlAttributes = new { @class = "form-control PTSMSDatepicker" } })
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar PTSMSDatepicker"></i>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.EffectiveDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12 col-lg-6 col-xs-12" id="FileContainer">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LearningTeachingMethod, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.LearningTeachingMethod, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.LearningTeachingMethod, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AssessmentMethod, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.AssessmentMethod, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AssessmentMethod, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReferenceMaterial, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ReferenceMaterial, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ReferenceMaterial, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @if (Model.DropDownFileLists.Count > 0)
+                {
+                        <label class="control-label col-md-3">Module File/s</label>
+                        <div class="col-md-10">
+                            <ul>
+                                @{
+                                    foreach (var item in @Model.DropDownFileLists)
+                                    {
+                                        <li><a href="#" class="File-Link" data-id='@item.Value~@item.Text'>@item.Text</a></li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                                    }
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">Select Module File/s</label>
+                    <div class="col-lg-4">
+                        <input type="file" class="btn btn-sm" id="ModuleReferenceFiles" multiple="multiple" name="ModuleReferenceFiles" placeholder="Upload Module Reference Files" rel="txtTooltip" title="Browse file/s" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MuduleObjective, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-10">
+                @* @Html.Raw(Model.MuduleObjective)*@
+                @Html.TextAreaFor(model => model.MuduleObjective, new { htmlAttributes = new { id = "MuduleObjective", name = "MuduleObjective", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MuduleObjective, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <input type="submit" value="Edit" class="btn btn-info" />
+            </div>
+        </div>
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+

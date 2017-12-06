@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.References.Phase>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Phase List.";
+    ViewBag.TableId = "tblPhase";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblPhase" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <tr>
+        <th>
+            No.
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @{
+        int i = 1;
+        foreach (var item in Model)
+        {
+            <tr role="row" class="odd">
+                <td>@(i++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.PhaseId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.PhaseId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.PhaseId })
+                </td>
+            </tr>
+        }
+    }
+</table>

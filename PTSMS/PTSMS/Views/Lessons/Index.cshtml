@@ -1,0 +1,111 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.Lesson>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Lesson List.";
+    ViewBag.TableId = "tblLesson";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblLesson" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentType.EquipmentTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryType.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessonName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeAircraftDual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeAircraftSolo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FTDTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCheckRide)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckRidePassingMark)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.LessonPassingMark)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.EffectiveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RevisionNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                string EffectiveDate = item.EffectiveDate.ToString("dd/MM/yyyy");
+                <tr role="row" class="odd">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EquipmentType.EquipmentTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryType.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LessonName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeAircraftDual)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeAircraftSolo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FTDTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsCheckRide)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckRidePassingMark)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.LessonPassingMark)
+                        </td>*@
+                    <td>
+                        @EffectiveDate
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RevisionNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.LessonId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.LessonId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.LessonId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

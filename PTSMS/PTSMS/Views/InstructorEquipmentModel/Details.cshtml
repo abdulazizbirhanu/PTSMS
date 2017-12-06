@@ -1,0 +1,32 @@
+﻿@model PTSMSDAL.Models.Scheduling.Relations.InstructorEquipmentModel
+
+@{
+    ViewBag.Title = "Details";
+ ViewBag.Name = "Instructor Equipment Model Detail";
+ Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ <br />
+<div>   
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EquipmentModel.EquipmentModelName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EquipmentModel.EquipmentModelName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Instructor.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Instructor.CreatedBy)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.InstructorEquipmentModelId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

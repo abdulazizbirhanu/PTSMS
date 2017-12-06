@@ -1,0 +1,68 @@
+﻿@model IEnumerable<PTSMS.Models.RoleViewModel>
+
+@{
+    ViewBag.Title = "Roles";
+    ViewBag.Name = "Roles List.";
+    ViewBag.TableId = "tblRoles";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+ @section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            @{
+                if (ViewBag.RoleMessage != null)
+                {
+                <text>bootbox.alert('@ViewBag.RoleMessage');</text>
+                    ViewBag.RoleMessage = null;
+                }
+        }
+        });
+    </script>
+}
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblRoles" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+      @{
+          int i = 1;
+          foreach (var item in Model)
+          {
+            <tr class="odd" role="row">
+                <td>@(i++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { name = item.RoleName }) |
+                        @Html.ActionLink("Delete", "Delete", new { name = item.RoleName })*@
+                    <span style="white-space : nowrap">
+                        <a href="@Url.Action("Edit", new { name = item.RoleName })" title="EDIT"><i class="fa fa-edit text-primary"></i></a> |
+                        <a href="@Url.Action("Delete", new { name = item.RoleName })" title="DELETE"><i class="fa fa-remove text-red"></i></a>
+                    </span>
+                </td>
+            </tr>
+          }
+    }
+    </tbody>
+</table>

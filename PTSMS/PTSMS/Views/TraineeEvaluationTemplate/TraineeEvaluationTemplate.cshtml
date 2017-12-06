@@ -1,0 +1,279 @@
+﻿
+@model  PTSMSDAL.Models.Scheduling.View.TraineeEvaluationTemplateView
+
+<style>
+    .ScrollStyle {
+        max-height: 350px;
+        overflow-y: scroll;
+    }
+
+    .evaluation-Template {
+        border-radius: 10px !important;
+        /*display: block!important;*/
+        border: 3px solid;
+        border-color: #517842;
+        background-color: #f2f6f6;
+    }
+</style>
+
+@using (Html.BeginForm("AcceptEvaluationTemplate", "TraineeEvaluationTemplate", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnEvaluationTemplate" }))
+{
+    @Html.AntiForgeryToken()
+    <div style="color:red"> @Html.ValidationSummary()</div>
+
+    <div class="EvaluationItemContainer">
+        <div id="isAlreadedAgreed-Container">
+
+        </div>
+        <br />
+        <div class="ScrollStyle">
+            @{
+                if (Model != null)
+                {
+                    int index = 0;
+                    int numberOfItems = 0;
+                    if (Model.EvaluationCategory.Count > 0)
+                    {
+                        for (int i = 0; i < Model.EvaluationCategory.Count(); i++)
+                        {
+                            index++;
+                            int categoryId = Model.EvaluationCategory[i].Id;
+
+                            <div class="row">
+                                <div class="col-md-6 col-lg-6 col-sm-12">
+                                    <!--Display the even number indexed categories item in the first column-->
+                                    <table class="table table-responsive table-bordered display evaluation-Template" cellspacing="0" role="grid" width="100%">
+                                        <thead class="alert-success">
+                                            <tr>
+                                                <th>@Model.EvaluationCategory[i].Name</th>
+                                                @for (int j = 0; j < Model.LessonScores.Count(); j++)
+                                                {
+                                                    <th>@Model.LessonScores[j].Name</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.EvaluationCategory[i++].EvaluationItem)
+                                            {
+                                                numberOfItems = numberOfItems + 1;
+                                                string ItemSpecificClass = "Category" + categoryId + "-Item" + item.Id;
+                                                string cssClass = "flat-red grade-CheckBox " + ItemSpecificClass;
+                                                string id = "Category" + categoryId + "Item" + item.Id;
+
+                                                string ButtonGroupId = "labelCategory" + categoryId + "Item" + item.Id;
+                                                string ButtonGroupCssClass = "btn btn-default btn-sm " + ButtonGroupId;
+                                                string ButtonGroupCssClassIfEvaluated = "btn btn-primary btn-sm " + ButtonGroupId;
+
+                                                <tr>
+                                                    <td>@item.Name</td>
+                                                    @for (int j = 0; j < Model.LessonScores.Count(); j++)
+                                                    {
+                                                        string ButtonGroup = ButtonGroupId + Model.LessonScores[j].Id;
+                                                        string ItemIdAndName = id + Model.LessonScores[j].Id;
+                                                        if (item.ScoreLevelId == Model.LessonScores[j].Id)
+                                                        {
+                                                            <td><label class="@ButtonGroupCssClassIfEvaluated" id="@ButtonGroup" onclick="return false"><input type="checkbox" class='@cssClass' value="@categoryId~@item.Id~@Model.LessonScores[j].Id" id="@ItemIdAndName" name="@ItemIdAndName" checked onclick="return false" /></label></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><label class="@ButtonGroupCssClass" id="@ButtonGroup" onclick="return false"><input type="checkbox" class='@cssClass' value="@categoryId~@item.Id~@Model.LessonScores[j].Id" id="@ItemIdAndName" name="@ItemIdAndName" onclick="return false" /></label></td>
+                                                        }
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-md-6 col-lg-6 col-sm-12">
+                                    <!--Display the odd number indexed categories item in the second column-->
+                                    @{
+                                        if (!(i == Model.EvaluationCategory.Count()))
+                                        {
+                                            categoryId = Model.EvaluationCategory[i].Id;
+                                            <table class="table table-responsive table-bordered display evaluation-Template" cellspacing="0" role="grid" width="100%">
+                                                <thead class="alert-success">
+                                                    <tr>
+                                                        <th>@Model.EvaluationCategory[i].Name</th>
+                                                        @for (int j = 0; j < Model.LessonScores.Count(); j++)
+                                                        {
+                                                            <th>@Model.LessonScores[j].Name</th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.EvaluationCategory[i].EvaluationItem)
+                                                    {
+                                                        numberOfItems = numberOfItems + 1;
+                                                        string ItemSpecificClass = "Category" + categoryId + "-Item" + item.Id;
+                                                        string cssClass = "flat-red grade-CheckBox " + ItemSpecificClass;
+                                                        string id = "Category" + categoryId + "Item" + item.Id;
+
+                                                        string ButtonGroupId = "labelCategory" + categoryId + "Item" + item.Id;
+                                                        string ButtonGroupCssClass = "btn btn-default btn-sm " + ButtonGroupId;
+                                                        string ButtonGroupCssClassIfEvaluated = "btn btn-primary btn-sm " + ButtonGroupId;
+
+                                                        <tr>
+                                                            <td>@item.Name</td>
+                                                            @for (int j = 0; j < Model.LessonScores.Count(); j++)
+                                                            {
+                                                                string ButtonGroup = ButtonGroupId + Model.LessonScores[j].Id;
+                                                                string ItemIdAndName = id + Model.LessonScores[j].Id;
+                                                                if (item.ScoreLevelId == Model.LessonScores[j].Id)
+                                                                {
+                                                                    <td><label class="@ButtonGroupCssClassIfEvaluated" id="@ButtonGroup" onclick="return false"><input type="checkbox" class='@cssClass' value="@categoryId~@item.Id~@Model.LessonScores[j].Id" id="@ItemIdAndName" name="@ItemIdAndName" checked onclick="return false" /></label></td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td><label class="@ButtonGroupCssClass" id="@ButtonGroup" onclick="return false"><input type="checkbox" class='@cssClass' value="@categoryId~@item.Id~@Model.LessonScores[j].Id" id="@ItemIdAndName" name="@ItemIdAndName" onclick="return false" /></label></td>
+                                                                }
+                                                            }
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                                        }
+
+                                        if (numberOfItems > 0)
+                                        {
+                                            <div class="form-group hide">
+                                                <div class="col-md-8">
+                                                    <div class="input-group  bootstrap-timepicker timepicker">
+                                                        <input type="text" class="form-control" id="txtnumberOfItems" name="txtnumberOfItems" value="@numberOfItems">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        if (index == 0)
+                                        {
+                                            <div class="alert alert-warning alert-dismissible">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                                No evaluation template found for this lesson.
+                                            </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-warning alert-dismissible">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                                No evaluation template found for this lesson.
+                                            </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-warning alert-dismissible">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                                No evaluation template found for this lesson.
+                                            </div>
+                                        }
+            }
+        </div>
+        <div id="evaluationFooter">
+            <div class="row">
+
+                @*<div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <lable class="control-label col-md-2">Password: </lable>
+                        <div class="col-md-8">
+                            <input type="password" class="form-control" id="txtPassword" name="txtPassword" autocomplete="off" data-val="true" data-val-required="Password is required." />
+                        </div>
+                    </div>
+                </div>*@
+
+                <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <lable class="control-label col-md-4">Overall Grade </lable>
+                        <div class="col-md-8">
+                            @Html.DropDownList("OverallGradeId", null, htmlAttributes: new { @class = "form-control", id = "OverallGradeId", name = "OverallGradeId" })
+                            @*<input type="text" class="form-control" id="txtOverallGrade" name="txtOverallGrade" data-val="true" data-val-required="Overall grade is required." placeholder="Overall Grade" readonly />*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <button class="btn btn-warning btn-sm btnTraineeEvaluationAcceptance" type="button" id="btnRejected" name="btnRejected" data-id="false"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Reject</button>
+                        </div>                   
+                        <div class="col-md-6">
+                            <button class="btn btn-info btn-sm btnTraineeEvaluationAcceptance" type="button" id="btnAccept" name="btnAccept" data-id="true"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Accept</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row hide">
+                <div class="col-md-7 col-lg-7 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <textarea class="form-control" id="EvaluationItem" name="EvaluationItem"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                        }
+
+
+
+
+@*
+    <script src="~/Scripts/validator.js"></script>*@
+
+<link href="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //Begin, for trainee evaluation template
+        $("#txtTimeIn,#txtTimeOut").timepicker({
+            showInputs: false,
+            showMeridian: false,
+            minuteStep: 5
+        });
+        $('.PTSMSDatepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            startDate: new Date()
+        });
+        //evaluationHeader,evaluationFooter
+
+        if (@Model.EvaluationCategory.Count() == 0) {
+            $('#evaluationHeader').addClass('hide');
+            $('#evaluationFooter').addClass('hide');
+        }
+        else
+        {
+            $('#evaluationHeader').removeClass('hide');
+            $('#evaluationFooter').removeClass('hide');
+            //Get value to be posted
+
+            if('@Model.IsEvaluated' == 'True')
+            {
+                @*$('#txtOverallGrade').val(@Model.OverallGrade);*@
+                @*$('#txtEvaluationDate').val('@Model.Date');
+                $('#txtTimeIn').val('@Model.TimeIn');
+                $('#txtTimeOut').val('@Model.TimeOut');*@
+                $('#txtRemark').val('@Model.Remark');
+            }
+        }
+    });
+</script>

@@ -1,0 +1,145 @@
+﻿
+@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.Lesson>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Lesson List.";
+    ViewBag.TableId = "tblLesson";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<style>
+    #EvaluationTemplateModalPopup .modal-dialog {
+        width: 75%;
+    }
+</style>
+
+<link href="~/Content/BootstrapDataTable/BootstrapDataTableCSS.css" rel="stylesheet" />
+
+@section scripts
+    {
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/BootstrapDataTables/BootstrapDataTables.js"></script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('body').on('click', ".lessonEvaluationTemplate", function () {
+
+            var lessonId = $(this).attr("data-id");
+
+            $('#myEditModalLabel').html('Lesson Evaluation Template');
+
+            var url = "/InstructorProfile/LessonEvaluationTemplate";
+
+            url = url + '?lessonId=' + lessonId;
+
+            $.get(url, function (data) {
+
+                $('#lessonEvaluationTemplate-container').empty();
+                $('#lessonEvaluationTemplate-container').html(data);
+                $('#EvaluationTemplateModalPopup').modal('show');
+            });
+        });
+    });
+    </script>
+
+}
+
+<table id="tblLesson" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentType.EquipmentTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryType.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessonName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeAircraftDual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeAircraftSolo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FTDTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCheckRide)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckRidePassingMark)
+            </th>
+            <th>Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                string EffectiveDate = item.EffectiveDate.ToString("dd/MM/yyyy");
+                <tr role="row" class="odd">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EquipmentType.EquipmentTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryType.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LessonName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeAircraftDual)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeAircraftSolo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FTDTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsCheckRide)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckRidePassingMark)
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Details", "LessonDetails", new { id = item.LessonId })     |*@
+                        <a href="@Url.Action("LessonDetails", new { id = item.LessonId })" title="DETAILS"><i class="fa fa-list-ul text-green"></i></a>&nbsp;|&nbsp;
+                        <a href="#" title="LESSON EVALUATION TEMPLATE" class="lessonEvaluationTemplate" data-id="@item.LessonId">Evaluation</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+<div class="modal modal-fade" id="EvaluationTemplateModalPopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" id="editModalPopup" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myEditModalLabel">Lesson Evaluation Template</h4>
+            </div>
+            <div class="modal-body" id="editModalBody">
+                <div style="color:red"><lable class="control-label" name="lblMessage" id="lblMessage"></lable></div>
+                <div id="lessonEvaluationTemplate-container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

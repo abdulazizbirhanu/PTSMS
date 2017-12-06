@@ -1,0 +1,85 @@
+﻿
+@model IEnumerable<PTSMSDAL.Models.Others.NotificationView>
+
+
+
+@{
+
+    if (Model != null)
+    {
+        int numberOfParticipant = 0;
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr style="background-color:#6FA1D2; color:#ffffff;">
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th></th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Has Mobile?</th>
+                    <th>Has Email?</th>
+                    <th>Can Send?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var notif in Model)
+                {
+                    numberOfParticipant = numberOfParticipant + 1;
+                    int i = 0;
+                    <tr>
+                        <td rowspan="@notif.ConcernedBodyList.Count()">@notif.NotificationId</td>
+                        <td rowspan="@notif.ConcernedBodyList.Count()">@notif.Name</td>
+                        <td>@notif.ConcernedBodyList.FirstOrDefault().NotificationId</td>
+                        <td>@notif.ConcernedBodyList.FirstOrDefault().FirstName</td>
+                        <td>@notif.ConcernedBodyList.FirstOrDefault().LastName</td>
+                        <td>@notif.ConcernedBodyList.FirstOrDefault().HasMobileNumber</td>
+                        <td>@notif.ConcernedBodyList.FirstOrDefault().HasEmailAddress</td>
+                        @if (notif.ConcernedBodyList.FirstOrDefault().HasEmailAddress == false && notif.ConcernedBodyList.FirstOrDefault().HasMobileNumber == false)
+                        {
+                            <td><input type="checkbox" id="" name="" data-id="@notif.ConcernedBodyList.FirstOrDefault().Email~@notif.ConcernedBodyList.FirstOrDefault().PhoneNumber~@notif.ConcernedBodyList.FirstOrDefault().HasMobileNumber~@notif.ConcernedBodyList.FirstOrDefault().HasEmailAddress~@notif.ConcernedBodyList.FirstOrDefault().PersonId~@notif.ConcernedBodyList.FirstOrDefault().ScheduleId" onclick="return false" /></td>
+                        }
+                        else
+                        {
+                            <td><input type="checkbox" id="" name="" data-id="@notif.ConcernedBodyList.FirstOrDefault().Email~@notif.ConcernedBodyList.FirstOrDefault().PhoneNumber~@notif.ConcernedBodyList.FirstOrDefault().HasMobileNumber~@notif.ConcernedBodyList.FirstOrDefault().HasEmailAddress~@notif.ConcernedBodyList.FirstOrDefault().PersonId~@notif.ConcernedBodyList.FirstOrDefault().ScheduleId" /></td>
+                        }
+                    </tr>
+                    foreach (var notification in notif.ConcernedBodyList)
+                    {
+                        if (i > 0)
+                        {
+                            numberOfParticipant = numberOfParticipant + 1;
+                            <tr style="color:#555555;">
+                                <td>@notification.NotificationId</td>
+                                <td>@notification.FirstName</td>
+                                <td>@notification.LastName</td>
+                                <td>@notification.HasMobileNumber</td>
+                                <td>@notification.HasEmailAddress</td>
+                                @if (notification.HasEmailAddress == false && notification.HasMobileNumber == false)
+                                {
+                                    <td><input type="checkbox" id="" name="" data-id="@notification.Email~@notification.PhoneNumber~@notification.HasMobileNumber~@notification.HasEmailAddress~@notification.PersonId~@notification.ScheduleId" onclick="return false" /></td>
+                                }
+                                else
+                                {
+                                    <td><input type="checkbox" id="" name="" data-id="@notification.Email~@notification.PhoneNumber~@notification.HasMobileNumber~@notification.HasEmailAddress~@notification.PersonId~@notification.ScheduleId" /></td>
+                                }
+                            </tr>
+                        }
+                        i = i + 1;
+                    }
+                }
+            </tbody>
+        </table>
+        Session["NumberOfParticipant"] = numberOfParticipant;
+    }
+}
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+    });
+</script>

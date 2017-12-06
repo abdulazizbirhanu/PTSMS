@@ -1,0 +1,68 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Enrollment.Operations.PersonLeave>
+
+@{
+    ViewBag.Title = "List";
+    ViewBag.Name = "Person Leave List";
+    ViewBag.TableId = "tblPersonLeave";
+    ViewBag.DefualtSortingColumnIndex = 1;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ 
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblPersonLeave">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveType.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Person.CompanyId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FromDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++) </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LeaveType.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.CompanyId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FromDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ToDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PersonLeaveId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.PersonLeaveId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.PersonLeaveId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

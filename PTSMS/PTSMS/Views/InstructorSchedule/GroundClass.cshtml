@@ -1,0 +1,1372 @@
+﻿
+@{
+    ViewBag.Title = "GroundClass Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Name = "Ground Class Schedule";
+}
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+
+<link href="~/Content/FullCalendar/jquery-ui.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/qtip/jquery.qtip.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/ajax-progress-bar/css/jquery.progressTimer.css" rel="stylesheet" />
+
+<style>
+    #editScheduledEventModel .modal-dialog {
+    }
+
+    .add-event {
+        border-radius: 10px;
+        display: block;
+        border: solid;
+        border-color: #517842;
+    }
+
+    .custom-Col {
+        border-right: 3px solid;
+        border-color: #517842;
+    }
+    /*#addScheduledEventModel*/
+    #editScheduledEventModel .modal-dialog {
+        width: 60%;
+    }
+
+    #addScheduledEventModel .modal-dialog {
+        width: 60%;
+    }
+
+    .datepicker {
+        z-index: 1151 !important;
+    }
+</style>
+
+@section scripts
+    {
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/lib/moment.min.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.js"></script>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/validator.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/qtip/jquery.qtip.js"></script>
+    <script src="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/ajax-progress-bar/js/jquery.progressTimer.js"></script>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            //////////////////////////Begin, Get Current date //////////////////////////
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            today = mm + '/' + dd + '/' + yyyy;
+            //////////////////////////End, Get Current date //////////////////////////////
+
+            //////////////////////////////////Begin, Make event color Batch Class Specific////////////////////////////////////////
+            var BatchClassColorList = null;
+            $.ajax({
+                url: "/Scheduler/BatchClassColorList",
+                type: 'GET',
+                success: function (result) {
+                    if (result.hasList) {
+                        BatchClassColorList = result.resultData;
+                    }
+                },
+                error: function () {
+                    bootbox.alert("Error has occured while coloring the event.");
+                }
+            });
+
+            //Get List of event to be diplayed in the Calendar
+            var sources = {
+                sourceone: {
+                    url: "/InstructorSchedule/GetGroundScheduledEventForInstructor/",
+                    type: 'GET',
+                    data: function () {
+                       
+                        var currentDate = $('#calendar').fullCalendar('getDate');
+                        if (currentDate) {
+
+                            var clickedDateTime = new Date(currentDate.toString());
+                            var convertedDateTime = new Date(clickedDateTime - 3 * 60 * 60 * 1000);
+
+                            var day = convertedDateTime.getDate();
+                            var month = convertedDateTime.getMonth() + 1;
+                            var year = convertedDateTime.getFullYear();
+
+                            return {
+                                month: month,
+                                year: year
+                            }
+                        }
+                    },
+                    cache: false,       //this is optional
+                    color: '#6C92A8',   //this is optional
+                    textColor: 'white'  //this is optional
+                }
+            }
+
+            $('#calendar').fullCalendar({
+                theme: true,
+                resourceAreaWidth: 230,
+                editable: true,
+                aspectRatio: 1.5,
+                scrollTime: '00:00',
+                header: {
+                    left: 'promptResource today prev,next',
+                    center: 'title',
+                    right: 'timelineDay,timelineFiveDays,timelineFiftinDays,timelineMonthDays'
+                },
+                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                customButtons: {
+                    promptResource: {
+                        text: '+ Batch Class',
+                        click: function () {
+                            var title = prompt('batch Class Name');
+                            if (title) {
+                                $('#calendar').fullCalendar(
+                                    'addResource',
+                                    { title: title },
+                                    true // scroll to the new resource?
+                                );
+                            }
+                        }
+                    }
+                },
+                defaultView: 'timelineMonthDays',
+                views: {
+                    timelineDay: {
+                        type: 'timeline',
+                        duration: { days: 1 }
+                    },
+                    timelineFiveDays: {
+                        type: 'timeline',
+                        duration: { days: 5 }
+                    },
+                    timelineFiftinDays: {
+                        type: 'timeline',
+                        duration: { days: 15 }
+                    },
+                    timelineMonthDays: {
+                        type: 'timeline',
+                        duration: { month: 1 }
+                    },
+                },
+                resourceLabelText: '',//'Batch Based Scheduler',
+                resourceColumns: [
+                {
+                    labelText: 'Batch Class',
+                    field: 'BatchClassName'
+                }],
+                //resourceGroupField: 'BatchName',
+                resources: '/InstructorSchedule/GetGroundSchedulerResourceForInstructor/',
+                //events: [sources.sourceone],
+                eventSources: [sources.sourceone],
+                //eventSources: [{
+                //    url: '/Scheduler/GetFTDandFlyingScheduledEvent/',
+                //    type: 'GET',
+                //    data: function () {
+                //        debugger;
+                //        var currentDate = $('#calendar').fullCalendar('getDate');
+                //        if (currentDate) {
+
+                //            var clickedDateTime = new Date(currentDate.toString());
+                //            var convertedDateTime = new Date(clickedDateTime - 3 * 60 * 60 * 1000);
+
+                //            var day = convertedDateTime.getDate();
+                //            var month = convertedDateTime.getMonth() + 1;
+                //            var year = convertedDateTime.getFullYear();
+
+                //            return {
+                //                month: month,
+                //                year: year
+                //            }
+                //        }
+                //    }
+                //}],
+                eventRender: function (event, element, view) {
+
+                    //var clickedDateTime = new Date(date.toString());
+                    var date = new Date();
+
+                    //if (new Date(event.start.toString()) > date)
+                    //    $(element).css("borderColor", "green");
+                    //if (new Date(event.start.toString()) == date)
+                    //    $(element).css("borderColor", "yellow");
+                    //if (new Date(event.start.toString()) < date)
+                    //    $(element).css("borderColor", "red");
+
+                    //Assign equipment specific event background color
+                    if (BatchClassColorList != null) {
+                        jQuery.each(BatchClassColorList, function (index, item) {
+
+                            if (event.resourceId == item.BatchClassId) {
+                                $(element).css("backgroundColor", item.Color);
+                            }
+                        });
+                    }
+
+                    if (event.description.toLowerCase().indexOf("canceled") > 0) {
+                        $(element).css("backgroundColor", "red");
+                        setInterval(function () {
+                            element.fadeOut(900).delay(300).fadeIn(800);
+                        }, 2000);
+                    }
+
+                    element.qtip({
+                        content: {
+                            text: event.description
+                        },
+                        style: {
+                            classes: 'qtip-green qtip-shadow qtip-youtube'
+                        },
+                        position: {
+                            my: 'top left',  // Position my top left...
+                            at: 'bottom right', // at the bottom right of...
+                            //target: $('.selector') // my target
+                        }
+                        //content: event.description,
+                        //style: {
+                        //        width: 250,
+                        //        tip: 'leftMiddle',
+                        //        color: 'white',
+                        //        background:'#66CC33',
+                        //        name: 'green'
+                        //    }
+                    });
+                },
+                eventClick: function (event, jsEvent, view, resourceObj) {
+                    debugger;
+                    $("#progressBarDiv").hide().fadeIn('fast');
+
+                    //Assign the detail to view
+                    $("#lblAttendAvailabilityMessage").html("");
+                    $("#btnAttenSave").removeAttr("disabled");
+
+                    $('#txtAttenModuleScheduleId').val(event.id);
+                    $('#txtDescription').html(event.description);
+
+
+                    $('#ModuleID').val(event.moduleID);
+                    $('#ModuleName').val(event.ModuleName);
+                    // bach class info save
+                    $('#BatchClassID').val(event.batchClassID);
+                    $('#BatchClassName').val(event.batchClassName);
+                    //
+                    // exam type dropdown on Grade tab
+                    $('#dpdSelectExam').empty();
+                    $('#dpdSelectExam').append($('<option>', {
+                        value: event.courseID,
+                        text: event.courseCode + ' (Course)'
+                    }));
+
+                    $('#dpdReSelectExam').empty();
+                    $('#dpdReSelectExam').append($('<option>', {
+                        value: event.courseID,
+                        text: event.courseCode + ' (Course)'
+                    }));
+
+                    $("#StudentsListPartialView").html('');//clear student list
+                    $("#ReStudentsListPartialView").html('');//clear student list
+
+                    $('#dpdSelectExam').empty();
+                    $('#dpdSelectExam').append($('<option>', {
+                        value: '',
+                        text: 'Select Exam'
+                    }));
+                    $('#dpdReSelectExam').empty();
+                    $('#dpdReSelectExam').append($('<option>', {
+                        value: '',
+                        text: 'Select Exam'
+                    }));
+
+
+                    $('#dpdExamType').empty();
+                    $('#dpdExamType').append($('<option>', {
+                        value: '',
+                        text: 'Exam Type'
+                    }));
+                    $('#dpdExamType').append($('<option>', {
+                        value: event.moduleID,
+                        text: event.moduleCode + ' (Module)'
+                    }));
+                    $('#dpdExamType').append($('<option>', {
+                        value: event.courseID,
+                        text: event.courseCode + ' (Course)'
+                    }));
+
+                    $('#dpdReExamType').empty();
+                    $('#dpdReExamType').append($('<option>', {
+                        value: '',
+                        text: 'Exam Type'
+                    }));
+                    $('#dpdReExamType').append($('<option>', {
+                        value: event.moduleID,
+                        text: event.moduleCode + ' (Module)'
+                    }));
+                    $('#dpdReExamType').append($('<option>', {
+                        value: event.courseID,
+                        text: event.courseCode + ' (Course)'
+                    }));
+
+
+                    //For Attendance
+                    $('#txtAttenTakenDate').val('');
+                    $('#txtAttenNote').val('');
+
+                    var AttendInstructorDropdown = $('#dpdAttenInstructor');
+                    AttendInstructorDropdown.empty();
+                    var AttendClassRoomDropdown = $('#dpdAttenClassRoom');
+                    AttendClassRoomDropdown.empty();
+
+                    //For Attendance
+                    $('#dpdAttenInstructor').append($('<option>', {
+                        value: '',
+                        text: 'Select Instructor'
+                    }));
+
+                    $('#dpdAttenClassRoom').append($('<option>', {
+                        value: '',
+                        text: 'Select Class Room'
+                    }));
+
+                    ///////////////////////////GET ATTENDANCE DATA FROM THE SERVER////////////////////////////////////////
+                    var URL = "/Scheduler/GetAttendaceData";
+                    var URLData = {
+                        'moduleScheduleId': event.id
+                    };
+
+                    jQuery.ajax({
+                        url: URL,
+                        type: 'POST',
+                        data: URLData,
+                        success: function (result) {
+                            if (result.hasList) {
+
+                                $("#btnAttenSave").removeAttr("disabled");
+                                $("#lblAttendAvailabilityMessage").html('');
+                                $('#dpdAttenInstructor').empty();
+                                $('#dpdAttenClassRoom').empty();
+
+                                var $AttenAbsentTrainee = $('#dpdAttenAbsentTrainee');
+                                $AttenAbsentTrainee.val(null).trigger("change");
+                                $AttenAbsentTrainee.empty();
+
+                                $('#dpdAttenInstructor').append($('<option>', {
+                                    value: '',
+                                    text: 'Select Instructor'
+                                }));
+                                $('#dpdAttenClassRoom').append($('<option>', {
+                                    value: '',
+                                    text: 'Select Class Room'
+                                }));
+                                //$('#dpdAttenAbsentTrainee').trigger()
+
+                                //Initialize all dropdown lists.
+                                jQuery.each(result.resultData.PotentialInstructors, function (index, instructorItem) {
+                                    $('#dpdAttenInstructor').append($('<option>', {
+                                        value: instructorItem.InstructorId + '',
+                                        text: instructorItem.NameAndCompanyId + ''
+                                    }));
+                                });
+                                jQuery.each(result.resultData.ClassRooms, function (index, classRoomItem) {
+                                    $('#dpdAttenClassRoom').append($('<option>', {
+                                        value: classRoomItem.ClassRoomId + '',
+                                        text: classRoomItem.Building.BuildingName + '-' + classRoomItem.RoomNo + ''
+                                    }));
+                                });
+                                jQuery.each(result.resultData.Trainees, function (index, traineeItem) {
+                                    $('#dpdAttenAbsentTrainee').append($('<option>', {
+                                        value: traineeItem.TraineeId + '',
+                                        text: traineeItem.TraineeNameAndCompanyId + ''
+                                    }));
+                                });
+                                //ModuleActivities
+                                var GUI = "<ul class='ModuleActivityList tabs'>";
+                                jQuery.each(result.resultData.ModuleActivities, function (index, moduleActivityItem) {
+
+                                    if (moduleActivityItem.IsTaken) {
+                                        GUI = GUI + "<li>" + "<input type='checkbox' name='chbModuleActivity" + moduleActivityItem.Id + "' id='chbModuleActivity" + moduleActivityItem.Id + "' data-id='" + moduleActivityItem.Id + "' disabled checked='checked'/>" + moduleActivityItem.Name + "</li>";
+                                    }
+                                    else {
+                                        GUI = GUI + "<li>" + "<input type='checkbox' name='chbModuleActivity" + moduleActivityItem.Id + "' id='chbModuleActivity" + moduleActivityItem.Id + "' data-id='" + moduleActivityItem.Id + "' />" + moduleActivityItem.Name + "</li>";
+                                    }
+
+                                    // $("#ModuleActivities ul").append('<li><a href="#"><span class="tab">Message Center</span></a></li>');
+                                });
+                                GUI = GUI + "</ul>";
+                                $('#ModuleActivities > .ModuleActivityList:last').remove();
+                                var newModuleActivityElement = $("#ModuleActivities");
+                                newModuleActivityElement = $(GUI).attr({ id: "ModuleActivities" });
+                                newModuleActivityElement.appendTo("#ModuleActivities");
+                            }
+                            else {
+                                $("#lblAttendAvailabilityMessage").html("There is no resource available to fill attendance dropdown list.");
+                                $("#btnAttenSave").attr("disabled", "disabled");
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured!!!.");
+                        }
+                    });
+
+
+                    ///////////////////////////////GET SCHEDULE DETAIL TO BE EDITED//////////////////////////////////////////////
+
+                    var getGroundScheduleDetailUrl = "/Scheduler/GetGroundScheduleDetail";
+
+                    var groundDetailPostData = {
+                        'moduleScheduleId': event.id
+                    };
+
+                    jQuery.ajax({
+                        url: getGroundScheduleDetailUrl,
+                        type: 'POST',
+                        data: groundDetailPostData,
+                        success: function (result) {
+                            if (result.hasValue) {
+
+                                //txtAttenModuleInstructorId,txtAttendanceClassRoomId
+                                $('#txtAttenModuleInstructorId').val(result.resultData.Instructor.InstructorId);
+                                $('#txtAttendanceClassRoomId').val(result.resultData.ClassRoomId);                                 
+                                //alert(result.resultData.Date.toString());
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured while reading event details!");
+                        }
+                    });
+                    /////////////////////////////////////////////////
+                    $('#editScheduledEventModel').modal('show');
+                    return false;
+                }
+            });
+            /////////////////////////////////End, Make event color Batch Class Specific/////////////////////////////////////////
+
+            function getDate(date) {
+                debugger;
+                if (date != null) {
+
+                    var startDateTime = new Date(date.toString());
+                    startDateTime = new Date(startDateTime - 3 * 60 * 60 * 1000);
+
+                    var day = startDateTime.getDate();
+                    var month = startDateTime.getMonth() + 1;
+                    var year = startDateTime.getFullYear();
+                    var extractedDate = month + '/' + day + '/' + year;
+
+                    return extractedDate;
+                }
+            }
+
+
+            $("#dpdAttenAbsentTrainee").select2();
+            $('#txtFilterDateRange').daterangepicker();
+            $('#txtAttenTakenDate').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' });
+
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+
+
+            //Create an instance of progress bar
+            var progress = $(".loading-progress").progressTimer({
+                timeLimit: 30,
+                onFinish: function () {
+                }
+            });
+            ///////////////////////////////////BEGIN EVENT HANDLER FOR SEARCHING SCHEDULE EVENT ///////////////////////////////////
+            $('.SearchEventContainer').on("click", "#btnSearch", function () {
+
+                var filterBy = $('#dpdFilterBy').val();
+                var filterBy1 = document.getElementById('dpdFilterBy');
+                var filterValue1 = document.getElementById('dpdFilterValue');
+
+                if (filterBy == 'Date') {
+                    filterValue = $('#txtFilterDateRange').val();
+                }
+                else {
+                    filterValue = $('#dpdFilterValue').val();
+                }
+                //string FilterBy, int FilterValue
+                var date = {
+                    'FilterBy': filterBy,
+                    'FilterValue': filterValue
+                };
+                //alert('filterBy=' + filterBy + ' & filterValue= ' + filterValue);
+                if (filterBy1.selectedIndex > 0 && (filterValue1.selectedIndex > 0 || filterValue != null)) {
+
+                    //used to remove calendar event with same sourse.
+                    $('#calendar').fullCalendar('removeEventSource', sources.sourceone);
+
+                    sources = {
+                        sourceone: {
+                            url: "/Scheduler/Filter",
+                            data: date,
+                            type: 'POST',
+                            cache: false,       //this is optional
+                            color: '#6C92A8',   //this is optional
+                            textColor: 'white'  //this is optional
+                        }
+                    }
+                    $('#calendar').fullCalendar('addEventSource', sources.sourceone);
+
+                }
+                else {
+                    bootbox.alert("Please provide all search inputs.");
+                }
+            });
+
+            $('.SchedulingContainer').on('change', "#dpdFilterBy", function () {
+                var filterBy = $('#dpdFilterBy').val();//dpdFilterValue
+                var filterValue = $('#dpdFilterValue').val();
+
+                if (!(filterBy == 'Date')) {
+
+                    $('#dpdFilterValue').removeClass('hide');
+                    $('#txtFilterDateRange').addClass('hide');
+
+                    var Url = "/Scheduler/GetFilterValue";//string filterBy, int filterValue
+                    var Data = {
+                        'filterBy': filterBy
+                    };
+
+                    ////BatchClass,Instructor,Program
+                    var FilterDropdown = $('#dpdFilterValue');
+                    FilterDropdown.empty();
+
+                    $('#dpdFilterValue').append($('<option>', {
+                        value: '',
+                        text: '--Select ' + filterBy + "--"
+                    }));
+
+                    $.ajax({
+                        url: Url,
+                        type: 'GET',
+                        data: Data,
+                        success: function (result) {
+                            if (result.hasList) {
+
+                                jQuery.each(result.resultData, function (index, item) {
+                                    $('#dpdFilterValue').append($('<option>', {
+                                        value: item.Id + '',
+                                        text: item.Name + ''
+                                    }));
+                                });
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured!!!.");
+                        }
+                    });
+                }
+                else {
+                    //txtFilterDateRange,dpdFilterValue
+                    $('#txtFilterDateRange').removeClass('hide');
+                    $('#dpdFilterValue').addClass('hide');
+                }
+
+            });
+            ///////////////////////////////////END EVENT HANDLER FOR SEARCHING SCHEDULE EVENT ////////////////////////////////////
+
+            $('.SchedulingContainer').on("click", "#btnAttenSave", function () {
+                //Get data to be posted
+                var ModuleSchedule = $('#txtAttenModuleScheduleId').val();
+                var TakenDate = $('#txtAttenTakenDate').val();
+                var Instructor = $('#dpdAttenInstructor').val();
+                var ClassRoom = $('#dpdAttenClassRoom').val();
+                var AbsentTrainee = "";
+                AbsentTrainee = $('#dpdAttenAbsentTrainee').val();
+                //alert(AbsentTrainee);
+                var Note = $('#txtAttenNote').val();
+                var password = $('#txtPassword').val();
+               
+                var moduleActivities = "";
+
+                $('#ModuleActivities :checked').each(function () {
+                    var isDisabled = $(this).is(':disabled');
+                    if (!isDisabled) {
+                        moduleActivities = moduleActivities + $(this).data('id') + ",";
+                    }
+                });
+
+                //alert('MS= ' + ModuleSchedule + ' TD=' + TakenDate + ' I=' + Instructor + ' CR=' + ClassRoom + ' AT' + AbsentTrainee + ' N' + Note);
+                var Url = "/Scheduler/AddAttendance";
+
+                var postData = {
+                    'moduleSchedule': ModuleSchedule,
+                    'takenDate': TakenDate,
+                    'instructorId': Instructor,
+                    'classRoomId': ClassRoom,
+                    'trainees': AbsentTrainee,
+                    'Note': Note,
+                    'password': password,
+                    'moduleActivities': moduleActivities
+                };
+
+                //Save Attendance
+                $.ajax({
+                    url: Url,
+                    type: 'POST',
+                    data: postData,
+                    success: function (result) {
+                        //jQuery.noConflict();
+                        $('#editScheduledEventModel').modal('hide');
+                        if (result.isSuccess) {
+                            bootbox.alert("Attendance successfuly Added.");
+                        }
+                        else {
+                            bootbox.alert(result.message);
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+            });
+
+
+            //GRADE TAB ACTIONS
+
+            $('.SchedulingContainer').on('change', "#dpdExamType", function () {
+                //var date = $('#dpdDate').val();
+                $("#StudentsListPartialView").html('');//clear student list
+                var examType = $('#dpdExamType').val();
+                debugger;
+                if (examType != "") {
+                    //Clear the existing dropdown option of Class room and instructor
+                    $('#dpdSelectExam').empty();
+                    //Initialize the first/defualt option
+                    $('#dpdSelectExam').append($('<option>', {
+                        value: '',
+                        text: 'Select Exam'
+                    }));
+
+                    var selectedIndex = $("select[name='dpdExamType'] option:selected").index();
+
+                    var URI = "";
+                    if (selectedIndex == 1) {
+                        URI = "/Grading/ModuleExamList";
+                        var postData = {
+                            'moduleid': examType
+                        };
+                    }
+                    if (selectedIndex == 2) {
+                        URI = "/Grading/CourseExamList";
+                        var postData = {
+                            'courseid': examType
+                        };
+                    }
+
+                    debugger;
+                    $.ajax({
+                        url: URI,
+                        type: 'POST',
+                        data: postData,
+                        success: function (result) {
+                            if (result.hasList) {
+                                debugger;
+                                // result.examList
+
+                                jQuery.each(result.examList, function (index, examItem) {
+                                    debugger;
+                                    $('#dpdSelectExam').append($('<option>', {
+                                        value: examItem.ExamId,
+                                        text: examItem.Exam.Name
+                                    }));
+                                });
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured while retriving Exam list.");
+                        }
+                    });
+
+
+                } else {
+                    $('#dpdSelectExam').empty();
+                    //Initialize the first/defualt option
+                    $('#dpdSelectExam').append($('<option>', {
+                        value: '',
+                        text: 'Select Exam'
+                    }));
+                }
+            });
+
+            $('.SchedulingContainer').on('change', "#dpdSelectExam", function () {
+                //var date = $('#dpdDate').val();
+                var examID = $('#dpdSelectExam').val();
+                var examType = $('#dpdExamType').val();
+                //debugger;
+                if (examID != "" && examType != "") {
+                    var selectedIndex = $("select[name='dpdExamType'] option:selected").index();
+                    var URI = "";
+                    var batchClassID = $("#BatchClassID").val();
+                    if (selectedIndex == 1) {
+                        URI = "/Grading/ModuleStudentsListPartialView";
+                        var postData = {
+                            examID: examID,
+                            batchClassID: batchClassID,
+                            moduleID: examType
+                        };
+                    }
+                    if (selectedIndex == 2) {
+                        URI = "/Grading/CourseStudentsListPartialView";
+                        var postData = {
+                            examID: examID,
+                            batchClassID: batchClassID,
+                            courseID: examType
+                        };
+                    }
+                    ///// auto partial view reload
+                    $.ajax({
+                        url: URI,
+                        type: "POST",
+                        data: postData
+                    })
+                    .done(function (partialViewResult) {
+                        //alert(partialViewResult);
+                        $("#StudentsListPartialView").html(partialViewResult);
+                    }).error(function (error) {
+                        bootbox.alert("Error has occured while retriving Students list.");
+                    });
+                    /////end of partial view auto reload
+
+
+                    /*
+                    //clear table
+                    $('#StudentResult tr').empty();
+                    $('#StudentResult tr:last').after('<tr><td>' + "ID" + '</td><td>' + "Trainee ID" + '</td><td>' + "Full Name " +
+                                              '</td><td>' + "Grade" + '</td><td>' + "is Re-Exam" + '</td><td>' + ' Action ' + '</td></tr>');
+                    var traineeIDList = [];
+                    debugger;
+                    $.ajax({
+                        url: URI,
+                        type: 'POST',
+                        data: postData,
+                        success: function (result) {
+                            if (result.hasList) {
+                                debugger;
+                                jQuery.each(result.studentList, function (index, studentItem) {
+                                    debugger;
+                                    $('#StudentResult tr:last').
+                                        after('<tr><td>' + (index + 1) + '</td><td>' + studentItem.TraineeID + '</td><td>' + studentItem.FullName +
+                                        '</td><td>' + '<input type="text" class="form-control" id="Grade_' + studentItem.TraineeID + '">' + '</td><td>' +
+                                        '<input type="checkbox" class="checkbox"  id="ReExam_' + studentItem.TraineeID + '"/>' + '</td><td>' +
+                                        ' <a class="btn btn-success" id="Save_' + studentItem.TraineeID +
+                                        '" onclick="alert(' + studentItem.TraineeID + ')"> Save </a> ' + '</td></tr>');
+                                });
+                                //func(' + studentItem.TraineeID + ')
+                                $('#StudentResult tr:last').after('<tr><td>' + "" + '</td><td>' + "" + '</td><td>' + "" +
+                                                '</td><td>' + "" + '</td><td>' + "" + '</td><td>' +
+                                                '<button class="btn btn-sucess" id="SaveAll">Save All</button> ' + '</td></tr>');
+
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured while retriving Students list.");
+                        }
+                    });
+                    */
+                }
+
+            });
+
+            //END OF GRADE TAB ACTIONS
+
+            //RE-EXAM GRADE TAB
+            $('.SchedulingContainer').on('change', "#dpdReExamType", function () {
+                //var date = $('#dpdDate').val();
+                $("#ReStudentsListPartialView").html('');//clear student list
+                var examType = $('#dpdReExamType').val();
+                debugger;
+                if (examType != "") {
+                    //Clear the existing dropdown option of Class room and instructor
+                    $('#dpdReSelectExam').empty();
+                    //Initialize the first/defualt option
+                    $('#dpdReSelectExam').append($('<option>', {
+                        value: '',
+                        text: 'Select Exam'
+                    }));
+
+                    var selectedIndex = $("select[name='dpdReExamType'] option:selected").index();
+
+                    var URI = "";
+                    if (selectedIndex == 1) {
+                        URI = "/Grading/ModuleExamList";
+                        var postData = {
+                            'moduleid': examType
+                        };
+                    }
+                    if (selectedIndex == 2) {
+                        URI = "/Grading/CourseExamList";
+                        var postData = {
+                            'courseid': examType
+                        };
+                    }
+
+                    debugger;
+                    $.ajax({
+                        url: URI,
+                        type: 'POST',
+                        data: postData,
+                        success: function (result) {
+                            if (result.hasList) {
+                                debugger;
+                                // result.examList
+
+                                jQuery.each(result.examList, function (index, examItem) {
+                                    debugger;
+                                    $('#dpdReSelectExam').append($('<option>', {
+                                        value: examItem.ExamId,
+                                        text: examItem.Exam.Name
+                                    }));
+                                });
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured while retriving Exam list.");
+                        }
+                    });
+
+
+                } else {
+                    $('#dpdReSelectExam').empty();
+                    //Initialize the first/defualt option
+                    $('#dpdReSelectExam').append($('<option>', {
+                        value: '',
+                        text: 'Select Exam'
+                    }));
+                }
+            });
+
+
+            $('.SchedulingContainer').on('change', "#dpdReSelectExam", function () {
+                //var date = $('#dpdDate').val();
+                var examID = $('#dpdReSelectExam').val();
+                var examType = $('#dpdReExamType').val();
+                //debugger;
+                if (examID != "" && examType != "") {
+                    var selectedIndex = $("select[name='dpdReExamType'] option:selected").index();
+                    var URI = "";
+                    var batchClassID = $("#BatchClassID").val();
+                    if (selectedIndex == 1) {
+                        URI = "/Grading/ReModuleStudentsListPartialView";
+                        var postData = {
+                            examID: examID,
+                            batchClassID: batchClassID,
+                            moduleID: examType
+                        };
+                    }
+                    if (selectedIndex == 2) {
+                        URI = "/Grading/ReCourseStudentsListPartialView";
+                        var postData = {
+                            examID: examID,
+                            batchClassID: batchClassID,
+                            courseID: examType
+                        };
+                    }
+                    ///// auto partial view reload
+                    $.ajax({
+                        url: URI,
+                        type: "POST",
+                        data: postData
+                    })
+                    .done(function (partialViewResult) {
+                        $("#ReStudentsListPartialView").html(partialViewResult);
+                    }).error(function (error) {
+                        bootbox.alert("Error has occured while retriving Students list.");
+                    });
+                    /////end of partial view auto reload
+                }
+
+            });
+
+
+            $('a[data-toggle="tab"]').on('click', function (e) {
+
+                var target = $(e.target).attr("href");
+
+                if ((target == '#attendance_tab')) {
+                    //dpdAttenClassRoom,dpdAttenInstructor
+                    $('#dpdAttenClassRoom').val($('#txtAttendanceClassRoomId').val());
+                    $('#dpdAttenInstructor').val($('#txtAttenModuleInstructorId').val());
+                }
+            });
+            //END OF RE-EXAM GRADE TAB
+        });
+        //read just sizing after font load
+        $(window).on('load', function () {
+            $('#calendar').fullCalendar('render');
+        });
+
+        $(document).ready(function () {
+            $('#PTSHtmlBodyTag').addClass("sidebar-collapse");
+            @{
+                if (ViewBag.ScheduleMessage != null)
+                {
+                    <text> bootbox.alert('@ViewBag.ScheduleMessage');</text>
+                    ViewBag.ScheduleMessage = null;
+                }
+            }
+        });
+    </script>
+}
+
+
+
+<script>
+    
+    function SaveAllStudentRecord1(traineeIdList){
+        debugger;
+        var postData = {
+            traineeIdList: traineeIdList
+        };
+
+
+        $.ajax({
+            url: "/Grading/SaveAllStudentResult",
+            type: 'POST',
+            data: postData,
+            success: function (result) {
+                var message="";
+                debugger;
+                jQuery.each(result.message, function (index, item) {
+                    message = message + item.resultType + item.resultValue;
+                });
+                bootbox.alert(message);
+            },
+            error: function (e) {
+                bootbox.alert("Error has occured!!!.");
+            }
+        });
+    }
+
+    function SaveStudentRecord(traineeCourseId, traineeModuleId, traineeId, examId, IsPassFailExam) {
+
+        var grade = $("#Grade_" + traineeId).val();
+        var passFailExamResult = $("#PassFailExamResultId_" + traineeId).val();
+        //alert(passFailExamResult);
+        //alert("grade" + grade + " passFailExamResult" + passFailExamResult);
+        //debugger;
+        if (($.isNumeric(grade) && (grade >= 0 && grade <= 100)) || IsPassFailExam) {
+            var URI = "/Grading/SaveStudentResult";
+            var postData = {
+                traineeModuleId: traineeModuleId,
+                traineeCourseId: traineeCourseId,
+                traineeId: traineeId,
+                examId: examId,
+                grade: grade,
+                passFailExamResult: passFailExamResult,
+                IsPassFailExam: IsPassFailExam
+            };
+
+            $.ajax({
+                url: URI,
+                type: 'POST',
+                data: postData,
+                success: function (result) {
+                    bootbox.alert(result.message);
+                    //if (result.isSuccessfull)
+                    //    bootbox.alert("Saved Successfully!!!.");
+                    //else
+                    //    bootbox.alert("Not Saved Successfully!!!.");
+                },
+                error: function () {
+                    bootbox.alert("Error has occured!!!.");
+                }
+            });
+
+            /*
+            $.ajax({
+                url: URI,
+                type: "POST",
+                data: postData
+            })
+                    .done(function (partialViewResult) {
+                        debugger;
+                        $("#refTable").html(partialViewResult);
+                    }).error(function (error) {
+                        bootbox.alert("Error has occured while retriving Students list.");
+                    });
+            */
+
+        } else {
+            bootbox.alert("Grade value is invalid");
+        }
+    }
+  
+</script>
+
+<script>
+    function ReSaveStudentRecord(traineeCourseId, traineeModuleId, traineeId, examId, ReExamCount, IsPassFailExam) {
+        var grade = $("#ReGrade_" + traineeId).val();
+        var RePassFailExamResult = $("#RePassFailExamResultId_" + traineeId).val();
+        //alert(RePassFailExamResult)
+       // debugger;
+        if (($.isNumeric(grade) && (grade >= 0 && grade <= 100)) || IsPassFailExam) {
+            var URI = "/Grading/ReSaveStudentResult";
+
+            //warning/confirmation box
+            bootbox.confirm({
+                message: "Are you sure you want to re-grade?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {// if yes
+
+                        var postData = {
+                            traineeModuleId: traineeModuleId,
+                            traineeCourseId: traineeCourseId,
+                            traineeId: traineeId,
+                            examId: examId,
+                            ReExamCount: ReExamCount,
+                            grade: grade,
+                            RePassFailExamResult: RePassFailExamResult,
+                            IsPassFailExam: IsPassFailExam
+                        };
+
+                        $.ajax({
+                            url: URI,
+                            type: 'POST',
+                            data: postData,
+                            success: function (result) {
+                                bootbox.alert(result.message);
+                                //if (result.isSuccessfull)
+                                //    bootbox.alert(message);
+                                //else
+                                //    bootbox.alert("Not Saved Successfully!!!.");
+                            },
+                            error: function () {
+                                bootbox.alert("Error has occured!!!.");
+                            }
+                        });
+
+                    }
+                }
+            });
+
+        } else {
+            bootbox.alert("Grade value is invalid");
+        }
+    }
+   
+</script>
+
+<div class="SchedulingContainer">
+
+
+    <div class="section SearchEventContainer">
+        <div class="form-horizontal">
+            @Html.AntiForgeryToken()
+            <div style="color:red">@Html.ValidationSummary()</div>
+            <div class="form-group">
+                <lable class="control-label col-md-2"><strong>Filter</strong> </lable>
+                <div class="col-md-3">
+                    <select class="form-control input-sm" type="text" name="dpdFilterBy" id="dpdFilterBy" width="300"
+                            data-val="true"
+                            data-val-required="Filter option is required." required>
+                        <option value="">--Select Filter Option--</option>
+                        <option value="BatchClass">Batch Class</option>
+                        <option value="Program">Program</option>
+                        <option value="Date">Date</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control input-sm" type="text" name="dpdFilterValue" id="dpdFilterValue" width="300"
+                            data-val="true"
+                            data-val-required="Filter value is required." required>
+                        <option value="">--Select Filter Option--</option>
+                    </select>
+                    <input type="text" class="form-control hide" name="txtFilterDateRange" id="txtFilterDateRange" width="300" />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn-sm btn-success" type="submit" id="btnSearch" name="btnSearch">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+
+
+    <div id='calendar'></div>
+
+    <div class="modal modal-fade" id="editScheduledEventModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Scheduled Class</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="loading-progress" id="progressBarDiv"></div>
+
+                    Press ESC button to exit.
+                    <div class="add-event">
+                        <br />
+                        <div class="nav-tabs-custom">
+
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#detail_tab" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                                <li class=""><a href="#attendance_tab" data-toggle="tab" aria-expanded="false">Attendance</a></li>
+                                <li class=""><a href="#Grade_tab" data-toggle="tab" aria-expanded="false">Grade</a></li>
+                                <li class=""><a href="#ReGrade_tab" data-toggle="tab" aria-expanded="false">Re-Grade</a></li>
+                            </ul>
+
+                            <div class="tab-content">
+
+                                <div class="tab-pane active" id="detail_tab">
+                                    <div class="form-horizontal">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 custom-Col">
+                                                <lable class="control-label" name="txtDescription" id="txtDescription"></lable>
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                                                @using (Html.BeginForm("CancelGroundSchedule", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                {
+
+                                                <div class="alert alert-warning alert-dismissible">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                    <h4><i class="icon fa fa-warning"></i> Note!</h4>
+                                                    Do you need to cancel schedule?
+                                                </div>
+                                                @Html.AntiForgeryToken()
+                                                <div style="color:red"> @Html.ValidationSummary()</div>
+
+                                                <div class="form-group">
+                                                    <lable class="control-label col-md-4">Reason</lable>
+                                                    <div class="col-md-8">
+                                                        <select class="form-control input-sm" type="text" name="cancelReason" id="cancelReason" width="300" style="width: 100%;" data-val="true" data-val-required="Reason is required.">
+                                                            <option value="">--Select Reason--</option>
+                                                            <option value="Weather Condition">Weather Condition </option>
+                                                            <option value="Schedule clash">Schedule Clash</option>
+                                                            <option value="Maintenance">Maintenance </option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <lable class="control-label col-md-4">Remark</lable>
+                                                    <div class="col-md-8">
+                                                        <textarea class="form-control" name="cancelRemark" id="cancelRemark" rows="7" placeholder="Write remark" data-val="true" data-val-required="Remark is required."></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group hide">
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" name="cancelModuleScheduleId" id="cancelModuleScheduleId" rows="7" placeholder="Write remark" data-val="true" data-val-required="schedule id is required." />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-6 pull-right">
+                                                        <button class="btn btn-warning btn-sm" type="submit" id="btnCancel"><span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Cancel</button>
+                                                    </div>
+                                                </div>
+                                                }
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="attendance_tab">
+                                    <div class="form-horizontal AttendanceSaveContainer">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div style="color:red"><lable class="control-label" name="lblAttendAvailabilityMessage" id="lblAttendAvailabilityMessage"></lable></div>
+
+                                        <div class="form-group hide">
+                                            <lable class="control-label   col-md-4"><strong>Module Schedule Id</strong> </lable>
+                                            <div class="col-md-6">
+                                                <input class="form-control" name="txtAttenModuleScheduleId" id="txtAttenModuleScheduleId" />
+                                                <input class="form-control" name="txtAttendanceClassRoomId" id="txtAttendanceClassRoomId" />
+                                                <input class="form-control" name="txtAttenModuleInstructorId" id="txtAttenModuleInstructorId" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <lable class="control-label col-md-4">Taken Date</lable>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" name="txtAttenTakenDate" id="txtAttenTakenDate" width="300" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <lable class="control-label col-md-4">Instructor</lable>
+                                            <div class="col-md-6">
+                                                <select class="form-control input-sm" type="text" name="dpdAttenInstructor" id="dpdAttenInstructor" width="300">
+                                                    <option value="">Select Instructor</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <lable class="control-label col-md-4">Class Room</lable>
+                                            <div class="col-md-6">
+                                                <select class="form-control input-sm" type="text" name="dpdAttenClassRoom" id="dpdAttenClassRoom" width="300">
+                                                    <option value="">Select Class Room</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" id="ModuleActivityDiv">
+                                            <lable class="control-label col-md-4">Module Activities</lable>
+                                            <div class="col-md-8">
+                                                <div id="ModuleActivities">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <lable class="control-label col-md-4">Absent Trainee/s</lable>
+                                            <div class="col-md-6">
+                                                <select class="form-control select2" name="dpdAttenAbsentTrainee" id="dpdAttenAbsentTrainee" multiple="multiple" data-placeholder="Select trainee" @*data-val="true" data-val-required="Phase is required."*@ style="width: 100%;"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <lable class="control-label col-md-4">Note</lable>
+                                            <div class="col-md-6">
+                                                <textarea class="form-control" name="txtAttenNote" id="txtAttenNote" width="300"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <lable class="control-label col-md-4">Password: </lable>
+                                            <div class="col-md-6">
+                                                <input type="password" class="form-control" id="txtPassword" name="txtPassword" autocomplete="off" data-val="true" data-val-required="Password is required." />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <button class="btn btn-success btn-sm" type="submit" id="btnAttenSave"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="Grade_tab">
+                                    @*@using (Html.BeginForm("Grade", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnGrade" }))
+                                        {*@
+                                    @Html.AntiForgeryToken()
+                                    <div style="color:red"> @Html.ValidationSummary()</div>
+                                    <div style="color:red"> <label id="lblGrade" name="lblGrade"></label></div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <lable class="control-label col-md-2">Exam Type</lable>
+                                            <div class="col-md-4">
+                                                <select class="form-control input-sm" type="text" name="dpdExamType" id="dpdExamType" width="300" data-val="true" data-val-required="Exam Type is required." required>
+                                                    <option value="">Select Exam Type</option>
+                                                </select>
+                                            </div>
+                                            @*</div>
+                                                <div class="form-group">*@
+                                            <lable class="control-label col-md-2">Select Exam</lable>
+                                            <div class="col-md-4">
+                                                <select class="form-control input-sm" type="text" name="dpdSelectExam" id="dpdSelectExam" width="300" data-val="true" data-val-required="Select Exam is required." required>
+                                                    <option value="">Select Exam</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    @*@Html.Partial("_StudentGradeList")*@
+
+                                    <div id="StudentsListPartialView">
+
+                                        <!-- partial view content will be inserted here -->
+                                    </div>
+                                    @*}*@
+
+                                    <div class="hidden">
+                                        <input type="text" id="BatchClassName" />
+                                        <input type="text" id="BatchClassID" />
+                                        <input type="text" id="ModuleID" />
+                                        <input type="text" id="ModuleName" />
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane" id="ReGrade_tab">
+                                    @*@using (Html.BeginForm("Grade", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnGrade" }))
+                                        {*@
+                                    @Html.AntiForgeryToken()
+                                    <div style="color:red"> @Html.ValidationSummary()</div>
+                                    <div style="color:red"> <label id="lblReGrade" name="lblReGrade"></label></div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <lable class="control-label col-md-2">Exam Type</lable>
+                                            <div class="col-md-4">
+                                                <select class="form-control input-sm" type="text" name="dpdReExamType" id="dpdReExamType" width="300" data-val="true" data-val-required="Exam Type is required." required>
+                                                    <option value="">Select Exam Type</option>
+                                                </select>
+                                            </div>
+                                            @*</div>
+                                                <div class="form-group">*@
+                                            <lable class="control-label col-md-2">Select Exam</lable>
+                                            <div class="col-md-4">
+                                                <select class="form-control input-sm" type="text" name="dpdReSelectExam" id="dpdReSelectExam" width="300" data-val="true" data-val-required="Select Exam is required." required>
+                                                    <option value="">Select Exam</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    @*@Html.Partial("_StudentGradeList")*@
+
+
+                                    <div id="ReStudentsListPartialView">
+
+                                        <!-- partial view content will be inserted here -->
+                                    </div>
+                                    @*}*@
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

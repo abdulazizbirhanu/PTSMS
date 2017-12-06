@@ -1,0 +1,123 @@
+﻿@model PTSMSDAL.Models.Dispatch.ActivityCheckIn
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ActivityCheckIn</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ArrivalAirport.AirportName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ArrivalAirport.AirportName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartureAirport.AirportName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DepartureAirport.AirportName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Equipment.NameOrSerialNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Equipment.NameOrSerialNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FlyingFTDSchedule.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FlyingFTDSchedule.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Instructor.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Instructor.CreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observer.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observer.CreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sequence)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sequence)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DestinationId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DestinationId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParkingSpotId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParkingSpotId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StatusId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StatusId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ActivityCheckInId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

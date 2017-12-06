@@ -1,0 +1,115 @@
+﻿
+
+@model PTSMSDAL.Models.Curriculum.Operations.Course
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Course Detail.";
+}
+
+<div>
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            Previous @Html.DisplayNameFor(model => model.PreviousCourse.CourseCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousCourse.CourseCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditHour)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditHour)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExternalTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalChapter)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExternalChapter)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalReference)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExternalReference)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CoursePassingMark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CoursePassingMark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Back to My Course List", "InstructorCourses")
+</p>
+

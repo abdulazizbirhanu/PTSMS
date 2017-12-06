@@ -1,0 +1,41 @@
+﻿@model PTSMSDAL.Models.Curriculum.Operations.Prerequisite
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Title = "Prerequisite Details.";
+    }
+
+
+<div>
+   <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CourseCategory.Course.CourseCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseCategory.Course.CourseCode)
+        </dd>
+
+        <dt>
+            Prerequisite @Html.DisplayNameFor(model => model.PrerequisiteCourse.CourseCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrerequisiteCourse.CourseCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PrerequisiteId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

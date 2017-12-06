@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Unauthorized";
+    Layout = "~/Views/Shared/_CMSLayout.cshtml";
+}
+
+<section class="content">
+    <div class="error-page">
+        <h2 class="headline text-danger">401</h2>
+        <div class="error-content">
+            <h3><i class="fa fa-warning text-danger"></i> Oops! Unauthorized Request.</h3>
+            <p>
+                You do not have a privilage to access the requested resource.
+            </p>
+            <div class="callout callout-danger">
+                <h4> Meanwhile, you may return to: </h4>
+                <ul class="list-unstyled">
+                    <li><a style="text-decoration : none" href=" @Url.Action("eVISADetails", "eVISAs")"><i class="fa fa-barcode"></i> <span>Validate e-VISA</span></a></li>
+                    <li><a style="text-decoration : none" href=" @Url.Action("NewRequests", "Requests")"><i class="fa fa-question-circle text-primary"></i> <span>Requests</span></a></li>
+                    <li><a style="text-decoration : none" href=" @Url.Action("WaitingForApproval", "Validations")"><i class="fa fa-check-square-o"></i> <span>Waiting approval</span></a></li>
+                    <li><a style="text-decoration : none" href=" @Url.Action("ApprovedRequests", "Approvals")"><i class="fa fa-check-square text-success"></i> <span>Approved</span></a></li>
+                    <li><a style="text-decoration : none" href="@Url.Action("DeniedRequests","Approvals")"><i class="fa fa-ban text-danger"></i> <span>Denied</span></a></li>
+                </ul>
+            </div>
+           
+        </div><!-- /.error-content -->
+    </div><!-- /.error-page -->
+</section><!-- /.content -->

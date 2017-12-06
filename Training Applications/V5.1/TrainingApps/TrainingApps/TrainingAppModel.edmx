@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Dev_CMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Dev_CMS.dbo.TrainingApplication' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TrainingApplication">
+          <Key>
+            <PropertyRef Name="Salutation" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="Gender" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="CellPhone" />
+            <PropertyRef Name="City" />
+            <PropertyRef Name="Country" />
+            <PropertyRef Name="EducationalLevel" />
+            <PropertyRef Name="ApplyingForProgram" />
+            <PropertyRef Name="Category" />
+          </Key>
+          <Property Name="Salutation" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="MiddleName" Type="nvarchar(max)" />
+          <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CellPhone" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="HomePhone" Type="nvarchar(max)" />
+          <Property Name="City" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Country" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="EducationalLevel" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ApplyingForProgram" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CertificateType" Type="nvarchar(max)" />
+          <Property Name="Category" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="Dev_CMSModelStoreContainer">
+          <EntitySet Name="TrainingApplication" EntityType="Self.TrainingApplication" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TrainingApplication].[Salutation] AS [Salutation], 
+    [TrainingApplication].[FirstName] AS [FirstName], 
+    [TrainingApplication].[MiddleName] AS [MiddleName], 
+    [TrainingApplication].[LastName] AS [LastName], 
+    [TrainingApplication].[Gender] AS [Gender], 
+    [TrainingApplication].[Email] AS [Email], 
+    [TrainingApplication].[CellPhone] AS [CellPhone], 
+    [TrainingApplication].[HomePhone] AS [HomePhone], 
+    [TrainingApplication].[City] AS [City], 
+    [TrainingApplication].[Country] AS [Country], 
+    [TrainingApplication].[EducationalLevel] AS [EducationalLevel], 
+    [TrainingApplication].[ApplyingForProgram] AS [ApplyingForProgram], 
+    [TrainingApplication].[CertificateType] AS [CertificateType], 
+    [TrainingApplication].[Category] AS [Category]
+    FROM [dbo].[TrainingApplication] AS [TrainingApplication]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Dev_CMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TrainingApplication">
+          <Key>
+            <PropertyRef Name="Salutation" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="Gender" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="CellPhone" />
+            <PropertyRef Name="City" />
+            <PropertyRef Name="Country" />
+            <PropertyRef Name="EducationalLevel" />
+            <PropertyRef Name="ApplyingForProgram" />
+            <PropertyRef Name="Category" />
+          </Key>
+          <Property Name="Salutation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gender" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CellPhone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HomePhone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EducationalLevel" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ApplyingForProgram" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CertificateType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="Dev_CMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TrainingApplications" EntityType="Self.TrainingApplication" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Dev_CMSModelStoreContainer" CdmEntityContainer="Dev_CMSEntities">
+          <EntitySetMapping Name="TrainingApplications">
+            <EntityTypeMapping TypeName="Dev_CMSModel.TrainingApplication">
+              <MappingFragment StoreEntitySet="TrainingApplication">
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CellPhone" ColumnName="CellPhone" />
+                <ScalarProperty Name="HomePhone" ColumnName="HomePhone" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="EducationalLevel" ColumnName="EducationalLevel" />
+                <ScalarProperty Name="ApplyingForProgram" ColumnName="ApplyingForProgram" />
+                <ScalarProperty Name="CertificateType" ColumnName="CertificateType" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

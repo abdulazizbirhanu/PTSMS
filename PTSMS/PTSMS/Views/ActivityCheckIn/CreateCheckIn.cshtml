@@ -1,0 +1,309 @@
+﻿
+@model PTSMSDAL.Models.Dispatch.ActivityCheckIn
+
+<link href="~/Content/AdminLTE/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.timeentry.package-2.0.1/jquery.plugin.js"></script>
+<script src="~/Scripts/jquery.timeentry.package-2.0.1/jquery.timeentry.js"></script>
+
+@*@using (Html.BeginForm("Create", "ActivityCheckIn", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnActivityCheckIn" }))
+{
+    @Html.AntiForgeryToken()*@
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <h3 class="box-title">Activity Check-In </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+            <div class="col-md-12 hide" id="CheckInMessage">
+                <div class="row hide" id="CheckInMessageSuccess">
+                    <div class="col-md-12">
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-hand-o-right"></i> Success!</h4>
+                            <ul>
+                                <li><lable id="CheckInMessageSuccessLabel"> </lable></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row hide" id="CheckInMessageFail">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-hand-o-right"></i> Failed!</h4>
+                            <ul>
+                                <li><lable id="CheckInMessageFailLabel"> </lable></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @if (Model.FlyingFTDScheduleId == 0)
+                {
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                        Schedule to which the check in associate is not exist.
+                    </div>
+                }
+                else
+                {
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group hide">
+                                @Html.LabelFor(model => model.FlyingFTDScheduleId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.EditorFor(model => model.FlyingFTDScheduleId, new { htmlAttributes = new { @class = "form-control", value = ViewBag.ActivityCheckinId } })
+                                    @Html.ValidationMessageFor(model => model.FlyingFTDScheduleId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group hide">
+                                @Html.LabelFor(model => model.ActivityCheckInId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.EditorFor(model => model.ActivityCheckInId, new { htmlAttributes = new { @class = "form-control", value = ViewBag.ActivityCheckinId } })
+                                    @Html.ValidationMessageFor(model => model.ActivityCheckInId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EquipmentId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("EquipmentId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.EquipmentId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.InstructorId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("InstructorId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.InstructorId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="ObserverIdDiv">
+                                @Html.LabelFor(model => model.ObserverId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("ObserverId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ObserverId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CheckInTime, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-4">
+                                    <div class="input-group date form_datetime6">
+                                        @Html.EditorFor(model => model.CheckInTime, new { htmlAttributes = new { @class = "form-control", id = "CheckInTime", name = "CheckInTime" } })
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.CheckInTime, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" id="CheckIntimeTime" autocomplete="off" class="form-control" size="10">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DestinationId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("DestinationId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DestinationId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="OperationAreaIdDiv">
+                                @Html.LabelFor(model => model.OperationAreaId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("OperationAreaId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.OperationAreaId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-7">
+                                    <input type="submit" value="Create" id="btnActivityCheckIn" class="btn btn-info" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+                            <div class="form-group" id="ParkingSpotIdDiv">
+                                @Html.LabelFor(model => model.ParkingSpotId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("ParkingSpotId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ParkingSpotId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DepartureAirportId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("DepartureAirportId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DepartureAirportId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ArrivalAirportId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("ArrivalAirportId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ArrivalAirportId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CheckInStatusId, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.DropDownList("CheckInStatusId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CheckInStatusId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-7">
+                                    @Html.EditorFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control", rows = 7 } })
+                                    @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group hide">
+                        <input type="password" name="txtActivityCheckInPassword" id="txtActivityCheckInPassword" />
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    </div>
+@*}*@
+
+
+<script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="~/Content/AdminLTE/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        @{
+            bool IsFlyingLesson = (bool)ViewBag.IsFlyingLesson;
+            if(!IsFlyingLesson)
+            {
+                <text>
+        $('#ParkingSpotIdDiv').addClass('hide');
+        $('#OperationAreaIdDiv').addClass('hide');
+        $('#ObserverIdDiv').addClass('hide');
+        </text>
+                //ParkingSpotIdDiv,OperationAreaIdDiv,ObserverIdDiv
+            }
+        }
+        var checkinday = new Date();
+        debugger;
+        if($('#CheckInTime').val()==''||$('#CheckInTime').val()==null)
+            checkinday = new Date();
+        else
+            checkinday = new Date('@ViewBag.CheckInTime');
+        var dd = checkinday.getDate();
+        var mm = checkinday.getMonth() + 1; //January is 0!
+        var yyyy = checkinday.getFullYear();
+
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        var currentDate = mm + '/' + dd + '/' + yyyy;
+
+
+        var clickedDateTime = new Date(checkinday.toString());
+        var convertedDateTime = new Date(clickedDateTime);
+
+        var hour = convertedDateTime.getHours();
+        var min = convertedDateTime.getMinutes();
+        var sec = convertedDateTime.getSeconds();
+
+        if (hour.toString().length == 1)
+            hour = "0" + hour;
+        if (min.toString().length == 1)
+            min = "0" + min;
+        var time = hour + ":" + min;
+        var CheckInTime = $('#CheckInTime').val();
+
+        $('#CheckInTime').val(currentDate);
+        $('#CheckIntimeTime').val(time);
+
+        $(".form_datetime6").datepicker({
+            format: "mm/dd/yyyy",
+            autoclose: true,
+            todayBtn: true,
+          //  startDate: today,
+            showMeridian: true,
+            // pickerPosition: 'top-right'
+        });
+        $('#CheckIntimeTime').timeEntry({ show24Hours: true });
+
+        $('#btnActivityCheckIn').on('click', function (e) {
+            debugger;
+            var data = {
+                "FlyingFTDScheduleId": $('#FlyingFTDScheduleId').val(),
+                "ActivityCheckInId": $('#ActivityCheckInId').val(),
+                "EquipmentId": $('#EquipmentId').val(),
+                "InstructorId": $('#InstructorId').val(),
+                "CheckInTime": $('#CheckInTime').val() + ' ' + $('#CheckIntimeTime').val(),
+                "DestinationId": $('#DestinationId').val(),
+                "DepartureAirportId": $('#DepartureAirportId').val(),
+                "ArrivalAirportId": $('#ArrivalAirportId').val(),
+                "CheckInStatusId": $('#CheckInStatusId').val(),
+                "Comments": $('#Comments').val()
+            }
+
+            $.ajax({
+                url: "/ActivityCheckIn/CreateJson",
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    $('#CheckInMessage').removeClass("hide");
+                    if (result.isSuccess) {
+                        $('#CheckInMessageSuccess').removeClass("hide");
+                        $('#CheckInMessageFail').addClass("hide");
+                        $('#CheckInMessageSuccessLabel').html(result.Message);
+                    }
+                    else {
+                        $('#CheckInMessageFail').removeClass("hide");
+                        $('#CheckInMessageSuccess').addClass("hide");
+                        $('#CheckInMessageFailLabel').html(result.Message);
+                    }
+
+                },
+                error: function () {
+                    $('#CheckInMessageFail').removeClass("hide");
+                    $('#CheckInMessageSuccess').addClass("hide");
+                    $('#CheckInMessageFailLabel').html("Error has occured while coloring the event.");
+                }
+            });
+        });
+    });
+</script>
+

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.Reference>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Program List.";
+    ViewBag.TableId = "tblReference";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblReference" class="table table-bordered table-hover dataTable">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousReference.ReferenceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReferenceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReferenceLocation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EffectiveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RevisionNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr class="odd" role="row">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PreviousReference.ReferenceName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReferenceName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReferenceLocation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EffectiveDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RevisionNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ReferenceId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ReferenceId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ReferenceId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

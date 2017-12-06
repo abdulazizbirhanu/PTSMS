@@ -1,0 +1,340 @@
+﻿@using PTSMSDAL.Models.Scheduling.View;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Name = "Phase Schedule";
+}
+
+<style>
+    #content ul li {
+        list-style-Type: none;
+        padding: 0 0 4px 23px;
+        background: url(http://www.computerhope.com/arrow.gif) no-repeat left top;
+    }
+
+
+    #PhaseScheduleCategoryModalPopup .modal-dialog {
+        width: 60%;
+    }
+</style>
+
+<link href="~/Content/AdminLTE/css/_all.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/iCheck/all.css" rel="stylesheet" />
+
+@section scripts
+    {
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            //Flat red color scheme for iCheck
+            $('input[type="checkbox"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-green'
+            });
+
+            @{
+                    if (ViewBag.PhaseMessage != null)
+                    {
+                    <text>
+            bootbox.alert('@ViewBag.PhaseMessage');
+            </text>
+                    ViewBag.PhaseMessage = null;
+                    }
+                }
+
+
+            $('#BatchPhaseForm').on('click', '.Phase', function (event) {
+
+                
+                //alert('Phase Trigger');
+                var Ids = $(this).val();
+                //Hold Batch Class Id and phase id in an array
+                var IdsArray = Ids.split('~');
+                //if ($(".Phase").prop('checked') == true) {
+                var checkBoxId = "Phase" + IdsArray[1];
+
+                //alert('checkBoxId = ' + checkBoxId + ' is Checked= ' + $(this).prop("checked"));
+
+                if ($(this).prop("checked") == true) {
+
+                    $('#BatchClassId').val(IdsArray[0]);
+                    $('#PhaseId').val(IdsArray[1]);
+
+                    var startingDate = $('#txtStartingDateId' + IdsArray[0] + '').val();
+                    var location = $('#dpdLocationId' + IdsArray[0] + '').val();
+                    var lessonCategoryTypeId = $('#dpdTypeId' + IdsArray[0] + '').val();
+                    var CategoryTypeHtmlID = '#dpdTypeId' + IdsArray[0] + '';
+
+                    //var typeText = $('#dpdTypeId' + IdsArray[0] + '').text();
+                    var CategoryTypeName = $(CategoryTypeHtmlID + " option:selected").text();
+                    //alert(CategoryTypeName);
+                    //alert("startingDate= " + startingDate + " location=" + location + " lessonCategoryTypeId=" + lessonCategoryTypeId);
+
+                    if (startingDate == "" || location == "" || CategoryTypeName == "") {
+                        bootbox.alert("Please select all inputs found the same row in the selected phase.");
+                    }
+                    else {
+
+                        $('#StartingDate').val(startingDate);
+                        $('#LocationId').val(location);//TypeId
+                        $('#TypeId').val(lessonCategoryTypeId);
+                        $('#TypeName').val(CategoryTypeName);
+                        var url = "";
+
+                        if (CategoryTypeName == "Ground" || CategoryTypeName == "Basic Training")
+                            url = "/PhaseSchedule/ListCourseModule";
+                        else
+                            url = "/PhaseSchedule/ListLessons";
+
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            data: {
+                                'batchClassId': IdsArray[0],
+                                'phaseId': IdsArray[1],
+                                'lessonCategoryTypeId': lessonCategoryTypeId
+                            },
+                            success: function (result) {
+                                if (result.hasList) {
+
+                                    var GUI = '';
+                                    if (!result.isSequenceAssigned) {
+                                       
+                                        GUI = "<div style='color:red' class='PhaseScheduleMessageDiv'><h5>Sequence for the following Lesson/Module is not assigned rather sequences are given by default.</h3></div>";
+                                    }
+                                    else {
+                                       
+                                        GUI = "<div style='color:red' class='PhaseScheduleMessageDiv'><h5>Sequence for the following Lesson/Module is assigned. Change the sequence and save if you want to amend.</h3></div>";
+                                    }
+                                   
+                                    var GUI = GUI + "<ol class='PhaseScheduleCategoryList'>";
+
+                                    if (CategoryTypeName == "Ground") {
+
+                                        jQuery.each(result.resultData, function (index, courseModule) {
+
+                                            GUI = GUI + "<li>" +
+                                                           "<div class='row'><div class='col-md-1'><input type='text' class='form-control' style='width:40px' name='Course" + courseModule.Course.Id + "' id='Course" + courseModule.Course.Id + "' value='" + courseModule.Course.Sequence + "' /></div>"
+                                                           + "<div class='col-md-10 col-sm-10'><label class='control-label'>" + courseModule.Course.Name + "</label></div></div>" +
+
+                                                       "<ol type='I'>";
+                                            jQuery.each(courseModule.Modules, function (index, module) {
+                                                GUI = GUI + "<li>" +
+                                                      "<div class='row'><div class='col-md-1'><input type='text' class='form-control' style='width:40px' name='Module" + module.Id + "' id='Module" + module.Id + "' value='" + module.Sequence + "' /></div>" +
+                                                      "<div class='col-md-10 col-sm-10'><label class='control-label'>" + module.Name + "</label></div></div>" +
+                                                "</li>";
+                                            });
+                                            GUI = GUI + "</ol>" + "</li>";
+                                        });
+                                    }
+                                    else {
+                                        jQuery.each(result.resultData, function (index, lesson) {
+                                            GUI = GUI + "<li>" +
+                                                       "<div class='row'><div class='col-md-1'><input type='text' class='form-control' style='width:40px' name='Lesson" + lesson.Id + "' id='Module" + lesson.Id + "' value='" + lesson.Sequence + "' /></div>" +
+                                                       "<div class='col-md-10 col-sm-10'><label class='control-label'>" + lesson.Name + "</label></div></div>" +
+                                                 "</li>";
+                                        });
+                                    }
+                                    GUI = GUI + "</ol><br/><br/>";
+
+                                    $('#PhaseScheduleCategoryModalPopupForm > .PhaseScheduleCategoryList:last').remove();
+                                    $('#PhaseScheduleCategoryModalPopupForm > .PhaseScheduleMessageDiv:last').remove();
+                                    
+                                    var newFormElement = $("#PhaseScheduleCategoryModalPopupForm");
+                                    newFormElement = $(GUI).attr({ id: "PhaseScheduleCategoryModalPopupForm" });
+                                    newFormElement.appendTo("#PhaseScheduleCategoryModalPopupForm");
+
+                                    //jQuery.noConflict();
+                                    $('#PhaseScheduleCategoryModalPopup').modal('show');
+                                }
+                                else {
+                                    if (CategoryTypeName == "Ground")
+                                        bootbox.alert("There is no Course or Module for the selected Batch or Phase.");
+                                    else
+                                        bootbox.alert("There is no Lesson for the selected Batch or Phase.");
+                                }
+                            },
+                            error: function () {
+                                bootbox.alert("Error has occured!!!.");
+                            }
+                        });
+                    }
+                }
+            });
+
+            $("#CourseModuleSequenceForm").submit(function (event) {
+
+                if ($(this).valid()) {
+                    //var $myForm = $('#CourseModuleSequenceForm');
+                    //$myForm.find(':submit').click();
+                    return true;
+                }
+                else {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+}
+
+
+
+<div class="form-horizontal" id="BatchPhaseForm">
+    <br />
+
+    @{
+        if (ViewBag.PhaseSchedule != null)
+        {
+            List<BatchClasses> batchClassList = (List<BatchClasses>)ViewBag.PhaseSchedule;
+            int batchCounter = 1;
+            string TypeId = String.Empty, StartingDateId = String.Empty, Location = String.Empty;
+            foreach (var batch in batchClassList)
+            {
+                TypeId = "dpdTypeId" + batch.BactchClass.Id;
+
+                Location = "dpdLocationId" + batch.BactchClass.Id;
+                StartingDateId = "txtStartingDateId" + batch.BactchClass.Id;
+                if (batchCounter == 1)
+                {
+                    <div class="form-group">
+                        <div class="col-md-2">
+                            <strong>Batch Class</strong>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Type</strong>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Location</strong>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Starting Date</strong>
+                        </div>
+                        <div class="col-md-4">
+                            @{
+                                var orderedPhase = batch.PhaseList.OrderBy(p => p.PhaseSequence).ToList();
+                                foreach (var phase in orderedPhase)
+                                {
+                                    <span><strong>@phase.Name |</strong></span>
+                                }
+                            }
+
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                    </div>
+                                }
+                                <div class="form-group">
+                                    <div class="col-md-2">
+                                        <label class="control-label"> @batch.BactchClass.Name</label>
+
+                                        <input type="checkbox" class="flat-red Batch" value='@batch.BactchClass.Id~@batchCounter' />
+
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        @Html.DropDownList(TypeId, (IEnumerable<SelectListItem>)ViewBag.LessonCategoryTypeId, htmlAttributes: new { id = TypeId, name = TypeId, @class = "form-control" })
+
+                                        @*<select class="form-control" id="@TypeId" required>
+                                                <option value="">--Select--</option>
+                                                <option value="Ground">Ground</option>
+                                                <option value="FTD">FTD</option>
+                                                <option value="Flying">Flying</option>
+                                            </select>*@
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <select class="form-control" id="@Location">
+                                            @foreach (var location in batch.LocationList)
+                                            {
+                                                <option value="@location.Id">
+                                                    @location.Name
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="input-group date">
+                                            <input type="text" id="@StartingDateId" name="StartingDate" class="form-control PTSMSDatepicker" />
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        @{
+                                            int phaseCounter = 1;
+                                            foreach (var phase in batch.PhaseList)
+                                            {
+
+                                                var checkboxId = "Phase" + phase.Id;
+                                                <label>
+                                                    @if (phase.isScheduled)
+                                                    {
+                                                        <input type="checkbox" class="Phase" id="@checkboxId" + value="@batch.BactchClass.Id~@phase.Id" checked />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" class="Phase" id="@checkboxId" + value="@batch.BactchClass.Id~@phase.Id" />
+                                                    }
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </label>
+                                                phaseCounter = phaseCounter + 1;
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                                    batchCounter = batchCounter + 1;
+                                                }
+
+                                            }
+    }
+</div>
+
+
+<div class="modal modal-fade AddEventContainer" id="PhaseScheduleCategoryModalPopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Course and Module Sequence.</h4>
+            </div>
+            <div class="modal-body">
+                <div style="color:red"><lable class="control-label" name="lblCourseModule" id="lblCourseModule"></lable></div>
+                @using (Html.BeginForm("SaveCourseModuleAndLessonSequence", "PhaseSchedule", FormMethod.Post, new { id = "CourseModuleSequenceForm", enctype = "multipart/form-data" }))
+                {
+                    <div class="form-horizontal" id="PhaseScheduleCategoryModalPopupForm">
+                        @Html.AntiForgeryToken()
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <button class="btn btn-success btn-sm" type="submit" id="btnSave"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Save</button>
+                        </div>
+                    </div>
+                    <div class="row hide">
+                        <input type="text" id="BatchClassId" name="BatchClassId" />
+                        <input type="text" id="PhaseId" name="PhaseId" />
+                        <input type="text" id="StartingDate" name="StartingDate" />
+                        <input type="text" id="LocationId" name="LocationId" />
+                        <input type="text" id="TypeId" name="TypeId" />
+                        <input type="text" id="TypeName" name="TypeName" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

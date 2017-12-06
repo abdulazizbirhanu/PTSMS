@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewBag.Title = "InstructorUtilizationReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<meta name="viewport" content="width=device-width" />
+<title></title>
+<link href="~/Content/FullCalendar/jquery-ui.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/qtip/jquery.qtip.css" rel="stylesheet" />
+@*https://select2.github.io/examples.html#programmatic-control*@
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/ajax-progress-bar/css/jquery.progressTimer.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/validator.js"></script>
+<style>
+    div.col-submit button {
+        border: 1px solid #E4E4E4;
+        background: #A3CECE;
+        font-size: 14px;
+        color: #fff;
+        padding: 1em;
+        display: block;
+        width: 100%;
+        cursor: pointer;
+        border: 0;
+        border-radius: 5px;
+        text-transform: uppercase;
+    }
+</style>
+@section scripts
+{
+    <script src="~/Scripts/FullCalendar/jquery-ui.custom.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/lib/moment.min.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.js"></script>
+
+
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/qtip/jquery.qtip.js"></script>
+    <script src="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/ajax-progress-bar/js/jquery.progressTimer.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/CustomScript/Dispatch.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.DatePick').datepicker({
+                autoclose: true,
+                todayHighlight: true
+
+            });
+        });
+        $('body').on('click', "#printTheReport", function () {
+            var printpage = $('#printingDiv').html();
+            var frame1 = $('<iframe />');
+            frame1[0].name = "frame1";
+            frame1.css({ "position": "absolute", "top": "-1000000px" });
+            $("body").append(frame1);
+            var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+            frameDoc.document.open();
+            //Create a new HTML document.
+
+            frameDoc.document.write(document.head.innerHTML + "<style>table.evaluation-Template{font-size:10px; !important}</style>");
+            //Append the external CSS file.
+
+            //Append the DIV contents.
+            frameDoc.document.write(printpage);
+            //frameDoc.contents().find("head").append(document.head.innerHTML);
+            frameDoc.document.write('</body></html>');
+            frameDoc.document.title = "ETHIOPIAN AIRLINES, PILOT TRAINING SCHOOL";
+            frameDoc.document.close();
+            setTimeout(function () {
+                window.frames["frame1"].focus();
+                window.frames["frame1"].print();
+                frame1.remove();
+            }, 500);
+            });
+    </script>
+
+}
+
+<div>
+    @using (Html.BeginForm("GenerateAndDisplayInstuctorReport", "Report", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnEditEvent" }))
+    {
+        <div style="color:red">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4 hidden">
+            Date From
+            <div class="input-group date">
+                <input type="text" class="form-control DatePick" id="FromDate" name="FromDate"  value='@TempData["FromDate"]'  readonly>
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4 hidden">
+
+            Date To
+            <div class="input-group date">
+                <input type="text" class="form-control DatePick" id="ToDate" name="ToDate"  value='@TempData["ToDate"]' readonly>
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            Year 
+            <select class="form-control " id="ReportYear" name="ReportYear" value='@TempData["ReportYear"]' >
+                <option value="@DateTime.Now.Year">@DateTime.Now.Year</option>
+                <option value="@DateTime.Now.AddYears(-1).Year">@DateTime.Now.AddYears(-1).Year</option>
+                <option value="@DateTime.Now.AddYears(-2).Year">@DateTime.Now.AddYears(-2).Year</option>
+                <option value="@DateTime.Now.AddYears(-3).Year">@DateTime.Now.AddYears(-3).Year</option>
+                <option value="@DateTime.Now.AddYears(-4).Year">@DateTime.Now.AddYears(-4).Year</option>
+                <option value="@DateTime.Now.AddYears(-5).Year">@DateTime.Now.AddYears(-5).Year</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            Quarter
+            <select class="form-control " id="ReportYear" name="ReportQuarter" value='@TempData["ReportQuarter"]'>
+                <option value="1">1st Quarter</option>
+                <option value="2">2nd Quarter</option>
+                <option value="3">3rd Quarter</option>
+                <option value="4">4th Quarter</option>
+            </select>
+        </div>
+        <div class="col-submit col-md-2">
+            <button type="submit">View</button>
+        </div>
+        <div class="col-submit col-md-2">
+            <button type="button" id="printTheReport"> Print </button>
+        </div>
+    }
+    @if (ViewBag.instructorsList != null)
+    {
+        <div id="printingDiv">
+            <table class="table table-responsive table-bordered">
+                <thead><tr><th>Instructor Id</th><th>Instructor Name</th><th>Total hour</th></tr></thead>
+                <tbody>
+                    @foreach (PTSMSDAL.Models.Report.InstructerReportView ev in ViewBag.instructorsList)
+                    {
+                        <tr><td>@ev.InstructorId</td><td>@ev.InstructorName</td><td>@ev.WorkingHour</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+

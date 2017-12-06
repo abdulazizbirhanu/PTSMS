@@ -1,0 +1,1579 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A0C0AF01-5E8C-499B-8B80-138AC091EC08}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PTSMS</RootNamespace>
+    <AssemblyName>PTSMS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\Crystal.Reports.13.0.15.1840\lib\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\Crystal.Reports.13.0.15.1840\lib\CrystalDecisions.ReportSource.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\Crystal.Reports.13.0.15.1840\lib\CrystalDecisions.Shared.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\Crystal.Reports.13.0.15.1840\lib\CrystalDecisions.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenXMLSDK-MOT.2.6.0.0\lib\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GAF, Version=2.2.5.20942, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GAF.2.2.4\lib\net45\GAF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.1.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenXmlPowerTools, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenXmlPowerTools.4.2\lib\OpenXmlPowerTools.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Packaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenXMLSDK-MOT.2.6.0.0\lib\System.IO.Packaging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Management.Automation.6.1.7601.17515\lib\net45\System.Management.Automation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\APIController\TraineeInfoBOes1Controller.cs" />
+    <Compile Include="Controllers\APIController\TraineeInfoBOes2Controller.cs" />
+    <Compile Include="Controllers\APIController\TraineeInfoBOesController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\CategoriesController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\GroundLessonsController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\ModuleActivityController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\ModulesController.cs" />
+    <Compile Include="Controllers\Curriculum\References\EquipmentTypeController.cs" />
+    <Compile Include="Controllers\Curriculum\References\StagesController.cs" />
+    <Compile Include="Controllers\Dispatch\ActivityAuthorizationController.cs" />
+    <Compile Include="Controllers\Dispatch\ActivityCheckInController.cs" />
+    <Compile Include="Controllers\Dispatch\ActivityRampInController.cs" />
+    <Compile Include="Controllers\Dispatch\ActivityRampOutController.cs" />
+    <Compile Include="Controllers\Dispatch\Master\ArrivalTimeReasonsController.cs" />
+    <Compile Include="Controllers\Dispatch\Master\CheckInStatusController.cs" />
+    <Compile Include="Controllers\Dispatch\Master\DepartureTimeReasonsController.cs" />
+    <Compile Include="Controllers\Dispatch\Master\DestinationsController.cs" />
+    <Compile Include="Controllers\Dispatch\Master\InstrumentApproachesController.cs" />
+    <Compile Include="Controllers\Dispatch\Master\OperationAreasController.cs" />
+    <Compile Include="Controllers\Dispatch\Master\OverallGradeController.cs" />
+    <Compile Include="Controllers\Dispatch\Master\ParkingSpotsController.cs" />
+    <Compile Include="Controllers\Dispatch\OverallGradeUpdateRequestController.cs" />
+    <Compile Include="Controllers\Enrollment\LicenseTypesController.cs" />
+    <Compile Include="Controllers\Enrollment\PersonController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
+    <Compile Include="Controllers\Grading\TraineeEvaluationTemplateController.cs" />
+    <Compile Include="Controllers\InstructorProfile\InstructorProfileController.cs" />
+    <Compile Include="Controllers\Others\AATMSMethodFilter.cs" />
+    <Compile Include="Controllers\Others\MessageController.cs" />
+    <Compile Include="Controllers\Others\NotificationController.cs" />
+    <Compile Include="Controllers\Others\SessionExpireAttribute.cs" />
+    <Compile Include="Controllers\PrivilegesController.cs" />
+    <Compile Include="Controllers\Report\ReportController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
+    <Compile Include="Controllers\Scheduling\AirportController.cs" />
+    <Compile Include="Controllers\Scheduling\BatchEquipmentModelController.cs" />
+    <Compile Include="Controllers\Scheduling\EquipmentMaintenancesController.cs" />
+    <Compile Include="Controllers\Scheduling\EquipmentModelsController.cs" />
+    <Compile Include="Controllers\Scheduling\FlightLogsController.cs" />
+    <Compile Include="Controllers\Scheduling\InstructorEquipmentModelController.cs" />
+    <Compile Include="Controllers\Scheduling\InstructorScheduleController.cs" />
+    <Compile Include="Controllers\Scheduling\LeaveTypesController.cs" />
+    <Compile Include="Controllers\Scheduling\LessonCategoryTypeController.cs" />
+    <Compile Include="Controllers\Scheduling\LocationsController.cs" />
+    <Compile Include="Controllers\Scheduling\PhaseScheduleController.cs" />
+    <Compile Include="Controllers\Curriculum\References\CategoryTypesController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\CoursesController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\CurriculumController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\EvaluationCategoriesController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\EvaluationItemsController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\EvaluationTemplatesController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\ExamsController.cs" />
+    <Compile Include="Controllers\Enrollment\BatchClassesController.cs" />
+    <Compile Include="Controllers\Enrollment\BatchesController.cs" />
+    <Compile Include="Controllers\Grading\GradingController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\LessonsController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\Curriculum\References\PhasesController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\PrerequisitesController.cs" />
+    <Compile Include="Controllers\Curriculum\References\ProgramsController.cs" />
+    <Compile Include="Controllers\Curriculum\Operations\ReferencesController.cs" />
+    <Compile Include="Controllers\Scheduling\ClassRoomsController.cs" />
+    <Compile Include="Controllers\Scheduling\DaysController.cs" />
+    <Compile Include="Controllers\Scheduling\DayTemplatesController.cs" />
+    <Compile Include="Controllers\Scheduling\EquipmentCertificatesController.cs" />
+    <Compile Include="Controllers\Scheduling\EquipmentsController.cs" />
+    <Compile Include="Controllers\Scheduling\InstructorSchedulesController.cs" />
+    <Compile Include="Controllers\Scheduling\InstructorsController.cs" />
+    <Compile Include="Controllers\Scheduling\LicensesController.cs" />
+    <Compile Include="Controllers\Scheduling\PeriodsController.cs" />
+    <Compile Include="Controllers\Scheduling\PeriodTemplatesController.cs" />
+    <Compile Include="Controllers\Scheduling\PersonDocumentsController.cs" />
+    <Compile Include="Controllers\Scheduling\PersonLeavesController.cs" />
+    <Compile Include="Controllers\Scheduling\QualificationTypesController.cs" />
+    <Compile Include="Controllers\Scheduling\RescheduleReasonsController.cs" />
+    <Compile Include="Controllers\Scheduling\SchedulerController.cs" />
+    <Compile Include="Controllers\Scheduling\StudentScheduleController.cs" />
+    <Compile Include="Controllers\Scheduling\ToolsController.cs" />
+    <Compile Include="Controllers\TraineeProfile\TraineeProfileController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountBindingModels.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Shared\ValidationErrorBO.cs" />
+    <Compile Include="Others\HelperClass.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="TrainingApplication.cs">
+      <DependentUpon>TrainingAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrainingAppModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrainingAppModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrainingAppModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrainingAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrainingAppModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrainingAppModel.edmx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\Changes.txt" />
+    <Content Include="Content\AdminLTE\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\AdminLTE\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\AdminLTE\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\AdminLTE\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\AdminLTE\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\AdminLTE\bootstrap\js\npm.js" />
+    <Content Include="Content\AdminLTE\css\AdminLTE.css" />
+    <Content Include="Content\AdminLTE\css\AdminLTE.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-black-light.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-black-light.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-black.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-black.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-blue-light.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-blue-light.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-blue.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-blue.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-green-light.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-green-light.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-green.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-green.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-purple-light.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-purple-light.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-purple.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-purple.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-red-light.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-red-light.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-red.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-red.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-yellow-light.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-yellow-light.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-yellow.css" />
+    <Content Include="Content\AdminLTE\css\skins\skin-yellow.min.css" />
+    <Content Include="Content\AdminLTE\css\skins\_all-skins.css" />
+    <Content Include="Content\AdminLTE\css\skins\_all-skins.min.css" />
+    <Content Include="Content\AdminLTE\css\_all.css" />
+    <Content Include="Content\AdminLTE\dist\css\AdminLTE.css" />
+    <Content Include="Content\AdminLTE\dist\css\AdminLTE.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-black-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-black-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-black.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-black.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-blue-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-blue-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-blue.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-blue.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-green-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-green-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-green.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-green.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-purple-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-purple-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-purple.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-purple.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-red-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-red-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-red.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-red.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-yellow-light.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-yellow-light.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-yellow.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\skin-yellow.min.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\_all-skins.css" />
+    <Content Include="Content\AdminLTE\dist\css\skins\_all-skins.min.css" />
+    <Content Include="Content\AdminLTE\dist\img\avatar.png" />
+    <Content Include="Content\AdminLTE\dist\img\avatar04.png" />
+    <Content Include="Content\AdminLTE\dist\img\avatar2.png" />
+    <Content Include="Content\AdminLTE\dist\img\avatar3.png" />
+    <Content Include="Content\AdminLTE\dist\img\avatar5.png" />
+    <Content Include="Content\AdminLTE\dist\img\boxed-bg.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\boxed-bg.png" />
+    <Content Include="Content\AdminLTE\dist\img\credit\american-express.png" />
+    <Content Include="Content\AdminLTE\dist\img\credit\cirrus.png" />
+    <Content Include="Content\AdminLTE\dist\img\credit\mastercard.png" />
+    <Content Include="Content\AdminLTE\dist\img\credit\mestro.png" />
+    <Content Include="Content\AdminLTE\dist\img\credit\paypal.png" />
+    <Content Include="Content\AdminLTE\dist\img\credit\paypal2.png" />
+    <Content Include="Content\AdminLTE\dist\img\credit\visa.png" />
+    <Content Include="Content\AdminLTE\dist\img\default-50x50.gif" />
+    <Content Include="Content\AdminLTE\dist\img\icons.png" />
+    <Content Include="Content\AdminLTE\dist\img\photo1.png" />
+    <Content Include="Content\AdminLTE\dist\img\photo2.png" />
+    <Content Include="Content\AdminLTE\dist\img\photo3.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\photo4.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\user1-128x128.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\user2-160x160.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\user3-128x128.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\user4-128x128.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\user5-128x128.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\user6-128x128.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\user7-128x128.jpg" />
+    <Content Include="Content\AdminLTE\dist\img\user8-128x128.jpg" />
+    <Content Include="Content\AdminLTE\dist\js\app.js" />
+    <Content Include="Content\AdminLTE\dist\js\app.min.js" />
+    <Content Include="Content\AdminLTE\dist\js\demo.js" />
+    <Content Include="Content\AdminLTE\dist\js\pages\dashboard.js" />
+    <Content Include="Content\AdminLTE\dist\js\pages\dashboard2.js" />
+    <Content Include="Content\AdminLTE\img\avatar.png" />
+    <Content Include="Content\AdminLTE\img\avatar04.png" />
+    <Content Include="Content\AdminLTE\img\avatar2.png" />
+    <Content Include="Content\AdminLTE\img\avatar3.png" />
+    <Content Include="Content\AdminLTE\img\avatar5.png" />
+    <Content Include="Content\AdminLTE\img\boxed-bg.jpg" />
+    <Content Include="Content\AdminLTE\img\boxed-bg.png" />
+    <Content Include="Content\AdminLTE\img\credit\american-express.png" />
+    <Content Include="Content\AdminLTE\img\credit\cirrus.png" />
+    <Content Include="Content\AdminLTE\img\credit\mastercard.png" />
+    <Content Include="Content\AdminLTE\img\credit\mestro.png" />
+    <Content Include="Content\AdminLTE\img\credit\paypal.png" />
+    <Content Include="Content\AdminLTE\img\credit\paypal2.png" />
+    <Content Include="Content\AdminLTE\img\credit\visa.png" />
+    <Content Include="Content\AdminLTE\img\default-50x50.gif" />
+    <Content Include="Content\AdminLTE\img\icons.png" />
+    <Content Include="Content\AdminLTE\img\photo1.png" />
+    <Content Include="Content\AdminLTE\img\photo2.png" />
+    <Content Include="Content\AdminLTE\img\photo3.jpg" />
+    <Content Include="Content\AdminLTE\img\photo4.jpg" />
+    <Content Include="Content\AdminLTE\img\user1-128x128.jpg" />
+    <Content Include="Content\AdminLTE\img\user2-160x160.jpg" />
+    <Content Include="Content\AdminLTE\img\user3-128x128.jpg" />
+    <Content Include="Content\AdminLTE\img\user4-128x128.jpg" />
+    <Content Include="Content\AdminLTE\img\user5-128x128.jpg" />
+    <Content Include="Content\AdminLTE\img\user6-128x128.jpg" />
+    <Content Include="Content\AdminLTE\img\user7-128x128.jpg" />
+    <Content Include="Content\AdminLTE\img\user8-128x128.jpg" />
+    <Content Include="Content\AdminLTE\js\app.js" />
+    <Content Include="Content\AdminLTE\js\app.min.js" />
+    <Content Include="Content\AdminLTE\js\demo.js" />
+    <Content Include="Content\AdminLTE\js\pages\dashboard.js" />
+    <Content Include="Content\AdminLTE\js\pages\dashboard2.js" />
+    <Content Include="Content\AdminLTE\plugins\ajax-progress-bar\css\jquery.progressTimer.css" />
+    <Content Include="Content\AdminLTE\plugins\ajax-progress-bar\js\jquery.progressTimer.js" />
+    <Content Include="Content\AdminLTE\plugins\bootstrap-datetimepicker\css\bootstrap-datetimepicker.css" />
+    <Content Include="Content\AdminLTE\plugins\bootstrap-datetimepicker\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\AdminLTE\plugins\bootstrap-datetimepicker\js\bootstrap-datetimepicker.js" />
+    <Content Include="Content\AdminLTE\plugins\bootstrap-datetimepicker\js\bootstrap-datetimepicker.min.js" />
+    <Content Include="Content\AdminLTE\plugins\chartjs\Chart.js" />
+    <Content Include="Content\AdminLTE\plugins\chartjs\Chart.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\dataTables.bootstrap.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\dataTables.bootstrap.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\dataTables.bootstrap.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\css\dataTables.autoFill.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\css\dataTables.autoFill.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\examples\columns.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\examples\complete-callback.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\examples\fill-both.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\examples\fill-horizontal.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\examples\scrolling.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\examples\simple.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\examples\step-callback.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\images\filler.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\js\dataTables.autoFill.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\js\dataTables.autoFill.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\AutoFill\Readme.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\css\dataTables.colReorder.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\css\dataTables.colReorder.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\alt_insert.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\colvis.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\col_filter.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\fixedcolumns.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\fixedheader.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\jqueryui.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\new_init.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\predefined.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\realtime.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\reset.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\scrolling.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\server_side.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\simple.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\examples\state_save.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\images\insert.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\js\dataTables.colReorder.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\js\dataTables.colReorder.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\License.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\css\dataTables.colVis.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\css\dataTables.colvis.jqueryui.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\css\dataTables.colVis.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\button_order.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\exclude_columns.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\group_columns.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\jqueryui.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\mouseover.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\new_init.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\restore.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\simple.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\text.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\title_callback.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\two_tables.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\examples\two_tables_identical.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\js\dataTables.colVis.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\js\dataTables.colVis.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\License.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\css\dataTables.fixedColumns.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\css\dataTables.fixedColumns.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\bootstrap.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\colvis.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\col_filter.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\css_size.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\index_column.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\left_right_columns.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\right_column.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\rowspan.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\server-side-processing.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\simple.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\size_fixed.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\size_fluid.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\examples\two_columns.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\js\dataTables.fixedColumns.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\js\dataTables.fixedColumns.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\License.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\css\dataTables.fixedHeader.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\css\dataTables.fixedHeader.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\examples\header_footer.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\examples\simple.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\examples\top_left_right.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\examples\two_tables.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\examples\zIndexes.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\js\dataTables.fixedHeader.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\js\dataTables.fixedHeader.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedHeader\Readme.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\css\dataTables.keyTable.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\css\dataTables.keyTable.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\examples\events.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\examples\html.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\examples\scrolling.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\examples\simple.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\js\dataTables.keyTable.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\js\dataTables.keyTable.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\KeyTable\Readme.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\css\dataTables.responsive.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\child-rows\column-control.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\child-rows\custom-renderer.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\child-rows\disable-child-rows.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\child-rows\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\child-rows\right-column.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\child-rows\whole-row-control.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\display-control\auto.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\display-control\classes.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\display-control\complexHeader.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\display-control\fixedHeader.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\display-control\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\display-control\init-classes.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\initialisation\ajax.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\initialisation\className.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\initialisation\default.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\initialisation\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\initialisation\new.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\initialisation\option.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\styling\bootstrap.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\styling\compact.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\styling\foundation.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\styling\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\examples\styling\scrolling.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\js\dataTables.responsive.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\js\dataTables.responsive.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\License.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\css\dataTables.scroller.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\css\dataTables.scroller.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\examples\api_scrolling.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\examples\data\2500.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\examples\large_js_source.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\examples\server-side_processing.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\examples\simple.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\examples\state_saving.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\images\loading-background.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\js\dataTables.scroller.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\js\dataTables.scroller.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\Readme.txt" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\css\dataTables.tableTools.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\css\dataTables.tableTools.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\ajax.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\alter_buttons.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\bootstrap.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\button_text.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\collection.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\defaults.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\index.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\jqueryui.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\multiple_tables.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\multi_instance.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\new_init.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\pdf_message.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\plug-in.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\select_column.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\select_multi.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\select_os.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\select_single.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\simple.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\examples\swf_path.html" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\collection.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\collection_hover.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\copy.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\copy_hover.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\csv.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\csv_hover.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\pdf.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\pdf_hover.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\print.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\print_hover.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\xls.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\xls_hover.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\js\dataTables.tableTools.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\js\dataTables.tableTools.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\swf\copy_csv_xls.swf" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\swf\copy_csv_xls_pdf.swf" />
+    <Content Include="Content\AdminLTE\plugins\datatables\images\sort_asc.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\images\sort_asc_disabled.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\images\sort_both.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\images\sort_desc.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\images\sort_desc_disabled.png" />
+    <Content Include="Content\AdminLTE\plugins\datatables\jquery.dataTables.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\jquery.dataTables.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\jquery.dataTables.min.css" />
+    <Content Include="Content\AdminLTE\plugins\datatables\jquery.dataTables.min.js" />
+    <Content Include="Content\AdminLTE\plugins\datatables\jquery.dataTables_themeroller.css" />
+    <Content Include="Content\AdminLTE\plugins\daterangepicker\daterangepicker-bs3.css" />
+    <Content Include="Content\AdminLTE\plugins\daterangepicker\daterangepicker.js" />
+    <Content Include="Content\AdminLTE\plugins\daterangepicker\moment.js" />
+    <Content Include="Content\AdminLTE\plugins\daterangepicker\moment.min.js" />
+    <Content Include="Content\AdminLTE\plugins\fastclick\fastclick.js" />
+    <Content Include="Content\AdminLTE\plugins\fastclick\fastclick.min.js" />
+    <Content Include="Content\AdminLTE\plugins\jQuery-progressBar-master\Content\images\ajax-loader.gif" />
+    <Content Include="Content\AdminLTE\plugins\jQuery-progressBar-master\Content\styles\jquery-progress.css" />
+    <Content Include="Content\AdminLTE\plugins\jQuery-progressBar-master\jquery-progressbar.js" />
+    <Content Include="Content\AdminLTE\plugins\jQuery\jQuery-2.1.4.min.js" />
+    <Content Include="Content\AdminLTE\plugins\jQuery\jQuery-2.2.0.min.js" />
+    <Content Include="Content\AdminLTE\plugins\jvectormap\jquery-jvectormap-1.2.2.css" />
+    <Content Include="Content\AdminLTE\plugins\jvectormap\jquery-jvectormap-1.2.2.min.js" />
+    <Content Include="Content\AdminLTE\plugins\jvectormap\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="Content\AdminLTE\plugins\qtip\jquery.qtip.css" />
+    <Content Include="Content\AdminLTE\plugins\qtip\jquery.qtip.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\ar.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\az.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\bg.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\ca.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\cs.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\da.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\de.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\en.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\es.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\et.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\eu.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\fa.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\fi.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\fr.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\gl.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\he.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\hi.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\hr.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\hu.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\id.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\is.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\it.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\ja.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\ko.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\lt.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\lv.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\mk.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\ms.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\nb.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\nl.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\pl.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\pt-BR.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\pt.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\ro.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\ru.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\sk.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\sr-Cyrl.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\sr.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\sv.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\th.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\tr.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\uk.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\vi.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\zh-CN.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\i18n\zh-TW.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\select2.css" />
+    <Content Include="Content\AdminLTE\plugins\select2\select2.full.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\select2.full.min.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\select2.js" />
+    <Content Include="Content\AdminLTE\plugins\select2\select2.min.css" />
+    <Content Include="Content\AdminLTE\plugins\select2\select2.min.js" />
+    <Content Include="Content\AdminLTE\plugins\slimScroll\jquery.slimscroll.js" />
+    <Content Include="Content\AdminLTE\plugins\slimScroll\jquery.slimscroll.min.js" />
+    <Content Include="Content\AdminLTE\plugins\sparkline\jquery.sparkline.js" />
+    <Content Include="Content\AdminLTE\plugins\sparkline\jquery.sparkline.min.js" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\BootstrapDataTable\BootstrapDataTableCSS.css" />
+    <Content Include="Content\BootstrapDataTable\selectDataTables.css" />
+    <Content Include="Content\CapsLockState\jquery.capslockstate.js" />
+    <Content Include="Content\dashboard\jquery-jvectormap-1.2.2.css" />
+    <Content Include="Content\dashboard\jquery-jvectormap-1.2.2.min.js" />
+    <Content Include="Content\daterangepicker\bootstrap.css" />
+    <Content Include="Content\daterangepicker\daterangepicker.css" />
+    <Content Include="Content\daterangepicker\daterangepicker.js" />
+    <Content Include="Content\daterangepicker\jquery.min.js" />
+    <Content Include="Content\daterangepicker\moment.min.js" />
+    <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\FullCalendar\fullcalendar.css" />
+    <Content Include="Content\FullCalendar\fullcalendar.min.css" />
+    <Content Include="Content\FullCalendar\fullcalendar.print.css" />
+    <Content Include="Content\FullCalendar\images\animated-overlay.gif" />
+    <Content Include="Content\FullCalendar\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
+    <Content Include="Content\FullCalendar\images\ui-bg_flat_15_cd0a0a_40x100.png" />
+    <Content Include="Content\FullCalendar\images\ui-bg_glass_100_e4f1fb_1x400.png" />
+    <Content Include="Content\FullCalendar\images\ui-bg_glass_50_3baae3_1x400.png" />
+    <Content Include="Content\FullCalendar\images\ui-bg_glass_80_d7ebf9_1x400.png" />
+    <Content Include="Content\FullCalendar\images\ui-bg_highlight-hard_100_f2f5f7_1x100.png" />
+    <Content Include="Content\FullCalendar\images\ui-bg_highlight-hard_70_000000_1x100.png" />
+    <Content Include="Content\FullCalendar\images\ui-bg_highlight-soft_100_deedf7_1x100.png" />
+    <Content Include="Content\FullCalendar\images\ui-bg_highlight-soft_25_ffef8f_1x100.png" />
+    <Content Include="Content\FullCalendar\images\ui-icons_2694e8_256x240.png" />
+    <Content Include="Content\FullCalendar\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\FullCalendar\images\ui-icons_3d80b3_256x240.png" />
+    <Content Include="Content\FullCalendar\images\ui-icons_72a7cf_256x240.png" />
+    <Content Include="Content\FullCalendar\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\FullCalendar\jquery-ui.min.css" />
+    <Content Include="Content\Images\32px.png" />
+    <Content Include="Content\Images\Barcodes\TV1.png" />
+    <Content Include="Content\Images\Barcodes\TV10016.png" />
+    <Content Include="Content\Images\Barcodes\TV10019.png" />
+    <Content Include="Content\Images\Barcodes\TV10022.png" />
+    <Content Include="Content\Images\Barcodes\TV10023.png" />
+    <Content Include="Content\Images\Barcodes\TV10029.png" />
+    <Content Include="Content\Images\Barcodes\TV10030.png" />
+    <Content Include="Content\Images\Barcodes\TV10032.png" />
+    <Content Include="Content\Images\Barcodes\TV14.png" />
+    <Content Include="Content\Images\Barcodes\TV16.png" />
+    <Content Include="Content\Images\Barcodes\TV18.png" />
+    <Content Include="Content\Images\Barcodes\TV2.png" />
+    <Content Include="Content\Images\Barcodes\TV27.png" />
+    <Content Include="Content\Images\Barcodes\TV28.png" />
+    <Content Include="Content\Images\Barcodes\TV29.png" />
+    <Content Include="Content\Images\Barcodes\TV3.png" />
+    <Content Include="Content\Images\Barcodes\TV30.png" />
+    <Content Include="Content\Images\Barcodes\TV31.png" />
+    <Content Include="Content\Images\Barcodes\TV32.png" />
+    <Content Include="Content\Images\Barcodes\TV33.png" />
+    <Content Include="Content\Images\Barcodes\TV34.png" />
+    <Content Include="Content\Images\Barcodes\TV35.png" />
+    <Content Include="Content\Images\Barcodes\TV36.png" />
+    <Content Include="Content\Images\Barcodes\TV37.png" />
+    <Content Include="Content\Images\Barcodes\TV38.png" />
+    <Content Include="Content\Images\Barcodes\TV39.png" />
+    <Content Include="Content\Images\Barcodes\TV4.png" />
+    <Content Include="Content\Images\Barcodes\TV40.png" />
+    <Content Include="Content\Images\Barcodes\TV41.png" />
+    <Content Include="Content\Images\Barcodes\TV42.png" />
+    <Content Include="Content\Images\Barcodes\TV43.png" />
+    <Content Include="Content\Images\Barcodes\TV44.png" />
+    <Content Include="Content\Images\Barcodes\TV47.png" />
+    <Content Include="Content\Images\Barcodes\TV49.png" />
+    <Content Include="Content\Images\Barcodes\TV5.png" />
+    <Content Include="Content\Images\giphy.gif" />
+    <Content Include="Content\Images\Photo\EP12345678PP.jpeg" />
+    <Content Include="Content\Images\Sliders\PTSimage0.jpg" />
+    <Content Include="Content\Images\Sliders\PTSimage1.jpg" />
+    <Content Include="Content\Images\Sliders\PTSimage2.jpg" />
+    <Content Include="Content\Images\Sliders\PTSimage3.jpg" />
+    <Content Include="Content\Images\Sliders\PTSimage4.jpg" />
+    <Content Include="Content\Images\Sliders\PTSimage5.jpg" />
+    <Content Include="Content\ionicons.css" />
+    <Content Include="Content\ionicons.min.css" />
+    <Content Include="Content\jquery-jvectormap.css" />
+    <Content Include="Content\JsTreeCss\style.css" />
+    <Content Include="Content\JsTreeCss\style.min.css" />
+    <Content Include="Content\lib\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="Content\lib\jquery-mousewheel.js" />
+    <Content Include="Content\loading-bar.css" />
+    <Content Include="Content\newStyle.css" />
+    <Content Include="Content\src\abstract-canvas-element.js" />
+    <Content Include="Content\src\abstract-element.js" />
+    <Content Include="Content\src\abstract-shape-element.js" />
+    <Content Include="Content\src\color-scale.js" />
+    <Content Include="Content\src\data-series.js" />
+    <Content Include="Content\src\jquery-1.8.2.js" />
+    <Content Include="Content\src\jquery-jvectormap.js" />
+    <Content Include="Content\src\jvectormap.js" />
+    <Content Include="Content\src\legend.js" />
+    <Content Include="Content\src\map-object.js" />
+    <Content Include="Content\src\map.js" />
+    <Content Include="Content\src\marker.js" />
+    <Content Include="Content\src\multimap.js" />
+    <Content Include="Content\src\numeric-scale.js" />
+    <Content Include="Content\src\ordinal-scale.js" />
+    <Content Include="Content\src\proj.js" />
+    <Content Include="Content\src\region.js" />
+    <Content Include="Content\src\simple-scale.js" />
+    <Content Include="Content\src\svg-canvas-element.js" />
+    <Content Include="Content\src\svg-circle-element.js" />
+    <Content Include="Content\src\svg-element.js" />
+    <Content Include="Content\src\svg-group-element.js" />
+    <Content Include="Content\src\svg-image-element.js" />
+    <Content Include="Content\src\svg-path-element.js" />
+    <Content Include="Content\src\svg-shape-element.js" />
+    <Content Include="Content\src\svg-text-element.js" />
+    <Content Include="Content\src\vector-canvas.js" />
+    <Content Include="Content\src\vml-canvas-element.js" />
+    <Content Include="Content\src\vml-circle-element.js" />
+    <Content Include="Content\src\vml-element.js" />
+    <Content Include="Content\src\vml-group-element.js" />
+    <Content Include="Content\src\vml-image-element.js" />
+    <Content Include="Content\src\vml-path-element.js" />
+    <Content Include="Content\src\vml-shape-element.js" />
+    <Content Include="Content\SweetAlert\sweetalert.css" />
+    <Content Include="Content\SweetAlert\sweetalert.min.js" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootbox.min.js" />
+    <Content Include="Content\AdminLTE\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Content\AdminLTE\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\AdminLTE\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\AdminLTE\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\AdminLTE\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\Images\Attachements\TV1.pdf" />
+    <Content Include="Content\Images\Attachements\TV10016.pdf" />
+    <Content Include="Content\Images\Attachements\TV10019.pdf" />
+    <Content Include="Content\Images\Attachements\TV10022.pdf" />
+    <Content Include="Content\Images\Attachements\TV10023.pdf" />
+    <Content Include="Content\Images\Attachements\TV10029.pdf" />
+    <Content Include="Content\Images\Attachements\TV10030.pdf" />
+    <Content Include="Content\Images\Attachements\TV10031.pdf" />
+    <Content Include="Content\Images\Attachements\TV10032.pdf" />
+    <Content Include="Content\Images\Attachements\TV14.pdf" />
+    <Content Include="Content\Images\Attachements\TV16.pdf" />
+    <Content Include="Content\Images\Attachements\TV18.pdf" />
+    <Content Include="Content\Images\Attachements\TV2.pdf" />
+    <Content Include="Content\Images\Attachements\TV3.pdf" />
+    <Content Include="Content\Images\Attachements\TV4.pdf" />
+    <Content Include="Content\Images\Attachements\TV49.pdf" />
+    <Content Include="Content\Images\Attachements\TV5.pdf" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColReorder\Readme.md" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\ColVis\Readme.md" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\FixedColumns\Readme.md" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\css\dataTables.responsive.scss" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Responsive\Readme.md" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\Scroller\examples\data\ssp.php" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\psd\collection.psd" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\psd\copy document.psd" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\psd\file_types.psd" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\images\psd\printer.psd" />
+    <Content Include="Content\AdminLTE\plugins\datatables\extensions\TableTools\Readme.md" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\AdminLTE\plugins\jQuery-progressBar-master\README.md" />
+    <Content Include="packages.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\PTSMS.pubxml" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\BootstrapDataTables\BootstrapDataTables.js" />
+    <Content Include="Scripts\CustomScript\Dispatch.js" />
+    <Content Include="Scripts\FullCalendar\fullcalendar.js" />
+    <Content Include="Scripts\FullCalendar\fullcalendar.min.js" />
+    <Content Include="Scripts\FullCalendar\gcal.js" />
+    <Content Include="Scripts\FullCalendar\jquery-ui.custom.min.js" />
+    <Content Include="Scripts\FullCalendar\jquery.min.js" />
+    <Content Include="Scripts\FullCalendar\lang-all.js" />
+    <Content Include="Scripts\FullCalendar\moment.min.js" />
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.24.js" />
+    <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.plugin.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.plugin.min.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-ar.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-ca.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-cs.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-de.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-es.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-fa.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-fr.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-hu.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-is.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-it.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-ja.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-lt.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-lv.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-nl.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-pl.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-pt.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-ro.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-ru.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-sk.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-sv.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-tr.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-vi.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-zh-CN.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry-zh-TW.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry.css" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\jquery.timeentry.min.js" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerBlue.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerBlueBig.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerDefault.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerDefaultBig.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerGem.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerGemBig.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerGreen.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerGreenBig.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerOrange.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerOrangeBig.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerSquare.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerSquareBig.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerText.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerTextBig.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerUpDown.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\spinnerUpDownBig.png" />
+    <Content Include="Scripts\jquery.timeentry.package-2.0.1\timeEntryBasic.html" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\JsTree\jstree.js" />
+    <Content Include="Scripts\JsTree\jstree.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PTSMSGlobalScript.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\validator.js" />
+    <Content Include="Scripts\vendors\angucomplete-alt.min.js" />
+    <Content Include="Scripts\vendors\angular-animate.js" />
+    <Content Include="Scripts\vendors\angular-base64.js" />
+    <Content Include="Scripts\vendors\angular-cookies.js" />
+    <Content Include="Scripts\vendors\angular-file-upload.js" />
+    <Content Include="Scripts\vendors\angular-local-storage.js" />
+    <Content Include="Scripts\vendors\angular-route.min.js" />
+    <Content Include="Scripts\vendors\angular-ui-router.js" />
+    <Content Include="Scripts\vendors\angular-validator.js" />
+    <Content Include="Scripts\vendors\angular-validator.min.js" />
+    <Content Include="Scripts\vendors\angular.min.js" />
+    <Content Include="Scripts\vendors\loading-bar.js" />
+    <Content Include="Scripts\vendors\ng-file-upload-shim.js" />
+    <Content Include="Scripts\vendors\ng-file-upload.js" />
+    <Content Include="Scripts\vendors\toastr.min.js" />
+    <Content Include="Scripts\vendors\ui-bootstrap-tpls-1.2.5.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="TrainingAppModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TrainingAppModel.edmx</DependentUpon>
+      <LastGenOutput>TrainingAppModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="TrainingAppModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TrainingAppModel.edmx</DependentUpon>
+      <LastGenOutput>TrainingAppModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\CategoryNames\Create.cshtml" />
+    <Content Include="Views\CategoryNames\Delete.cshtml" />
+    <Content Include="Views\CategoryNames\Details.cshtml" />
+    <Content Include="Views\CategoryNames\Edit.cshtml" />
+    <Content Include="Views\CategoryNames\Index.cshtml" />
+    <Content Include="Views\CategoryTypes\Create.cshtml" />
+    <Content Include="Views\CategoryTypes\Delete.cshtml" />
+    <Content Include="Views\CategoryTypes\Details.cshtml" />
+    <Content Include="Views\CategoryTypes\Edit.cshtml" />
+    <Content Include="Views\CategoryTypes\Index.cshtml" />
+    <Content Include="Views\Home\Welcome.cshtml" />
+    <Content Include="Views\Programs\Create.cshtml" />
+    <Content Include="Views\Programs\Delete.cshtml" />
+    <Content Include="Views\Programs\Details.cshtml" />
+    <Content Include="Views\Programs\Edit.cshtml" />
+    <Content Include="Views\Programs\Index.cshtml" />
+    <Content Include="Views\Shared\Header.cshtml" />
+    <Content Include="Views\Shared\_header.cshtml" />
+    <Content Include="Views\Shared\_sideBarLeft.cshtml" />
+    <Content Include="Views\Shared\_sideBarRight.cshtml" />
+    <Content Include="Views\Shared\_LayoutSPA.cshtml" />
+    <Content Include="Views\Shared\_footer.cshtml" />
+    <Content Include="Views\User\HomePage.cshtml" />
+    <Content Include="Views\User\Home.cshtml" />
+    <Content Include="Views\Curriculum\Index.cshtml" />
+    <Content Include="Views\Categories\Create.cshtml" />
+    <Content Include="Views\Categories\Delete.cshtml" />
+    <Content Include="Views\Categories\Details.cshtml" />
+    <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Courses\Create.cshtml" />
+    <Content Include="Views\Courses\Delete.cshtml" />
+    <Content Include="Views\Courses\Details.cshtml" />
+    <Content Include="Views\Courses\Edit.cshtml" />
+    <Content Include="Views\Courses\Index.cshtml" />
+    <Content Include="Views\EvaluationTemplates\Create.cshtml" />
+    <Content Include="Views\EvaluationTemplates\Delete.cshtml" />
+    <Content Include="Views\EvaluationTemplates\Details.cshtml" />
+    <Content Include="Views\EvaluationTemplates\Edit.cshtml" />
+    <Content Include="Views\EvaluationTemplates\Index.cshtml" />
+    <Content Include="Views\Exams\Create.cshtml" />
+    <Content Include="Views\Exams\Delete.cshtml" />
+    <Content Include="Views\Exams\Details.cshtml" />
+    <Content Include="Views\Exams\Edit.cshtml" />
+    <Content Include="Views\Exams\Index.cshtml" />
+    <Content Include="Views\Lessons\Create.cshtml" />
+    <Content Include="Views\Lessons\Delete.cshtml" />
+    <Content Include="Views\Lessons\Details.cshtml" />
+    <Content Include="Views\Lessons\Edit.cshtml" />
+    <Content Include="Views\Lessons\Index.cshtml" />
+    <Content Include="Views\Modules\Create.cshtml" />
+    <Content Include="Views\Modules\Delete.cshtml" />
+    <Content Include="Views\Modules\Details.cshtml" />
+    <Content Include="Views\Modules\Edit.cshtml" />
+    <Content Include="Views\Modules\Index.cshtml" />
+    <Content Include="Views\Prerequisites\Create.cshtml" />
+    <Content Include="Views\Prerequisites\Delete.cshtml" />
+    <Content Include="Views\Prerequisites\Details.cshtml" />
+    <Content Include="Views\Prerequisites\Edit.cshtml" />
+    <Content Include="Views\Prerequisites\Index.cshtml" />
+    <Content Include="Views\BatchClasses\Create.cshtml" />
+    <Content Include="Views\BatchClasses\Delete.cshtml" />
+    <Content Include="Views\BatchClasses\Details.cshtml" />
+    <Content Include="Views\BatchClasses\Edit.cshtml" />
+    <Content Include="Views\BatchClasses\Index.cshtml" />
+    <Content Include="Views\Batches\Create.cshtml" />
+    <Content Include="Views\Batches\Delete.cshtml" />
+    <Content Include="Views\Batches\Details.cshtml" />
+    <Content Include="Views\Batches\Edit.cshtml" />
+    <Content Include="Views\Batches\Index.cshtml" />
+    <Content Include="Views\EvaluationCategories\Create.cshtml" />
+    <Content Include="Views\EvaluationCategories\Delete.cshtml" />
+    <Content Include="Views\EvaluationCategories\Details.cshtml" />
+    <Content Include="Views\EvaluationCategories\Edit.cshtml" />
+    <Content Include="Views\EvaluationCategories\Index.cshtml" />
+    <Content Include="Views\EvaluationItems\Create.cshtml" />
+    <Content Include="Views\EvaluationItems\Delete.cshtml" />
+    <Content Include="Views\EvaluationItems\Details.cshtml" />
+    <Content Include="Views\EvaluationItems\Edit.cshtml" />
+    <Content Include="Views\EvaluationItems\Index.cshtml" />
+    <Content Include="Views\Phases\Create.cshtml" />
+    <Content Include="Views\Phases\Delete.cshtml" />
+    <Content Include="Views\Phases\Details.cshtml" />
+    <Content Include="Views\Phases\Edit.cshtml" />
+    <Content Include="Views\Phases\Index.cshtml" />
+    <Content Include="Views\References\Create.cshtml" />
+    <Content Include="Views\References\Delete.cshtml" />
+    <Content Include="Views\References\Details.cshtml" />
+    <Content Include="Views\References\Edit.cshtml" />
+    <Content Include="Views\References\Index.cshtml" />
+    <Content Include="Views\Programs\ProgramList.cshtml" />
+    <Content Include="Views\Shared\ErrorMessageBox.cshtml" />
+    <Content Include="Views\GroundLessons\Create.cshtml" />
+    <Content Include="Views\GroundLessons\Delete.cshtml" />
+    <Content Include="Views\GroundLessons\Details.cshtml" />
+    <Content Include="Views\GroundLessons\Edit.cshtml" />
+    <Content Include="Views\GroundLessons\Index.cshtml" />
+    <Content Include="Views\Users\Create.cshtml" />
+    <Content Include="Views\Users\Delete.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\Login.cshtml" />
+    <Content Include="Views\Batches\TraineeSyllabus.cshtml" />
+    <Content Include="Views\ClassRooms\Create.cshtml" />
+    <Content Include="Views\ClassRooms\Delete.cshtml" />
+    <Content Include="Views\ClassRooms\Details.cshtml" />
+    <Content Include="Views\ClassRooms\Edit.cshtml" />
+    <Content Include="Views\ClassRooms\Index.cshtml" />
+    <Content Include="Views\Days\Create.cshtml" />
+    <Content Include="Views\Days\Delete.cshtml" />
+    <Content Include="Views\Days\Details.cshtml" />
+    <Content Include="Views\Days\Edit.cshtml" />
+    <Content Include="Views\Days\Index.cshtml" />
+    <Content Include="Views\DayTemplates\Create.cshtml" />
+    <Content Include="Views\DayTemplates\Delete.cshtml" />
+    <Content Include="Views\DayTemplates\Details.cshtml" />
+    <Content Include="Views\DayTemplates\Edit.cshtml" />
+    <Content Include="Views\DayTemplates\Index.cshtml" />
+    <Content Include="Views\EquipmentCertificates\Create.cshtml" />
+    <Content Include="Views\EquipmentCertificates\Delete.cshtml" />
+    <Content Include="Views\EquipmentCertificates\Details.cshtml" />
+    <Content Include="Views\EquipmentCertificates\Edit.cshtml" />
+    <Content Include="Views\EquipmentCertificates\Index.cshtml" />
+    <Content Include="Views\Equipments\Create.cshtml" />
+    <Content Include="Views\Equipments\Delete.cshtml" />
+    <Content Include="Views\Equipments\Details.cshtml" />
+    <Content Include="Views\Equipments\Edit.cshtml" />
+    <Content Include="Views\Equipments\Index.cshtml" />
+    <Content Include="Views\Licenses\Create.cshtml" />
+    <Content Include="Views\Licenses\Delete.cshtml" />
+    <Content Include="Views\Licenses\Details.cshtml" />
+    <Content Include="Views\Licenses\Edit.cshtml" />
+    <Content Include="Views\Licenses\Index.cshtml" />
+    <Content Include="Views\Periods\Create.cshtml" />
+    <Content Include="Views\Periods\Delete.cshtml" />
+    <Content Include="Views\Periods\Details.cshtml" />
+    <Content Include="Views\Periods\Edit.cshtml" />
+    <Content Include="Views\Periods\Index.cshtml" />
+    <Content Include="Views\PeriodTemplates\Create.cshtml" />
+    <Content Include="Views\PeriodTemplates\Delete.cshtml" />
+    <Content Include="Views\PeriodTemplates\Details.cshtml" />
+    <Content Include="Views\PeriodTemplates\Edit.cshtml" />
+    <Content Include="Views\PeriodTemplates\Index.cshtml" />
+    <Content Include="Views\PersonDocuments\Create.cshtml" />
+    <Content Include="Views\PersonDocuments\Delete.cshtml" />
+    <Content Include="Views\PersonDocuments\Details.cshtml" />
+    <Content Include="Views\PersonDocuments\Edit.cshtml" />
+    <Content Include="Views\PersonDocuments\Index.cshtml" />
+    <Content Include="Views\PersonLeaves\Create.cshtml" />
+    <Content Include="Views\PersonLeaves\Delete.cshtml" />
+    <Content Include="Views\PersonLeaves\Details.cshtml" />
+    <Content Include="Views\PersonLeaves\Edit.cshtml" />
+    <Content Include="Views\PersonLeaves\Index.cshtml" />
+    <Content Include="Views\Tools\Create.cshtml" />
+    <Content Include="Views\Tools\Delete.cshtml" />
+    <Content Include="Views\Tools\Details.cshtml" />
+    <Content Include="Views\Tools\Edit.cshtml" />
+    <Content Include="Views\Tools\Index.cshtml" />
+    <Content Include="Views\Scheduler\GroundClassSchedule.cshtml" />
+    <Content Include="Views\InstructorSchedules\Create.cshtml" />
+    <Content Include="Views\InstructorSchedules\Delete.cshtml" />
+    <Content Include="Views\InstructorSchedules\Details.cshtml" />
+    <Content Include="Views\InstructorSchedules\Edit.cshtml" />
+    <Content Include="Views\InstructorSchedules\Index.cshtml" />
+    <Content Include="Views\Instructors\Create.cshtml" />
+    <Content Include="Views\Instructors\Delete.cshtml" />
+    <Content Include="Views\Instructors\Details.cshtml" />
+    <Content Include="Views\Instructors\Edit.cshtml" />
+    <Content Include="Views\Instructors\Index.cshtml" />
+    <Content Include="Views\QualificationTypes\Create.cshtml" />
+    <Content Include="Views\QualificationTypes\Delete.cshtml" />
+    <Content Include="Views\QualificationTypes\Details.cshtml" />
+    <Content Include="Views\QualificationTypes\Edit.cshtml" />
+    <Content Include="Views\QualificationTypes\Index.cshtml" />
+    <Content Include="Views\Grading\Index.cshtml" />
+    <Content Include="Views\Grading\ViewGrade.cshtml" />
+    <Content Include="Views\Scheduler\OrderSchedule.cshtml" />
+    <Content Include="Views\PhaseSchedule\Index.cshtml" />
+    <Content Include="Views\LessonCategoryType\Create.cshtml" />
+    <Content Include="Views\LessonCategoryType\Index.cshtml" />
+    <Content Include="Views\Scheduler\FTDAndFlyingScheduler.cshtml" />
+    <Content Include="Views\Scheduler\TraineeEvaluationTemplatePartialView.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\eVISALogin.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\Unauthorized.cshtml" />
+    <Content Include="Views\Account\Update.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\User\TestPage.cshtml" />
+    <Content Include="Views\Roles\Index.cshtml" />
+    <Content Include="Views\Roles\Create.cshtml" />
+    <Content Include="Views\Roles\Delete.cshtml" />
+    <Content Include="Views\Roles\Edit.cshtml" />
+    <Content Include="Views\Privileges\Index.cshtml" />
+    <Content Include="Views\Privileges\Create.cshtml" />
+    <Content Include="Views\Privileges\Delete.cshtml" />
+    <Content Include="Views\Privileges\Details.cshtml" />
+    <Content Include="Views\Privileges\Edit.cshtml" />
+    <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+    <Content Include="Views\Stages\Create.cshtml" />
+    <Content Include="Views\Stages\Delete.cshtml" />
+    <Content Include="Views\Stages\Details.cshtml" />
+    <Content Include="Views\Stages\Edit.cshtml" />
+    <Content Include="Views\Stages\Index.cshtml" />
+    <Content Include="Views\EquipmentType\Create.cshtml" />
+    <Content Include="Views\EquipmentType\Delete.cshtml" />
+    <Content Include="Views\EquipmentType\Details.cshtml" />
+    <Content Include="Views\EquipmentType\Edit.cshtml" />
+    <Content Include="Views\EquipmentType\Index.cshtml" />
+    <Content Include="Views\Programs\ProgramDetailPartialView.cshtml" />
+    <Content Include="Views\Categories\CategoryDetailPartialView.cshtml" />
+    <Content Include="Views\GroundLessons\GroundLessonsDetailPartialView.cshtml" />
+    <Content Include="Views\EvaluationTemplates\EvaluationTemplateDetailPartialView.cshtml" />
+    <Content Include="Views\Lessons\LessonDetailPartialView.cshtml" />
+    <Content Include="Views\Exams\ExamDetailPartialView.cshtml" />
+    <Content Include="Views\Modules\ModuleDetailPartialView.cshtml" />
+    <Content Include="Views\Prerequisites\PrerequisiteDetailPartialView.cshtml" />
+    <Content Include="Views\Courses\CourseDetailPartialView.cshtml" />
+    <Content Include="Views\Airport\Index.cshtml" />
+    <Content Include="Views\Airport\Details.cshtml" />
+    <Content Include="Views\Airport\Create.cshtml" />
+    <Content Include="Views\Airport\Edit.cshtml" />
+    <Content Include="Views\Airport\Delete.cshtml" />
+    <Content Include="Views\FlightLogs\Create.cshtml" />
+    <Content Include="Views\FlightLogs\Delete.cshtml" />
+    <Content Include="Views\FlightLogs\Details.cshtml" />
+    <Content Include="Views\FlightLogs\Edit.cshtml" />
+    <Content Include="Views\FlightLogs\Index.cshtml" />
+    <Content Include="Views\FlightLogs\CreateLightLogPartialView.cshtml" />
+    <Content Include="Views\FlightLogs\CreateFlightLogPartialView.cshtml" />
+    <Content Include="Views\Report\ReportViewer.cshtml" />
+    <Content Include="Views\Scheduler\EquipmentScheduler.cshtml" />
+    <Content Include="Views\Report\MonthlyFlightTimeReport.cshtml" />
+    <Content Include="Views\Report\ActiveStudentsReport.cshtml" />
+    <Content Include="Views\Report\ScheduleCancelationReport.cshtml" />
+    <Content Include="Views\Report\SignInAndOutReport.cshtml" />
+    <Content Include="Views\InstructorEquipmentModel\Create.cshtml" />
+    <Content Include="Views\InstructorEquipmentModel\Delete.cshtml" />
+    <Content Include="Views\InstructorEquipmentModel\Edit.cshtml" />
+    <Content Include="Views\InstructorEquipmentModel\Details.cshtml" />
+    <Content Include="Views\InstructorEquipmentModel\Index.cshtml" />
+    <Content Include="Views\BatchEquipmentModel\Create.cshtml" />
+    <Content Include="Views\BatchEquipmentModel\Delete.cshtml" />
+    <Content Include="Views\BatchEquipmentModel\Details.cshtml" />
+    <Content Include="Views\BatchEquipmentModel\Edit.cshtml" />
+    <Content Include="Views\BatchEquipmentModel\Index.cshtml" />
+    <Content Include="Views\Errors\BadRequest.cshtml" />
+    <Content Include="Views\Errors\NotFound.cshtml" />
+    <Content Include="Views\Errors\SericeUnavailable.cshtml" />
+    <Content Include="Views\Errors\Unauthorized.cshtml" />
+    <Content Include="Views\StudentSchedule\GroundClass.cshtml" />
+    <Content Include="Views\StudentSchedule\Equipment.cshtml" />
+    <Content Include="Views\FlightLogs\FlightLogDetail.cshtml" />
+    <Content Include="Views\TraineeEvaluationTemplate\TraineeEvaluationTemplate.cshtml" />
+    <Content Include="Views\InstructorSchedule\GroundClass.cshtml" />
+    <Content Include="Views\InstructorSchedule\Equipment.cshtml" />
+    <Content Include="Views\Scheduler\InstructorUtilization.cshtml" />
+    <Content Include="Views\TraineeProfile\TraineeSyllabus.cshtml" />
+    <Content Include="Views\TraineeProfile\TraineeLessons.cshtml" />
+    <Content Include="Views\TraineeProfile\LessonDetails.cshtml" />
+    <Content Include="Views\TraineeProfile\TraineeCourses.cshtml" />
+    <Content Include="Views\TraineeProfile\ModuleList.cshtml" />
+    <Content Include="Views\TraineeProfile\ModuleDetails.cshtml" />
+    <Content Include="Views\TraineeProfile\CourseDetails.cshtml" />
+    <Content Include="Views\TraineeProfile\TraineeEvaluationTemplate.cshtml" />
+    <Content Include="Views\TraineeProfile\ModuleExamList.cshtml" />
+    <Content Include="Views\TraineeProfile\ModuleExamDetails.cshtml" />
+    <Content Include="Views\TraineeProfile\TraineeCourseExamList.cshtml" />
+    <Content Include="Views\TraineeProfile\CourseExamDetails.cshtml" />
+    <Content Include="Views\TraineeProfile\TraineeLicenseList.cshtml" />
+    <Content Include="Views\TraineeProfile\TraineelicenseDetail.cshtml" />
+    <Content Include="Views\TraineeProfile\TraineeLeaveList.cshtml" />
+    <Content Include="Views\Notification\ScheduleNotification.cshtml" />
+    <Content Include="Views\Notification\GetConcernedBodies.cshtml" />
+    <Content Include="Views\InstructorProfile\InstructorLessons.cshtml" />
+    <Content Include="Views\InstructorProfile\LessonDetails.cshtml" />
+    <Content Include="Views\InstructorProfile\LessonEvaluationTemplate.cshtml" />
+    <Content Include="Views\InstructorProfile\InstructorCourses.cshtml" />
+    <Content Include="Views\InstructorProfile\CourseDetails.cshtml" />
+    <Content Include="Views\InstructorProfile\ModuleList.cshtml" />
+    <Content Include="Views\InstructorProfile\ModuleDetails.cshtml" />
+    <Content Include="Views\InstructorProfile\ModuleExamList.cshtml" />
+    <Content Include="Views\InstructorProfile\ModuleExamDetails.cshtml" />
+    <Content Include="Views\InstructorProfile\CourseExamList.cshtml" />
+    <Content Include="Views\InstructorProfile\CourseExamDetails.cshtml" />
+    <Content Include="Views\InstructorProfile\InstructorLicenseList.cshtml" />
+    <Content Include="Views\InstructorProfile\LicenseDetail.cshtml" />
+    <Content Include="Views\InstructorProfile\InstructorLeaveList.cshtml" />
+    <Content Include="Views\InstructorProfile\BatchList.cshtml" />
+    <Content Include="Views\InstructorProfile\BatchDetails.cshtml" />
+    <Content Include="Views\InstructorProfile\BatchClassDetails.cshtml" />
+    <Content Include="Views\InstructorProfile\TraineeSyllabus.cshtml" />
+    <Content Include="Views\TraineeProfile\Profile.cshtml" />
+    <Content Include="Views\InstructorProfile\Profile.cshtml" />
+    <Content Include="Views\ActivityAuthorization\Create.cshtml" />
+    <Content Include="Views\ActivityAuthorization\Delete.cshtml" />
+    <Content Include="Views\ActivityAuthorization\Details.cshtml" />
+    <Content Include="Views\ActivityAuthorization\Edit.cshtml" />
+    <Content Include="Views\ActivityAuthorization\Index.cshtml" />
+    <Content Include="Views\ActivityCheckIn\Create.cshtml" />
+    <Content Include="Views\ActivityCheckIn\Delete.cshtml" />
+    <Content Include="Views\ActivityCheckIn\Details.cshtml" />
+    <Content Include="Views\ActivityCheckIn\Edit.cshtml" />
+    <Content Include="Views\ActivityCheckIn\Index.cshtml" />
+    <Content Include="Views\ActivityRampIn\Create.cshtml" />
+    <Content Include="Views\ActivityRampIn\Delete.cshtml" />
+    <Content Include="Views\ActivityRampIn\Details.cshtml" />
+    <Content Include="Views\ActivityRampIn\Edit.cshtml" />
+    <Content Include="Views\ActivityRampIn\Index.cshtml" />
+    <Content Include="Views\ActivityRampOut\Create.cshtml" />
+    <Content Include="Views\ActivityRampOut\Delete.cshtml" />
+    <Content Include="Views\ActivityRampOut\Details.cshtml" />
+    <Content Include="Views\ActivityRampOut\Edit.cshtml" />
+    <Content Include="Views\ActivityRampOut\Index.cshtml" />
+    <Content Include="Views\ActivityCheckIn\CreateCheckIn.cshtml" />
+    <Content Include="Views\ActivityAuthorization\CreateAuthorization.cshtml" />
+    <Content Include="Views\ActivityRampOut\CreateRampOut.cshtml" />
+    <Content Include="Views\ActivityRampIn\CreateRampIn.cshtml" />
+    <Content Include="Views\OverallGrade\Create.cshtml" />
+    <Content Include="Views\OverallGrade\Delete.cshtml" />
+    <Content Include="Views\OverallGrade\Details.cshtml" />
+    <Content Include="Views\OverallGrade\Edit.cshtml" />
+    <Content Include="Views\OverallGrade\Index.cshtml" />
+    <Content Include="Views\OverallGradeUpdateRequest\Create.cshtml" />
+    <Content Include="Views\OverallGradeUpdateRequest\Delete.cshtml" />
+    <Content Include="Views\OverallGradeUpdateRequest\Details.cshtml" />
+    <Content Include="Views\OverallGradeUpdateRequest\Edit.cshtml" />
+    <Content Include="Views\OverallGradeUpdateRequest\Index.cshtml" />
+    <Content Include="Views\OverallGradeUpdateRequest\CreateOverallGradeUpdateRequest.cshtml" />
+    <Content Include="Views\Scheduler\Details.cshtml" />
+    <Content Include="Views\EquipmentMaintenances\Create.cshtml" />
+    <Content Include="Views\EquipmentMaintenances\Delete.cshtml" />
+    <Content Include="Views\EquipmentMaintenances\Details.cshtml" />
+    <Content Include="Views\EquipmentMaintenances\Edit.cshtml" />
+    <Content Include="Views\EquipmentMaintenances\Index.cshtml" />
+    <Content Include="Views\Shared\_StudentGradeList.cshtml" />
+    <Content Include="Views\Grading\ModuleStudentsList.cshtml" />
+    <Content Include="Views\Shared\_ReStudentGradeList.cshtml" />
+    <Content Include="Views\ModuleActivity\Create.cshtml" />
+    <Content Include="Views\ModuleActivity\Delete.cshtml" />
+    <Content Include="Views\ModuleActivity\Details.cshtml" />
+    <Content Include="Views\ModuleActivity\Edit.cshtml" />
+    <Content Include="Views\ModuleActivity\Index.cshtml" />
+    <Content Include="Views\ModuleActivity\ModuleActivityList.cshtml" />
+    <Content Include="Views\ModuleActivity\CreateModuleActivity.cshtml" />
+    <Content Include="Views\ModuleActivity\DeleteModuleActivity.cshtml" />
+    <Content Include="Views\ModuleActivity\EditModuleActivity.cshtml" />
+    <Content Include="Views\Message\Create.cshtml" />
+    <Content Include="Views\Message\Details.cshtml" />
+    <Content Include="Views\Message\Index.cshtml" />
+    <Content Include="Views\Batches\ShowCurriculumChange.cshtml" />
+    <Content Include="Views\Locations\Create.cshtml" />
+    <Content Include="Views\Locations\Delete.cshtml" />
+    <Content Include="Views\Locations\Details.cshtml" />
+    <Content Include="Views\Locations\Edit.cshtml" />
+    <Content Include="Views\Locations\Index.cshtml" />
+    <Content Include="Views\Destinations\Create.cshtml" />
+    <Content Include="Views\Destinations\Delete.cshtml" />
+    <Content Include="Views\Destinations\Details.cshtml" />
+    <Content Include="Views\Destinations\Edit.cshtml" />
+    <Content Include="Views\Destinations\Index.cshtml" />
+    <Content Include="Views\OperationAreas\Create.cshtml" />
+    <Content Include="Views\OperationAreas\Delete.cshtml" />
+    <Content Include="Views\OperationAreas\Details.cshtml" />
+    <Content Include="Views\OperationAreas\Edit.cshtml" />
+    <Content Include="Views\OperationAreas\Index.cshtml" />
+    <Content Include="Views\ParkingSpots\Create.cshtml" />
+    <Content Include="Views\ParkingSpots\Delete.cshtml" />
+    <Content Include="Views\ParkingSpots\Details.cshtml" />
+    <Content Include="Views\ParkingSpots\Edit.cshtml" />
+    <Content Include="Views\ParkingSpots\Index.cshtml" />
+    <Content Include="Views\ArrivalTimeReasons\Create.cshtml" />
+    <Content Include="Views\ArrivalTimeReasons\Delete.cshtml" />
+    <Content Include="Views\ArrivalTimeReasons\Details.cshtml" />
+    <Content Include="Views\ArrivalTimeReasons\Edit.cshtml" />
+    <Content Include="Views\ArrivalTimeReasons\Index.cshtml" />
+    <Content Include="Views\DepartureTimeReasons\Create.cshtml" />
+    <Content Include="Views\DepartureTimeReasons\Delete.cshtml" />
+    <Content Include="Views\DepartureTimeReasons\Details.cshtml" />
+    <Content Include="Views\DepartureTimeReasons\Edit.cshtml" />
+    <Content Include="Views\DepartureTimeReasons\Index.cshtml" />
+    <Content Include="Views\LicenseTypes\Create.cshtml" />
+    <Content Include="Views\LicenseTypes\Delete.cshtml" />
+    <Content Include="Views\LicenseTypes\Details.cshtml" />
+    <Content Include="Views\LicenseTypes\Edit.cshtml" />
+    <Content Include="Views\LicenseTypes\Index.cshtml" />
+    <Content Include="Views\RescheduleReasons\Create.cshtml" />
+    <Content Include="Views\RescheduleReasons\Delete.cshtml" />
+    <Content Include="Views\RescheduleReasons\Details.cshtml" />
+    <Content Include="Views\RescheduleReasons\Edit.cshtml" />
+    <Content Include="Views\RescheduleReasons\Index.cshtml" />
+    <Content Include="Views\InstrumentApproaches\Index.cshtml" />
+    <Content Include="Views\InstrumentApproaches\Details.cshtml" />
+    <Content Include="Views\InstrumentApproaches\Create.cshtml" />
+    <Content Include="Views\InstrumentApproaches\Edit.cshtml" />
+    <Content Include="Views\InstrumentApproaches\Delete.cshtml" />
+    <Content Include="Views\CheckInStatus\Index.cshtml" />
+    <Content Include="Views\CheckInStatus\Details.cshtml" />
+    <Content Include="Views\CheckInStatus\Create.cshtml" />
+    <Content Include="Views\CheckInStatus\Delete.cshtml" />
+    <Content Include="Views\CheckInStatus\Edit.cshtml" />
+    <Content Include="Views\Person\Create.cshtml" />
+    <Content Include="Views\Person\Delete.cshtml" />
+    <Content Include="Views\Person\Details.cshtml" />
+    <Content Include="Views\Person\Edit.cshtml" />
+    <Content Include="Views\Person\Index.cshtml" />
+    <Content Include="Views\Report\EquipmentUtilization.cshtml" />
+    <Content Include="Views\Report\InstructorUtilizationReport.cshtml" />
+    <Content Include="Views\Report\LessonReport.cshtml" />
+    <Content Include="Views\TraineeInfoBOes2\Create.cshtml" />
+    <Content Include="Views\TraineeInfoBOes2\Delete.cshtml" />
+    <Content Include="Views\TraineeInfoBOes2\Details.cshtml" />
+    <Content Include="Views\TraineeInfoBOes2\Edit.cshtml" />
+    <Content Include="Views\TraineeInfoBOes2\Index.cshtml" />
+    <Content Include="Views\Report\ScheduleFlightsReport.cshtml" />
+    <Content Include="Views\Report\FlownFlightsReport.cshtml" />
+    <Content Include="Views\Report\CanceledFlightsReport.cshtml" />
+    <Content Include="Views\Report\AircraftFlownTimeReport.cshtml" />
+    <Content Include="Views\Report\InstructorFlownTimeReport.cshtml" />
+    <Content Include="Views\Report\InstructorAircraftReport.cshtml" />
+    <Content Include="Views\Report\InstructorLicenseType.cshtml" />
+    <Content Include="Views\Report\AircraftStatus.cshtml" />
+    <EntityDeploy Include="TrainingAppModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TrainingAppModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="TrainingAppModel.edmx.diagram">
+      <DependentUpon>TrainingAppModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Views\EquipmentModels\Create.cshtml" />
+    <Content Include="Views\EquipmentModels\Delete.cshtml" />
+    <Content Include="Views\EquipmentModels\Details.cshtml" />
+    <Content Include="Views\EquipmentModels\Edit.cshtml" />
+    <Content Include="Views\EquipmentModels\Index.cshtml" />
+    <Content Include="Views\EquipmentMaintenances\CreateEquiMentainance.cshtml" />
+    <Content Include="Views\InstructorSchedule\TraineeEvaluationTemplatePartialView.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\AdminLTE\plugins\bootstrap-datetimepicker\js\locales\" />
+    <Folder Include="Content\AdminLTE\plugins\bootstrap-wysihtml5\" />
+    <Folder Include="Content\AdminLTE\plugins\ckeditor\" />
+    <Folder Include="Content\AdminLTE\plugins\datepicker\" />
+    <Folder Include="Content\AdminLTE\plugins\fullcalendar-2.9.1\" />
+    <Folder Include="Content\AdminLTE\plugins\fullcalendar-scheduler-1.3.3\" />
+    <Folder Include="Content\AdminLTE\plugins\fullcalendar\" />
+    <Folder Include="Content\AdminLTE\plugins\iCheck\" />
+    <Folder Include="Content\AdminLTE\plugins\timepicker\" />
+    <Folder Include="Controllers\Curriculum\Relations\" />
+    <Folder Include="Models\Messaging\" />
+    <Folder Include="Views\LeaveTypes\" />
+    <Folder Include="Views\PersonLeave\" />
+    <Folder Include="Views\TraineeInfoBOES\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PTSMSBAL\PTSMSBAL.csproj">
+      <Project>{77c1b39a-d673-4094-93c5-e413e2fccb23}</Project>
+      <Name>PTSMSBAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PTSMSDAL\PTSMSDAL.csproj">
+      <Project>{2e2baea9-3167-4846-ad8f-aac4ad2b9f3c}</Project>
+      <Name>PTSMSDAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>45157</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:45158/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

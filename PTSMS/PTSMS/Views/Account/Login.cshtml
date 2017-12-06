@@ -1,0 +1,107 @@
+﻿@using PTSMS.Models
+@model LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@ViewBag.Title | EAATMS</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <title>Login</title>
+</head>
+<body class="hold-transition login-page">
+
+    <div class="login-box">
+        <div class="login-box-msg">
+            <a href="/"><b>ETHIOPIAN AVAIATION ACADAMY TRAINING MANAGEMENT SYSYTEM</b></a> </span>
+        </div>
+        <div class="login-box-body">
+            @*  <div class="login-logo">
+                    <img src="~/Content/Images/Logo 3.png" alt="Logo" class="img img-responsive" />
+                    <span class="fa fa-lock fa-3x"></span>
+                </div><!-- /.login-logo -->
+            *@
+            <p class="login-box-msg">Log in to start your session</p>
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "btnLoginForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="has-feedback">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Company ID Number" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                </div>
+                <br />
+                <div class="has-feedback">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"></i></span>
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password****" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+                <br />
+                <div class="has-feedback">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-book fa-lg"></i></span>
+                        @Html.DropDownList("SchoolCode", null, htmlAttributes: new { @class = "form-control", id= "SchoolCode", name= "SchoolCode" })
+                    </div>
+                </div>
+
+                <br />
+                <div class="form-group box-footer">
+                    <div class="col-xs-6">
+
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div><!-- /.col -->
+                    <div class="col-xs-6 pull-right">
+                        <button type="submit" value="Log in" class="btn btn-primary btn-block"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp; Log In</button>
+                    </div><!-- /.col -->
+                </div>
+            }
+            @Html.ActionLink("Forgot your password?", "ForgotPassword")<br>
+        </div><!-- /.login-box-body -->
+
+    </div><!-- /.login-box -->
+    @*@section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }*@
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/AdminLTE")
+
+    <link href="~/Content/BootstrapDataTable/BootstrapDataTableCSS.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/BootstrapDataTables/BootstrapDataTables.js"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnLoginForm").submit(function (event) {
+
+            });
+        });
+    </script>
+</body>
+</html>

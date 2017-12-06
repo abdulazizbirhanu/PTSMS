@@ -1,0 +1,345 @@
+﻿@model PTSMSDAL.Models.Curriculum.Operations.Category
+
+@{
+    ViewBag.Title = "Edit";
+    ViewBag.Name = "Edit Category.";
+}
+@section scripts{
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            ///////////////////////////Begin, Category Name////////////////////////////
+            var categoryNameGlobal = '@Model.CategoryName';
+
+            if (categoryNameGlobal.toUpperCase() === "FTD") {
+
+                $('#dpdCategoryTypeId option').each(function () {
+                    var categoryType = $(this).text();
+                    categoryType = categoryType.replace(' ', '');
+
+                    if (categoryType === 'Ground') {
+                        var input = $('option[value="' + $(this).val() + '"]');
+                        input.addClass("hide");
+                    }
+                    else {
+                        var input = $('option[value="' + $(this).val() + '"]');
+                        input.removeClass("hide");
+                    }
+                });
+
+                //$('#dpdCategoryTypeId').val('');
+                $('#TimeAircraftSoloRow').addClass('hide');
+                $('#TimeAircraftDualRow').addClass('hide');
+                $('#PilotFlyingRow').addClass('hide');
+                $('#PilotMonitoringRow').addClass('hide');
+                $('#FTDTimeRow').removeClass('hide');
+            }
+            else {
+
+                if (categoryNameGlobal.toUpperCase() === "GROUND") {
+                    $('#TimeAircraftSoloRow').addClass('hide');
+                    $('#TimeAircraftDualRow').addClass('hide');
+
+                    $('#dpdCategoryTypeId option').each(function () {
+
+                        if ($(this).text().replace(' ', '') == 'Ground') {
+                            var input = $('option[value="' + $(this).val() + '"]');
+                            input.removeClass("hide");
+                        }
+                        else {
+                            var input = $('option[value="' + $(this).val() + '"]');
+                            input.addClass("hide");
+                        }
+                    });
+                }
+                else {
+                    $('#TimeAircraftSoloRow').removeClass('hide');
+                    $('#TimeAircraftDualRow').removeClass('hide');
+
+                    $('#dpdCategoryTypeId option').each(function () {
+                        var categoryType = $(this).text();
+                        categoryType = categoryType.replace(' ', '');
+                        var categoryTypeArray = categoryType.split('-');
+
+                        if (categoryType === 'Ground') {
+                            var input = $('option[value="' + $(this).val() + '"]');
+                            input.addClass("hide");
+                        }
+                        else {
+                            if (categoryTypeArray[1] == "(TypeRating)") {
+                                var input = $('option[value="' + $(this).val() + '"]');
+                                input.addClass("hide");
+                            }
+                            else {
+                                var input = $('option[value="' + $(this).val() + '"]');
+                                input.removeClass("hide");
+                            }
+                        }
+                    });
+                }
+
+                $('#FTDTimeRow').addClass('hide');
+                $('#PilotFlyingRow').addClass('hide');
+                $('#PilotMonitoringRow').addClass('hide');
+            }
+            ///////////////////////////Begin, Category Type////////////////////////////
+
+            ///////////////////////////Begin, Category Type////////////////////////////
+            //Get category Type
+            var categoryTypeValueGlobal = @Model.CategoryTypeId;
+            var categoryTypeTextGlobal = "";
+
+            $('#dpdCategoryTypeId option').each(function () {
+                if (categoryTypeValueGlobal == $(this).val()) {
+                    categoryTypeTextGlobal = $(this).text();
+                }
+            });
+            //Get Category Name
+            var categoryNameValueGlobal = $('#dpdCategoryName').val();
+
+            var categoryTypeArrayGlobal = categoryTypeTextGlobal.split('-');
+            categoryTypeTextGlobal = categoryTypeTextGlobal.replace(' ', '');
+
+            if (categoryTypeArrayGlobal[1] == "(TypeRating)") {
+
+                $('#PilotFlyingRow').removeClass('hide');
+                $('#PilotMonitoringRow').removeClass('hide');
+                $('#FTDTimeRow').addClass('hide');
+
+            }
+            else {
+                if (categoryTypeTextGlobal != 'Ground') {
+                    $('#PilotFlyingRow').addClass('hide');
+                    $('#PilotMonitoringRow').addClass('hide');
+                    if (categoryNameValueGlobal.toUpperCase() == 'FTD') {
+                        $('#FTDTimeRow').removeClass('hide');
+                    }
+                }
+            }
+            ///////////////////////////End, Category Type////////////////////////////
+
+            $('#dpdCategoryTypeId').val(@Model.CategoryTypeId);
+
+
+            $('#dpdCategoryName').on('change', function () {
+
+                var categoryName = $(this).val();
+
+                if (categoryName.toUpperCase() === "FTD") {
+
+                    $('#dpdCategoryTypeId option').each(function () {
+                        var categoryType = $(this).text();
+                        categoryType = categoryType.replace(' ', '');
+
+                        if (categoryType === 'Ground') {
+                            var input = $('option[value="' + $(this).val() + '"]');
+                            input.addClass("hide");
+                        }
+                        else {
+                            var input = $('option[value="' + $(this).val() + '"]');
+                            input.removeClass("hide");
+                        }
+                    });
+
+                    //$('#dpdCategoryTypeId').val('');
+                    $('#TimeAircraftSoloRow').addClass('hide');
+                    $('#TimeAircraftDualRow').addClass('hide');
+                    $('#PilotFlyingRow').addClass('hide');
+                    $('#PilotMonitoringRow').addClass('hide');
+                    $('#FTDTimeRow').removeClass('hide');
+                }
+                else {
+
+                    if (categoryName.toUpperCase() === "GROUND") {
+                        $('#TimeAircraftSoloRow').addClass('hide');
+                        $('#TimeAircraftDualRow').addClass('hide');
+
+                        $('#dpdCategoryTypeId option').each(function () {
+
+                            if ($(this).text().replace(' ', '') == 'Ground') {
+                                var input = $('option[value="' + $(this).val() + '"]');
+                                input.removeClass("hide");
+                            }
+                            else {
+                                var input = $('option[value="' + $(this).val() + '"]');
+                                input.addClass("hide");
+                            }
+                        });
+                    }
+                    else {
+                        $('#TimeAircraftSoloRow').removeClass('hide');
+                        $('#TimeAircraftDualRow').removeClass('hide');
+
+                        $('#dpdCategoryTypeId option').each(function () {
+                            var categoryType = $(this).text();
+                            categoryType = categoryType.replace(' ', '');
+                            var categoryTypeArray = categoryType.split('-');
+
+                            if (categoryType === 'Ground') {
+                                var input = $('option[value="' + $(this).val() + '"]');
+                                input.addClass("hide");
+                            }
+                            else {
+                                if (categoryTypeArray[1] == "(TypeRating)") {
+                                    var input = $('option[value="' + $(this).val() + '"]');
+                                    input.addClass("hide");
+                                }
+                                else {
+                                    var input = $('option[value="' + $(this).val() + '"]');
+                                    input.removeClass("hide");
+                                }
+                            }
+                        });
+                    }
+
+                    $('#FTDTimeRow').addClass('hide');
+                    $('#PilotFlyingRow').addClass('hide');
+                    $('#PilotMonitoringRow').addClass('hide');
+                }
+                $('#dpdCategoryTypeId').val('');
+            });
+
+            $('#dpdCategoryTypeId').on('change', function () {
+
+                //Get category Type
+                var categoryTypeValue = $(this).val();
+                var categoryTypeText = "";
+
+                $('#dpdCategoryTypeId option').each(function () {
+                    if (categoryTypeValue == $(this).val()) {
+                        categoryTypeText = $(this).text();
+                    }
+                });
+                //Get Category Name
+                var categoryNameValue = $('#dpdCategoryName').val();
+                var categoryNameText = "";
+
+                $('#dpdCategoryName option').each(function () {
+                    if (categoryNameValue == $(this).val()) {
+                        categoryNameText = $(this).text();
+                    }
+                });
+
+                var categoryTypeArray = categoryTypeText.split('-');
+                categoryTypeText = categoryTypeText.replace(' ', '');
+
+                if (categoryTypeArray[1] == "(TypeRating)") {
+
+                    $('#PilotFlyingRow').removeClass('hide');
+                    $('#PilotMonitoringRow').removeClass('hide');
+                    $('#FTDTimeRow').addClass('hide');
+
+                }
+                else {
+                    if (categoryTypeText != 'Ground') {
+                        $('#PilotFlyingRow').addClass('hide');
+                        $('#PilotMonitoringRow').addClass('hide');
+                        if (categoryNameValue.toUpperCase() == 'FTD') {
+                            $('#FTDTimeRow').removeClass('hide');
+                        }
+                    }
+                }
+            });
+
+        });
+
+
+    </script>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.CategoryId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryName, "CategoryName", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("CategoryName", (SelectList)ViewBag.CategoryNamee, htmlAttributes: new { id = "dpdCategoryName", name = "dpdCategoryName", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryTypeId, "CategoryTypeId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("CategoryTypeId", (IEnumerable<SelectListItem>)ViewBag.EvaluationTemplateId, htmlAttributes: new { id = "dpdCategoryTypeId", name = "dpdCategoryTypeId", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CategoryTypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="TimeAircraftDualRow">
+            @Html.LabelFor(model => model.TimeAircraftDual, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.TimeAircraftDual, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TimeAircraftDual, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="TimeAircraftSoloRow">
+            @Html.LabelFor(model => model.TimeAircraftSolo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.TimeAircraftSolo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TimeAircraftSolo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="FTDTimeRow">
+            @Html.LabelFor(model => model.FTDTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.FTDTime, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FTDTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group" id="PilotFlyingRow">
+            @Html.LabelFor(model => model.PilotFlying, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PilotFlying, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PilotFlying, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="PilotMonitoringRow">
+            @Html.LabelFor(model => model.PilotMonitoring, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PilotMonitoring, new { htmlAttributes = new { @class = "form-control"} })
+                @Html.ValidationMessageFor(model => model.PilotMonitoring, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EffectiveDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <div class="input-group date">
+                    @Html.EditorFor(model => model.EffectiveDate, new { htmlAttributes = new { @class = "form-control PTSMSDatepicker" } })
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar PTSMSDatepicker"></i>
+                    </div>
+                </div>              
+                @Html.ValidationMessageFor(model => model.EffectiveDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <input type="submit" value="Save" class="btn btn-info" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+ 

@@ -1,0 +1,51 @@
+﻿@model PTSMSDAL.Models.Scheduling.References.EquipmentModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>EquipmentModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EquipmentType.EquipmentTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EquipmentType.EquipmentTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EquipmentModelName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EquipmentModelName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsMultiEngine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsMultiEngine)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EquipmentModelId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

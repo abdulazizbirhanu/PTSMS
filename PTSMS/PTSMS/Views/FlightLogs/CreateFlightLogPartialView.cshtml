@@ -1,0 +1,259 @@
+﻿
+@model PTSMSDAL.Models.Scheduling.Relations.FlightLog
+
+
+@*@using (Html.BeginForm("Create", "FlightLogs", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnFlightLogs" }))
+{*@
+<div class="col-md-12 hide" id="FlightLogsMessage">
+    <div class="row hide" id="FlightLogsMessageSuccess">
+        <div class="col-md-12">
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-hand-o-right"></i> Success!</h4>
+                <ul>
+                    <li><lable id="FlightLogsMessageSuccessLabel"> </lable></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row hide" id="FlightLogsMessageFail">
+        <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-hand-o-right"></i> Failed!</h4>
+                <ul>
+                    <li><lable id="FlightLogsMessageFailLabel"> </lable></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="form-horizontal">
+
+        @Html.AntiForgeryToken()
+
+        @{
+            if (ViewBag.IsLessonEvaluated != null)
+            {
+                
+                if (ViewBag.IsLessonEvaluated)
+                {
+                    if (Model.ActivityCheckInId == 0)
+                    {
+                        <div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                            Sorry, Ramp out didn't made so far.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group hide">
+                            @Html.LabelFor(model => model.ActivityCheckInId, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.ActivityCheckInId, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ActivityCheckInId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group hide">
+                            @Html.LabelFor(model => model.FlightLogId, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.FlightLogId, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FlightLogId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DayTakeOff, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.DayTakeOff, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.DayTakeOff, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.NightTakeOff, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.NightTakeOff, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.NightTakeOff, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DayLanding, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.DayLanding, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.DayLanding, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.NightLanding, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.NightLanding, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.NightLanding, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.InstrumentApproachId, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-4">
+                                @Html.DropDownList("InstrumentApproachId", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.InstrumentApproachId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control", rows = 5 } })
+                                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @*<div class="form-group">
+                                <lable class="control-label col-md-3">Password: </lable>
+                                <div class="col-md-4">
+                                    <input type="password" class="form-control" id="txtPassword" name="txtPassword" autocomplete="off" data-val="true" data-val-required="Password is required." />
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-4">
+                                <input type="submit" value="Create" id="btnFlightLogs" class="btn btn-info" />
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                        Sorry, this lesson is not evaluated so far. Recording flight log will be possible right after evaluation. 
+                    </div>
+                }
+            }
+        }
+
+       
+    </div>
+
+    <div class="form-group hide">
+        <input type="text" id="DepartureTimeHours" name="DepartureTimeHour" class="form-control" />
+        <input type="text" id="DepartureTimeMinutes" name="DepartureTimeMinutes" class="form-control" />
+        <input type="password" name="txtFlightLogPassword" id="txtFlightLogPassword" />
+    </div>
+
+@*}*@
+
+
+
+@*<link href="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/validator.js"></script>
+<script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>*@
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#DepartureTime,#ArrivalTime,#TotalFlightTime,#PilotInCommand,#Dual,#FlightTimeDay,#FlightTimeNight,#InstrumentFlightTime,#SyntheticTrainerTime").timepicker({
+            showInputs: false,
+            showMeridian: false,
+            minuteStep: 5
+        });
+
+        $('.PTSMSDatepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            startDate: new Date()
+        });
+        //DepartureTimeHours,DepartureTimeMinutes
+        $('#DepartureTime').timepicker().on('hide.timepicker', function (e) {
+            //alert('hide.timepicker');
+            $('#DepartureTimeHours').val(e.time.value);
+            $('#DepartureTimeMinutes').val(e.time.minutes);
+            //alert('The time is ' + e.time.value);
+            //alert('The hour is ' + e.time.hours);
+            //alert('The minute is ' + e.time.minutes);
+            //alert('The meridian is ' + e.time.meridian);
+        });
+        $('#ArrivalTime').timepicker().on('hide.timepicker', function (e) {
+            //alert('hide.timepicker');
+            //alert('The time is ' + e.time.value);
+            //alert('The hour is ' + e.time.hours);
+            //alert('The minute is ' + e.time.minutes);
+            //alert('The meridian is ' + e.time.meridian);
+
+            //Get Departure Time
+            var depHours = parseInt($('#DepartureTimeHours').val());
+            var depMinutes = parseInt($('#DepartureTimeMinutes').val());
+
+            //substruct arrival time from departure time
+            var TotalFlightTimeHours = parseInt(e.time.hours) - depHours;
+            var TotalFlightTimeMinutes = parseInt(e.time.minutes) - depMinutes;
+
+            if (TotalFlightTimeMinutes < 0) {
+                TotalFlightTimeHours = TotalFlightTimeHours - 1;
+                TotalFlightTimeMinutes = (60 + TotalFlightTimeMinutes);
+            }
+
+            var TotalFlightTime = "";
+            if (TotalFlightTimeHours < 10)
+                TotalFlightTime = "0" + TotalFlightTimeHours;
+            else
+                TotalFlightTime = TotalFlightTimeHours;
+
+            if (TotalFlightTimeMinutes < 10)
+                TotalFlightTime = TotalFlightTime + ":0" + TotalFlightTimeMinutes;
+            else
+                TotalFlightTime = TotalFlightTime + ":" + TotalFlightTimeMinutes;
+
+            $('#TotalFlightTime').val(TotalFlightTime);
+        });
+        $('#btnFlightLogs').on('click', function (e) {
+            debugger;
+            var data = {
+                "ActivityCheckInId": $('#ActivityCheckInId').val(),
+                "DayLanding": $('#DayLanding').val(),
+                "DayTakeOff": $('#DayTakeOff').val(),
+                "FlightLogId": $('#FlightLogId').val(),
+                "InstrumentApproachId": $('#InstrumentApproachId').val(),
+                "NightLanding": $('#NightLanding').val(),
+                "NightTakeOff": $('#NightTakeOff').val(),
+                "Remark": $('#Remark').val()
+            }
+
+            $.ajax({
+                url: "/FlightLogs/CreateJson",
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    $('#FlightLogsMessage').removeClass("hide");
+                    if (result.isSuccess) {
+                        $('#FlightLogsMessageSuccess').removeClass("hide");
+                        $('#FlightLogsMessageFail').addClass("hide");
+                        $('#FlightLogsMessageSuccessLabel').html(result.Message);
+                    }
+                    else {
+                        $('#FlightLogsMessageFail').removeClass("hide");
+                        $('#FlightLogsMessageSuccess').addClass("hide");
+                        $('#FlightLogsMessageFailLabel').html(result.Message);
+                    }
+
+                },
+                error: function () {
+                    $('#FlightLogsMessageFail').removeClass("hide");
+                    $('#FlightLogsMessageSuccess').addClass("hide");
+                    $('#FlightLogsMessageFailLabel').html("Error has occured while coloring the event.");
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,89 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.GroundLesson>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Name = "Ground Lesson List.";
+    ViewBag.TableId = "tblGroundLesson";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblGroundLesson" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousGroundLesson.LessonCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessonCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessonName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EffectiveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RevisionNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                string EffectiveDate = item.EffectiveDate.ToString("dd/MM/yyyy");
+                <tr role="row" class="odd">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PreviousGroundLesson.LessonCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LessonCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LessonName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @EffectiveDate
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RevisionNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.GroundLessonId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.GroundLessonId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.GroundLessonId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

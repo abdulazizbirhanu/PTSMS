@@ -1,0 +1,85 @@
+﻿
+@model PTSMSDAL.Models.Scheduling.Relations.FlyingFTDSchedule
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Flying FTD Schedule Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Flying FTD Schedule Details</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body no-padding">
+        <div>
+            <dl class="dl-horizontal">
+                <dt>
+                    Trainee Name
+                </dt>
+
+                <dd>
+                    @Html.DisplayNameFor(model => model.Trainee.Person.FirstName)  @Html.DisplayNameFor(model => model.Trainee.Person.MiddleName)
+                </dd>
+
+                <dt>
+                    Instructor Name
+                </dt>
+                <dd>
+                    @Html.DisplayNameFor(model => model.Instructor.Person.FirstName)  @Html.DisplayNameFor(model => model.Instructor.Person.MiddleName)
+                </dd>
+
+                <dt>
+                    Lesson Name
+                </dt>
+                <dd>
+                    @Html.DisplayNameFor(model => model.Lesson.LessonName)
+                </dd>
+
+                <dt>
+                    Equipment
+                </dt>
+                <dd>
+                    @Html.DisplayNameFor(model => model.Equipment.NameOrSerialNo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Equipment.RoomNo)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Equipment.RoomNo)
+                </dd>              
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ScheduleStartTime)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ScheduleStartTime)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ScheduleEndTime)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ScheduleEndTime)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Status)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Status)
+                </dd>
+
+            </dl>
+        </div>
+
+    </div>
+</div>

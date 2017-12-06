@@ -1,0 +1,553 @@
+﻿@using PTSMS.Others;
+@using PTSMSDAL.Models.Others
+
+<aside class="main-sidebar" ng-controller="Header">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                @*<img src="~/Content/AdminLTE/img/avatar.png" class="img-circle" alt="User Image" />*@
+                <span><i class="fa fa-user fa-3x text-success"></i></span>
+            </div>
+            <div class="pull-left info">
+                <p>@(Session["SchoolName"] == null ? "" : Session["SchoolName"].ToString())</p>               
+                <p>@HttpContext.Current.User.Identity.Name / <a href="#"><i class="fa fa-circle text-success"></i> Online</a></p>               
+            </div>
+        </div>
+
+
+        <!-- Begin search form -->
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search..." />
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+
+        <!--End search form -->
+        @*@functions {
+
+                // Add code here.
+                public static MvcHtmlString If(this MvcHtmlString value, bool evaluation)
+                {
+                    return evaluation ? value : MvcHtmlString.Empty;
+                }
+                public static MvcHtmlString If(this MvcHtmlString value, bool evaluation, MvcHtmlString falseValue = default(MvcHtmlString))
+                {
+                    return evaluation ? value : falseValue;
+                }
+            }*@
+
+        @*@helper SayHello(string name)
+               {
+               <div>Hello @name</div>
+            }*@
+
+
+
+
+
+        @*@Html.ActionLink("Create New", "Create").If(User.IsInRole("Administrators"))*@
+
+        @{
+            List<UserMenu> userMenus = HelperClass.GetMenuList();
+
+            int account = 0, curriculum = 0, curriculumMaster = 0, enrollment = 0, enrollmentMaster = 0, scheduling = 0, schedulingMaster = 0, grading = 0, report = 0, traineeProfile = 0;
+
+
+            if (HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+             <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu" id="LeftMenuTree">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li class="treeview MenuState-Management accountMenu" id="MenuState3">
+                        <a href="#">
+                            <i class="fa fa-registered text-primary"></i> <span>ACCOUNT MANAGEMENT</span> <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @if (userMenus.Where(u => u.ControllerName == "Privileges").ToList().Count > 0)
+                            {
+                                account = account + 1;
+                            <li><a href="@Url.Action("Index", "Privileges")"><i class="fa fa-filter"></i> <span>Privileges</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Roles").ToList().Count > 0)
+                            {
+                                account = account + 1;
+                            <li><a href="@Url.Action("Index", "Roles")"><i class="fa fa-unlock"></i> <span>Roles</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Account").ToList().Count > 0)
+                            {
+                                account = account + 1;
+                            <li><a href="@Url.Action("Index", "Account")"><i class="fa fa-user"></i> <span>Account</span></a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="treeview MenuState-Management masterMenu" id="MenuState1">
+                        <a href="#"><i class="fa fa-th text-primary"></i> <span>MASTER DATA </span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu menu-open">
+
+                            <li class="Curriculum-MenuState-Management enrollmentMasterMenu" id="Curriculum1">
+                                <a href="#"><i class="fa fa-book"></i> <span>Enrollment</span><i class="fa fa-angle-left pull-right"></i></a>
+                                <ul class="treeview-menu">
+                                    @if (userMenus.Where(u => u.ControllerName == "DayTemplates").ToList().Count > 0)
+                                    {
+                                        enrollmentMaster = enrollmentMaster + 1;
+                                    <li><a href="@Url.Action("Index", "DayTemplates")"><i class="fa fa-space-shuttle"></i> <span>Day Template</span></a></li>
+                                    }
+
+                                    @if (userMenus.Where(u => u.ControllerName == "Days").ToList().Count > 0)
+                                    {
+                                        enrollmentMaster = enrollmentMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Days")"><i class="fa fa-space-shuttle"></i> <span>Day</span></a></li>
+                                    }
+
+                                    @if (userMenus.Where(u => u.ControllerName == "PeriodTemplates").ToList().Count > 0)
+                                    {
+                                        enrollmentMaster = enrollmentMaster + 1;
+                                    <li><a href="@Url.Action("Index", "PeriodTemplates")"><i class="fa fa-space-shuttle"></i> <span>Period Template</span></a></li>
+                                    }
+
+                                    @if (userMenus.Where(u => u.ControllerName == "Periods").ToList().Count > 0)
+                                    {
+                                        enrollmentMaster = enrollmentMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Periods")"><i class="fa fa-space-shuttle"></i> <span>Periods</span></a></li>
+                                    }
+
+                                    @if (userMenus.Where(u => u.ControllerName == "QualificationTypes").ToList().Count > 0)
+                                    {
+                                        enrollmentMaster = enrollmentMaster + 1;
+                                    <li><a href="@Url.Action("Index", "QualificationTypes")"><i class="fa fa-space-shuttle"></i> <span>Instructor Type</span></a></li>
+                                    }
+
+                                    @if (userMenus.Where(u => u.ControllerName == "Instructors").ToList().Count > 0)
+                                    {
+                                        enrollmentMaster = enrollmentMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Instructors")"><i class="fa fa-space-shuttle"></i> <span>Instructor</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Person").ToList().Count > 0)
+                                    {
+                                        enrollmentMaster = enrollmentMaster + 1;
+                                        <li><a href="@Url.Action("Index", "Person")"><i class="fa fa-space-shuttle"></i> <span>External Instructor</span></a></li>
+                                    }
+                                </ul>
+                            </li>
+
+                            <li class="Curriculum-MenuState-Management curriculumMasterMenu" id="Curriculum1">
+                                <a href="#"><i class="fa fa-book"></i> <span>Curriculum</span><i class="fa fa-angle-left pull-right"></i></a>
+                                <ul class="treeview-menu">
+                                    @if (userMenus.Where(u => u.ControllerName == "Programs").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Programs")"><i class="fa fa-space-shuttle"></i> <span>Programs</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "CategoryTypes").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "CategoryTypes")"><i class="fa fa-space-shuttle"></i> <span>Category Types</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Categories").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Categories")"><i class="fa fa-space-shuttle"></i> <span>Categories</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Courses").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Courses")"><i class="fa fa-space-shuttle"></i> <span>Courses</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Modules").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Modules")"><i class="fa fa-space-shuttle"></i> <span>Modules</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "GroundLessons").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "GroundLessons")"><i class="fa fa-space-shuttle"></i> <span>Ground Lessons</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Exams").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Exams")"><i class="fa fa-space-shuttle"></i> <span>Exams</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "EquipmentType").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "EquipmentType")"><i class="fa fa-space-shuttle"></i> <span>Equipment Type</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Lessons").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Lessons")"><i class="fa fa-space-shuttle"></i> <span>Lessons</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Phases").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Phases")"><i class="fa fa-space-shuttle"></i> <span>Phases</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Stages").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Stages")"><i class="fa fa-space-shuttle"></i> <span>Stage</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "EvaluationTemplates").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "EvaluationTemplates")"><i class="fa fa-space-shuttle"></i> <span>EvaluationTemplates</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "EvaluationCategories").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "EvaluationCategories")"><i class="fa fa-space-shuttle"></i> <span>EvaluationCategories</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "EvaluationItems").ToList().Count > 0)
+                                    {
+                                        curriculumMaster = curriculumMaster + 1;
+                                    <li><a href="@Url.Action("Index", "EvaluationItems")"><i class="fa fa-space-shuttle"></i> <span>EvaluationItems</span></a></li>
+                                    }
+                                </ul>
+                            </li>
+
+                            <li class="Curriculum-MenuState-Management schedulingMasterMenu" id="Curriculum1">
+                                <a href="#"><i class="fa fa-plane"></i> <span>Scheduling</span><i class="fa fa-angle-left pull-right"></i></a>
+                                <ul class="treeview-menu">
+                                    @if (userMenus.Where(u => u.ControllerName == "InstructorSchedules").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                    <li><a href="@Url.Action("Index", "InstructorSchedules")"><i class="fa fa-space-shuttle"></i> <span>Module to Instructor</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "ClassRooms").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                    <li><a href="@Url.Action("Index", "ClassRooms")"><i class="fa fa-space-shuttle"></i> <span>Class Room</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Equipments").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                    <li><a href="@Url.Action("Index", "Equipments")"><i class="fa fa-space-shuttle"></i> <span>Equipment</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Equipments").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "EquipmentModels")"><i class="fa fa-space-shuttle"></i> <span>Equipment Models</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "InstructorEquipmentModel").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                    <li><a href="@Url.Action("Index", "InstructorEquipmentModel")"><i class="fa fa-space-shuttle"></i> <span>Instructor Equipment Model</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "BatchEquipmentModel").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                    <li><a href="@Url.Action("Index", "BatchEquipmentModel")"><i class="fa fa-space-shuttle"></i> <span>Batch Equipment Model</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "PersonLeaves").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                    <li><a href="@Url.Action("Index", "PersonLeaves")"><i class="fa fa-space-shuttle"></i> <span>Person Leave</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "EquipmentMaintenances").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "EquipmentMaintenances")"><i class="fa fa-space-shuttle"></i> <span>Equipment Maintenances</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "DepartureTimeReasons").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "DepartureTimeReasons")"><i class="fa fa-space-shuttle"></i> <span>DepartureTimeReasons</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "ArrivalTimeReasons").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "ArrivalTimeReasons")"><i class="fa fa-space-shuttle"></i> <span>ArrivalTimeReasons</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Airport").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "Airport")"><i class="fa fa-space-shuttle"></i> <span>Airport</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "LicenseTypes").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "LicenseTypes")"><i class="fa fa-space-shuttle"></i> <span>License Types</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Licenses").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "Licenses")"><i class="fa fa-space-shuttle"></i> <span>License</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "ParkingSpots").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "ParkingSpots")"><i class="fa fa-space-shuttle"></i> <span>Parking Spots</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "OverallGrade").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "OverallGrade")"><i class="fa fa-space-shuttle"></i> <span>Over all Grade</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "OperationAreas").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "OperationAreas")"><i class="fa fa-space-shuttle"></i> <span>Operation Areas</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "InstrumentApproaches").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "InstrumentApproaches")"><i class="fa fa-space-shuttle"></i> <span>Instrument Approaches</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "Destinations").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "Destinations")"><i class="fa fa-space-shuttle"></i> <span>Destinations</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "CheckInStatus").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "CheckInStatus")"><i class="fa fa-space-shuttle"></i> <span>Check-In Status</span></a></li>
+                                    }
+                                    @if (userMenus.Where(u => u.ControllerName == "RescheduleReasons").ToList().Count > 0)
+                                    {
+                                        schedulingMaster = schedulingMaster + 1;
+                                        <li><a href="@Url.Action("Index", "RescheduleReasons")"><i class="fa fa-space-shuttle"></i> <span>Reschedule Reasons</span></a></li>
+                                    }
+                                    <li>@*<a href="@Url.Action("Index", "PersonDocuments")"><i class="fa fa-space-shuttle"></i> <span>Person Document</span></a>*@</li>
+                                    <li>@*<a href="@Url.Action("Index", "LessonCategoryType")"><i class="fa fa-space-shuttle"></i> <span>Lesson Scheduling Type</span></a>*@</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    @if (userMenus.Where(u => u.ControllerName == "TraineeProfile").ToList().Count > 0)
+                    {
+                        traineeProfile = traineeProfile + 1;
+                        <li class="active traineeProfileMenu" id="MenuState2"><a href="@Url.Action("TraineeSyllabus", "TraineeProfile")"><i class="fa fa-book text-primary"></i> <span>MY SYLLABUS</span></a></li>
+                    }
+
+                    @if (userMenus.Where(u => u.ControllerName == "TraineeProfile").ToList().Count > 0)
+                    {
+                        traineeProfile = traineeProfile + 1;
+                        <li class="active traineeProfileMenu" id="MenuState2"><a href="@Url.Action("TraineeLessons", "TraineeProfile")"><i class="fa fa-book text-primary"></i> <span>MY LESSONS</span></a></li>
+                    }
+                    @if (userMenus.Where(u => u.ControllerName == "TraineeProfile").ToList().Count > 0)
+                    {
+                        traineeProfile = traineeProfile + 1;
+                        <li class="active traineeProfileMenu" id="MenuState2"><a href="@Url.Action("TraineeCourses", "TraineeProfile")"><i class="fa fa-book text-primary"></i> <span>MY COURSES</span></a></li>
+                    }
+                    @if (userMenus.Where(u => u.ControllerName == "TraineeProfile").ToList().Count > 0)
+                    {
+                        traineeProfile = traineeProfile + 1;
+                        <li class="active traineeProfileMenu" id="MenuState2"><a href="@Url.Action("TraineeLicenseList", "TraineeProfile")"><i class="fa fa-book text-primary"></i> <span>MY LICENSE</span></a></li>
+                    }
+                    @if (userMenus.Where(u => u.ControllerName == "TraineeProfile").ToList().Count > 0)
+                    {
+                        traineeProfile = traineeProfile + 1;
+                        <li class="active traineeProfileMenu" id="MenuState2"><a href="@Url.Action("TraineeLeaveList", "TraineeProfile")"><i class="fa fa-book text-primary"></i> <span>MY LEAVE</span></a></li>
+                    }
+                    @if (userMenus.Where(u => u.ControllerName == "TraineeProfile").ToList().Count > 0)
+                    {
+                        traineeProfile = traineeProfile + 1;
+                        <li class="active traineeProfileMenu" id="MenuState2"><a href="@Url.Action("Profile", "TraineeProfile")"><i class="fa fa-book text-primary"></i> <span>MY PROFILE</span></a></li>
+                    }
+
+                    @if (userMenus.Where(u => u.ControllerName == "InstructorProfile").ToList().Count > 0)
+                    {
+                        <li class="active" id="MenuState2"><a href="@Url.Action("BatchList", "InstructorProfile")"><i class="fa fa-book text-primary"></i> <span>MY BATCHES</span></a></li>
+                    } 
+                    @if (userMenus.Where(u => u.ControllerName == "InstructorProfile").ToList().Count > 0)
+                    {
+                        <li class="active" id="MenuState2"><a href="@Url.Action("InstructorLessons", "InstructorProfile")"><i class="fa fa-book text-primary"></i> <span>MY LESSONS</span></a></li>
+                    }
+
+                    @if (userMenus.Where(u => u.ControllerName == "InstructorProfile").ToList().Count > 0)
+                    {
+                        <li class="active" id="MenuState2"><a href="@Url.Action("InstructorCourses", "InstructorProfile")"><i class="fa fa-book text-primary"></i> <span>MY COURSES</span></a></li>
+                    }
+                    @if (userMenus.Where(u => u.ControllerName == "InstructorProfile").ToList().Count > 0)
+                    {
+                        <li class="active" id="MenuState2"><a href="@Url.Action("InstructorLicenseList", "InstructorProfile")"><i class="fa fa-book text-primary"></i> <span>MY LICENSE</span></a></li>
+                    }
+                    @if (userMenus.Where(u => u.ControllerName == "InstructorProfile").ToList().Count > 0)
+                    {
+                        <li class="active" id="MenuState2"><a href="@Url.Action("InstructorLeaveList", "InstructorProfile")"><i class="fa fa-book text-primary"></i> <span>MY LEAVE</span></a></li>
+                    }
+                    @if (userMenus.Where(u => u.ControllerName == "InstructorProfile").ToList().Count > 0)
+                    {
+                        traineeProfile = traineeProfile + 1;
+                        <li class="active traineeProfileMenu" id="MenuState2"><a href="@Url.Action("Profile", "InstructorProfile")"><i class="fa fa-book text-primary"></i> <span>MY PROFILE</span></a></li>
+                    }
+                    @if (userMenus.Where(u => u.ControllerName == "Programs").ToList().Count > 0)
+                    {
+                        curriculum = curriculum + 1;
+                        <li class="active curriculumMenu" id="MenuState2"><a href="@Url.Action("ProgramList", "Programs")"><i class="fa fa-book text-primary"></i> <span>CURRICULUM</span></a></li>
+                    }
+                    <li class="treeview MenuState-Management enrollmentMenu" id="MenuState3">
+                        <a href="#">
+                            <i class="fa fa-registered text-primary"></i> <span>ENROLLEMENT</span> <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @if (userMenus.Where(u => u.ControllerName == "Batches").ToList().Count > 0)
+                            {
+                                enrollment = enrollment + 1;
+                                <li><a href="@Url.Action("Index", "Batches")"><i class="fa fa-space-shuttle"></i> <span>Batch</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "BatchClasses").ToList().Count > 0)
+                            {
+                                enrollment = enrollment + 1;
+                                <li><a href="@Url.Action("Index", "BatchClasses")"><i class="fa fa-space-shuttle"></i> <span>Batch Class</span></a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="treeview MenuState-Management schedulingMenu" id="MenuState3">
+                        <a href="#">
+                            <i class="fa fa-plane text-primary"></i> <span>SCHEDULING</span> <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @if (userMenus.Where(u => u.ControllerName == "PhaseSchedule").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("Index", "PhaseSchedule")"><i class="fa fa-space-shuttle"></i> <span>Phase Schedule</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Scheduler").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("GroundClassSchedule", "Scheduler")"><i class="fa fa-space-shuttle"></i> <span> Scheduler Ground Schedule</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Scheduler").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("EquipmentScheduler", "Scheduler")"><i class="fa fa-space-shuttle"></i> <span>FTD and Flying Schedule</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Scheduler").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("InstructorUtilization", "Scheduler")"><i class="fa fa-space-shuttle"></i> <span>Instructor Utilization</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "StudentSchedule").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("GroundClass", "StudentSchedule")"><i class="fa fa-space-shuttle"></i> <span>Ground Schedule</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "StudentSchedule").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("Equipment", "StudentSchedule")"><i class="fa fa-space-shuttle"></i> <span>FTD and Flying Schedule</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "InstructorSchedule").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("GroundClass", "InstructorSchedule")"><i class="fa fa-space-shuttle"></i> <span>Ground Schedule(Instructor)</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "InstructorSchedule").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("Equipment", "InstructorSchedule")"><i class="fa fa-space-shuttle"></i> <span>FTD and Flying Schedule(Instructor)</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Notification").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("ScheduleNotification", "Notification")"><i class="fa fa-space-shuttle"></i> <span>Notify Schedule</span></a></li>
+                            }
+
+                            @if (userMenus.Where(u => u.ControllerName == "OverallGradeUpdateRequest").ToList().Count > 0)
+                            {
+                                scheduling = scheduling + 1;
+                                <li><a href="@Url.Action("Index", "OverallGradeUpdateRequest")"><i class="fa fa-space-shuttle"></i> <span>Overall Grade Update Request</span></a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="active gradingMenu" id="MenuState4">
+                        <a href="#"><i class="fa fa-fighter-jet text-primary"></i> <span>TRAINING & GRADING</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            @if (userMenus.Where(u => u.ControllerName == "Grading").ToList().Count > 0)
+                            {
+                                grading = grading + 1;
+                                <li><a href="@Url.Action("Index", "Grading")"><i class="fa fa-space-shuttle"></i> <span> Grading</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Grading").ToList().Count > 0)
+                            {
+                                grading = grading + 1;
+                                <li><a href="@Url.Action("ViewGrade", "Grading")"><i class="fa fa-space-shuttle"></i> <span> View Grade</span></a></li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="active reportMenu" id="MenuState5">
+                        <a href="#"><i class="fa fa-fighter-jet text-primary"></i> <span>CERTIFICATION &  REPORTING</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                           @* @if (userMenus.Where(u => u.ControllerName == "Report").ToList().Count > 0)
+    {
+        report = report + 1;
+   
+                            <li><a href="http://SVHQBOPO01.ethiopianairlines.com:8080/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AR5SBDH08qJCpaWE56AKzQo"><i class="fa fa-space-shuttle"></i> <span> Monthly Flight Time Report</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Report").ToList().Count > 0)
+                            {
+                                report = report + 1;
+                          
+                            <li><a href="http://SVHQBOPO01.ethiopianairlines.com:8080/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXwqrqE7PAtJpa88tAk82vM"><i class="fa fa-space-shuttle"></i> <span> Active Students Report </span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Report").ToList().Count > 0)
+                            {
+                                report = report + 1;
+                          
+                            <li><a href="http://SVHQBOPO01.ethiopianairlines.com:8080/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AfkJxncX7jNFqpf0tyElV_w"><i class="fa fa-space-shuttle"></i> <span> Schedule Cancelation Report</span></a></li>
+                            }
+                            @if (userMenus.Where(u => u.ControllerName == "Report").ToList().Count > 0)
+                            {
+                                report = report + 1;
+                          
+                            <li><a href="http://SVHQBOPO01.ethiopianairlines.com:8080/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AZ3vrvnLZ5BAnle9wq1xs7c"><i class="fa fa-space-shuttle"></i> <span> Sign In/Out Report </span></a></li>
+                            }*@
+                            @if (userMenus.Where(u => u.ControllerName == "Report").ToList().Count > 0)
+                            {
+                                report = report + 1;
+                                @*<li><a href="@Url.Action("SignInAndOutReport", "Report")"><i class="fa fa-space-shuttle"></i> <span> Sign In/Out Report </span></a></li>*@
+                                @*<li><a href="http://SVHQBOP01.ethiopianairlines.com:8080/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AUY3cCYBuCdNoc4xpkrGfDM"><i class="fa fa-space-shuttle"></i> <span> Utilization Report </span></a></li>*@
+                                <li><a href="@Url.Action("EquipmentUtilization", "Report")"><i class="fa fa-space-shuttle"></i> <span> Equipment Utilization</span></a></li>
+                                <li><a href="@Url.Action("InstructorUtilizationReport", "Report")"><i class="fa fa-space-shuttle"></i> <span> Instructor Utilization</span></a></li>
+                                <li><a href="@Url.Action("LessonReport", "Report")"><i class="fa fa-space-shuttle"></i> <span> Lesson Report</span></a></li>
+                                <li><a href="@Url.Action("ScheduleFlightsReport", "Report")"><i class="fa fa-space-shuttle"></i> <span>Scheduled Flights Report</span></a></li>
+                                <li><a href="@Url.Action("FlownFlightsReport", "Report")"><i class="fa fa-space-shuttle"></i> <span> Flown Flights Report</span></a></li>
+                                <li><a href="@Url.Action("CanceledFlightsReport", "Report")"><i class="fa fa-space-shuttle"></i> <span> Canceled Flights Report</span></a></li>
+                                <li><a href="@Url.Action("AircraftFlownTimeReport", "Report")"><i class="fa fa-space-shuttle"></i> <span> Aircraft Flown Time Report</span></a></li>
+                                <li><a href="@Url.Action("InstructorFlownTimeReport", "Report")"><i class="fa fa-space-shuttle"></i> <span> Instructor Flight Time</span></a></li>
+                                <li><a href="@Url.Action("InstructorAircraftReport", "Report")"><i class="fa fa-space-shuttle"></i> <span> Instructor Flight Time (by Aircraft)</span></a></li>
+                                <li><a href="@Url.Action("InstructorLicenseType", "Report")"><i class="fa fa-space-shuttle"></i> <span> Instructor License</span></a></li>
+                                <li><a href="@Url.Action("AircraftStatus", "Report")"><i class="fa fa-space-shuttle"></i> <span> Aircraft Status</span></a></li>
+
+                            }
+
+                        </ul>
+                    </li>
+@if (userMenus.Where(u => u.ControllerName == "TraineeInfoBOes2").ToList().Count > 0)
+{
+                    <li class="applicantMenu" id="MenuState6">
+                        <a href="@Url.Action("Index", "TraineeInfoBOes2")"><i class="fa fa-fighter-jet text-primary"></i> <span>TRAINING APPLICANTS</span> </a>
+                    
+                    </li>
+}
+                    @*<li class="treeview" id="MenuState5">
+                            <a href="#"><i class="fa fa-file-text-o text-primary"></i> <span>CERTIFICATION &  REPORTING</span></a>
+                        </li>*@
+                </ul>
+
+                Session["account"] = account;
+                Session["report"] = report;
+                Session["curriculum"] = curriculum;
+                Session["curriculumMaster"] = curriculumMaster;
+                Session["enrollment"] = enrollment;
+                Session["enrollmentMaster"] = enrollmentMaster;
+                Session["scheduling"] = scheduling;
+                Session["schedulingMaster"] = schedulingMaster;
+                Session["grading"] = grading;
+                Session["traineeProfile"] = traineeProfile;
+            }
+        }
+    </section>
+</aside>

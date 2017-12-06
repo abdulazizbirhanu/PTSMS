@@ -1,0 +1,82 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.Operations.ClassRoom>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Name = "Class Room List.";
+    ViewBag.TableId = "tblClassRoom";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblClassRoom" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Building.BuildingName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location.LocationName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Capacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EffectiveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RevisionNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr class="odd" role="row">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Building.BuildingName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location.LocationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Capacity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EffectiveDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RevisionNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ClassRoomId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ClassRoomId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ClassRoomId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

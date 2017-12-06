@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "Schedule Notification";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+<link href="~/Content/FullCalendar/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+
+
+
+@section scripts
+    {
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/lib/moment.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#txtLessonType').val('FTD');
+            var realDate = new Date();
+
+        
+            $('#txtDateRange').daterangepicker({ timePicker: false, timePickerIncrement: 30, format: 'MMM/DD/YYYY', minDate: realDate});
+          
+            $("#txtDateRange").data('daterangepicker').setStartDate(realDate);
+
+            $('body').on('click', "#btnSearch", function () {
+
+                var lessonType = $('#txtLessonType').val(); 
+                var dateRange = $('#txtDateRange').val();
+
+                $('#myEditModalLabel').html('List');
+
+                var url = "/Notification/GetConcernedBodies";
+                url = url + '?lessonType=' + lessonType + "&dateRange=" + dateRange;
+
+                $.get(url, function (data) {
+
+                    $('#notificationListContaioner').empty();
+                    $('#notificationListContaioner').html(data);
+
+                    $('.notifyDiv').removeClass('hide'); 
+                    $('.passwordDiv').removeClass('hide');
+                    //$('#EvaluationTemplateModalPopup').modal('show');
+                });
+            });
+
+            $(".buttoGroup").click(function () {
+                $(".buttoGroup").removeClass('active');
+                $(this).toggleClass("active");
+                $('#txtLessonType').val($(this).data("id"));
+            });
+
+            //$('.FTDAndGFSchedulingContainer').on("submit", "#btnEvaluationTemplate", function (event) {
+
+            $('body').on('click', "#btnNotify", function () {
+
+                //collect and add checked value into a single place / text field
+                var RecipientList = '';
+
+                var email = '';
+                var phoneNumber = '';
+                var HasEmail = '';
+                var HasPhoneNumber = '';
+                var SMSMessage = '';
+                var EmailMessage = '';
+                var password = $('#txtPassword').val();
+                var ScheduleId = PersonId = '';
+
+                var numberOfClickedRecipient = 0;
+
+                $('#notificationListContaioner :checked').each(function () {
+
+                    numberOfClickedRecipient = numberOfClickedRecipient + 1;
+                    var Ids = $(this).data("id");
+                    var IdsArray = Ids.split('~');
+
+                    email = IdsArray[0];
+                    phoneNumber = IdsArray[1];
+                    HasPhoneNumber = IdsArray[2];
+                    HasEmail = IdsArray[3];
+                    PersonId = IdsArray[4];
+                    ScheduleId = IdsArray[5];
+
+                    RecipientList = RecipientList + email + "-" + phoneNumber + "-" + HasPhoneNumber + "-" + HasEmail + "-" + PersonId + '-' + ScheduleId + "~";
+
+                });
+
+                if (numberOfClickedRecipient === 0) {
+
+                    var box = bootbox.confirm("You did not select any recipient. Please select and retry again.", function (result) {
+                        if (result) {
+                            box.modal('hide');
+                        }
+                    });
+                }
+                else if (numberOfClickedRecipient < parseInt('@Session["NumberOfParticipant"]')) {
+
+                    var box = bootbox.confirm("You did not select all recipient. Are you sure you want to <b>continue</b>?", function (result) {
+                        if (result) {
+
+                            var Url = "/Notification/SendScheduleNotification";
+
+                            Url = Url + "?RecipientList=" + RecipientList + "&password=" + password;
+                            location.href = Url;
+                        }
+                    });
+                }
+                else {
+                    var Url = "/Notification/SendScheduleNotification";
+
+                    Url = Url + "?RecipientList=" + RecipientList + "&password=" + password;
+                    location.href = Url;
+                }
+            });
+        });
+    </script>
+}
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Schedule Notification</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body no-padding">
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="btn-group">                   
+                    <button type="button" class="btn btn-info active buttoGroup" data-id="FTD">FTD</button>
+                    <button type="button" class="btn btn-info buttoGroup" data-id="FLYING">FLYING</button>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <div class="form-group">
+                    <lable class="control-label col-md-4">Date Range</lable>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="txtDateRange" id="txtDateRange" width="300px" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2">
+                <button type="submit" class="btn btn-sm btn-info" id="btnSearch" name="btnSearch">
+                    Search
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="notificationListContaioner">
+
+        </div>
+
+    </div>
+</div>
+<div class="hide passwordDiv row" >
+    <label class="control-label col-md-2">Password</label>
+    <div class="col-md-4">
+        <input type="password" id="txtPassword" name="txtPassword" class="form-control" autocomplete="off" placeholder="***" />
+    </div>
+</div>
+
+<div class="form-group hide notifyDiv pull-right">
+    <button type="submit" class="btn btn-sm btn-info" id="btnNotify" name="btnNotify">
+        Notify
+        <i class="fa fa-send"></i>
+    </button>
+</div>
+
+<div class="row hide">
+    <input type="text" id="txtLessonType" name="txtLessonType" />
+</div>

@@ -1,0 +1,121 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.Course>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Course List.";
+    ViewBag.TableId = "tblCourse";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="table-responsive">
+
+</div>
+<table id="tblCourse" class="table table-responsive display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Previous @Html.DisplayNameFor(model => model.PreviousCourse.CourseCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TheoreticalDuration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PracticalDuration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreditHour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExternalTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExternalChapter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExternalReference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoursePassingMark)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EffectiveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RevisionNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                string EffectiveDate = item.EffectiveDate.ToString("dd/MM/yyyy");
+                <tr role="row" class="odd">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PreviousCourse.CourseCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TheoreticalDuration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PracticalDuration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreditHour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExternalTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExternalChapter)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExternalReference)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoursePassingMark)
+                    </td>
+                    <td>
+                        @EffectiveDate
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RevisionNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.CourseId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.CourseId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.CourseId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

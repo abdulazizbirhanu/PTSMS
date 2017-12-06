@@ -1,0 +1,120 @@
+﻿@model PTSMSDAL.Models.Curriculum.Operations.Module
+
+@{
+    ViewBag.Title = "Delete";
+    ViewBag.Name = "Are you sure you want to delete this Module?";
+}
+
+
+<div>
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Course.CourseTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Course.CourseTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModuleCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModuleCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModuleTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModuleTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TheoreticalDuration)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TheoreticalDuration)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PracticalDuration)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PracticalDuration)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalChapter)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExternalChapter)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalReference)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExternalReference)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HasExam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HasExam)
+        </dd>
+
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModuleWeight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModuleWeight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-info" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

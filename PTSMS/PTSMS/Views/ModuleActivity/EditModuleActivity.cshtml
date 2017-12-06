@@ -1,0 +1,60 @@
+﻿
+
+
+@model PTSMSDAL.Models.Curriculum.Operations.ModuleActivity
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title"> Edit Module Activity  </h3>
+        <div class="">
+            <a href="#" title="MODULE ACTIVITY LIST" class="moduleActivityList" data-id="@Model.ModuleId">Back to List</a>
+        </div>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>        
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body no-padding">
+       @using (Html.BeginForm("Edit", "ModuleActivity", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnEditEvent" }))
+       {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">                
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ModuleActivityId)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ModuleActivityName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.ModuleActivityName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ModuleActivityName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EstimatedDuration, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.EstimatedDuration, new { htmlAttributes = new { @class = "form-control", type="number" } })
+                        @Html.ValidationMessageFor(model => model.EstimatedDuration, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ModuleId, "ModuleId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.DropDownList("ModuleId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ModuleId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-6">
+                        <input type="submit" value="Save" class="btn btn-info" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

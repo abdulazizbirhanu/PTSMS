@@ -1,0 +1,62 @@
+﻿
+@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.ModuleActivity>
+
+<a href="#" title="CREATE NEW" class="createModuleActivity" data-id="@ViewBag.ModuleId">Create New</a>
+
+
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblModuleActivity">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Module.ModuleCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModuleActivityName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimatedDuration)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++) </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Module.ModuleCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModuleActivityName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstimatedDuration)
+                    </td>
+                    <td>
+                        <a href="#" title="EDIT MODULE ACTIVITY" class="editModuleActivity" data-id="@item.ModuleActivityId">Edit</a>
+                        <a href="#" title="DELETE MODULE ACTIVITY" class="deleteModuleActivity" data-id="@item.ModuleActivityId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#tblModuleActivity').DataTable({
+            "order": [[1, "asc"]]
+        });
+    });
+</script>

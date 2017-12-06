@@ -1,0 +1,392 @@
+﻿@using PTSMSDAL.Models.Curriculum.View;
+@{
+    ViewBag.Title = "TraineeSyllabus";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Name = "Trainee Syllabus";
+}
+<style type="text/css">
+    .skin-blue-light .sidebar-menu > li {
+        -webkit-transition: border-left-color 0.3s ease;
+        -o-transition: border-left-color 0.3s ease;
+        transition: border-left-color 0.3s ease;
+    }
+
+    .sidebar-menu > li.header {
+        color: #848484;
+        background: #66CCFF;
+    }
+
+    .sidebar-menu > li > a {
+        border-left: 3px solid transparent;
+        font-weight: 900 !important;
+    }
+
+    /*.CurriculemTreeViewController .sidebar-menu > li:hover > a,*/
+    .CurriculemTreeViewController .sidebar-menu > li.active > a {
+        color: #000000 !important;
+        background: #f4f4f5 !important;
+    }
+
+    .skin-blue-light .sidebar-menu > li.active {
+        border-left-color: #3c8dbc;
+    }
+
+    /*.CurriculemTreeViewController .tree-view-row-style > li:hover .tree-view-row-style > li:focus {
+        background-color: #66CCFF !important;
+    }*/
+
+    .CurriculemTreeViewController .text-color {
+        color: #fff;
+    }
+
+    .skin-blue .CurriculemTreeViewController .treeview-menu > li > a {
+        color: #000;
+    }
+
+    .skin-blue .treeview-menu > li > a:hover {
+        color: #67975b;
+        /*font-weight:bold;*/
+    }
+
+    .skin-blue .CurriculemTreeViewController .sidebar-menu > li > .treeview-menu {
+        margin: 0 1px;
+        background: #f4f4f5;
+    }
+
+    .CurriculemTreeViewController .sidebar-menu .treeview-menu > li > a {
+        padding: 0px 1px 1px 1px;
+    }
+
+    .btn-info {
+        background-color: #67975b;
+        border-color: #67975b;
+        padding: 0px 6px 0px 6px;
+    }
+
+    .btn-warning {
+        border-color: #67975b;
+        padding: 0px 7px 0px 3px;
+    }
+
+    /*.btn {
+        padding: 0px 3px 0px 3px;
+    }*/
+
+    ul ul, ol ul {
+        list-style-type: none;
+    }
+
+    .skin-blue .treeview-menu > li.active > a, .skin-blue .CurriculemTreeViewController .treeview-menu > li > a:hover {
+        color: #67975b;
+    }
+</style>
+
+
+
+
+
+@section scripts
+    {
+    @*<script src="~/Scripts/jquery-1.10.2.js"></script>*@
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#curriculumTree').on('click', '.View-Curriculum', function () {
+
+                var dataIds = $(this).attr('data-id');
+
+                var dataArray = dataIds.split('~');
+                var currentId = dataArray[0];
+                var treeLevel = dataArray[1];
+
+                //alert(currentId + ' ' + treeLevel);
+
+                var serviceURL = "";              
+               
+                if (treeLevel == "ProgramHierarchy") {
+                    serviceURL = "/Programs/Details";
+                }
+                else if (treeLevel == "CategoryView") {
+                    serviceURL = "/Categories/Details";
+                }
+                else if (treeLevel == "CourseView") {
+                    serviceURL = "/Courses/Details";
+                }
+                else if (treeLevel == "CourseExamView") {
+                    serviceURL = "/Exams/Details";
+                }
+                else if (treeLevel == "PrerequisiteView") {
+                    serviceURL = "/Prerequisites/Details";
+                }
+                else if (treeLevel == "ModuleView") {
+                    serviceURL = "/Modules/Details";
+                }
+                else if (treeLevel == "ModuleExamView") {
+                    serviceURL = "/Exams/Details";
+                }
+                else if (treeLevel == "LessonView") {
+                    serviceURL = "/Lessons/Details";
+                }
+                else if (treeLevel == "LessonEvaluationTemplateView") {
+                    serviceURL = "/EvaluationTemplates/Details";
+                }
+                else if (treeLevel == "ModuleGroundLessonView") {
+                    serviceURL = "/GroundLessons/Details";
+                }
+                location.href = serviceURL + '?id=' + currentId;
+            });
+        });
+    </script>
+}
+
+
+<!-- sidebar: style can be found in sidebar.less -->
+<!-- Default box -->
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="callout callout-info">
+            <h4>Trainee Profile.</h4>
+            <p>Name = <strong>@ViewBag.TraineeFullName</strong>, Company Id = <strong>@ViewBag.CompanyId</strong> , Batch Class = <strong>@ViewBag.BatchClass</strong></p>
+            @{
+                if (ViewBag.TraineeProgramHierarchy == null)
+                {
+                    //ProgramHierarchy varProgramHierarchy = (ProgramHierarchy)ViewBag.TraineeProgramHierarchy;
+                    //if (varProgramHierarchy.Id == 0 || varProgramHierarchy.Id == null)
+                    //{
+                    <p style="color:red; font-size:2em;">There is not Syllabus for this Trainee.</p>
+                       // }
+                    }
+                }
+        </div>
+    </div>
+    <!-- /.box-body -->
+    @*<div class="box-footer">
+            Footer
+        </div>*@
+    <!-- /.box-footer-->
+</div>
+<!-- /.box -->
+
+
+<section class="sidebar CurriculemTreeViewController">
+
+    <ul class="sidebar-menu" id="curriculumTree">
+        @{                        //Begin
+
+            if (ViewBag.TraineeProgramHierarchy != null)
+            {
+                ProgramHierarchy programHierarchy = (ProgramHierarchy)ViewBag.TraineeProgramHierarchy;
+
+                <li class="treeview active Program-State-Management" id="@programHierarchy.Type@programHierarchy.Id">
+                    <a href="#">
+                        @*<i class="fa fa-share"></i>*@
+                        <span>
+                            @programHierarchy.Name
+                            <button class='btn btn-info btn-xs View-Curriculum' data-id='@programHierarchy.Id~@programHierarchy.Type' title='View'>
+                                &nbsp;<i class=" fa fa-question-circle"></i>
+                            </button>
+                        </span>
+                    </a>
+                    @if (programHierarchy.CategoryList != null)
+                    {
+                        foreach (var cat in programHierarchy.CategoryList)
+                        {
+                            <ul class="treeview-menu">
+                                <li class="treeview Category-State-Management" id="@cat.Type@cat.Id">
+                                    <a href="#">
+                                        @if (cat.CourseList.Count() > 0 || cat.LessonList.Count() > 0)
+                                        {
+                                            <i class="fa fa-angle-left pull-left"></i>
+                                        }
+                                        <span>
+                                            @cat.Name
+                                            <button class='btn btn-info btn-xs View-Curriculum' data-id='@cat.Id~@cat.Type' title='View'>
+                                                <i class="fa fa-question-circle"></i>
+                                            </button>
+                                        </span>
+                                    </a>
+                                    @if (cat.CourseList != null)
+                                    {
+                                        foreach (var course in cat.CourseList)
+                                        {
+                                            <ul class="treeview-menu">
+                                                <li class="treeview CourseAndLesson-State-Management" id="@course.Type@course.Id">
+                                                    <a href="#">
+                                                        @if (course.CourseExamList.Count() > 0 || course.PrerequisiteList.Count() > 0 || course.ModuleList.Count() > 0)
+                                                        {
+                                                            <i class="fa fa-angle-left pull-left"></i>
+                                                        }
+                                                        <span>
+                                                            @course.Name
+                                                            <button class='btn btn-info btn-xs View-Curriculum' data-id='@course.Id~@course.Type' title='View'>
+                                                                <i class="fa fa-question-circle"></i>
+                                                            </button>
+                                                        </span>
+                                                    </a>
+
+                                                    @if (course.CourseExamList != null)
+                                                    {
+                                                        foreach (var courseExam in course.CourseExamList)
+                                                        {
+                                                            <ul class="treeview-menu">
+                                                                <li>
+                                                                    <a href="#">
+                                                                        @*<i class="fa fa-angle-left pull-left"></i>*@
+                                                                        <span>
+                                                                            @courseExam.Name
+                                                                            <button class='btn btn-info btn-xs View-Curriculum' data-id='@courseExam.Id~@courseExam.Type' title='View'>
+                                                                                &nbsp;<i class=" fa fa-question-circle"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        }
+                                                    }
+                                                    @if (course.PrerequisiteList != null)
+                                                    {
+                                                        foreach (var prerequisite in course.PrerequisiteList)
+                                                        {
+                                                            <ul class="treeview-menu">
+                                                                <li>
+                                                                    <a href="#">
+                                                                        @*<i class="fa fa-angle-left pull-left"></i>*@
+                                                                        <span>
+                                                                            @prerequisite.Name
+                                                                            <button class='btn btn-info btn-xs View-Curriculum' data-id='@prerequisite.Id~@prerequisite.Type' title='View'>
+                                                                                &nbsp;<i class=" fa fa-question-circle"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        }
+                                                    }
+
+                                                    @if (course.ModuleList != null)
+                                                    {
+                                                        foreach (var courseModule in course.ModuleList)
+                                                        {
+                                                            <ul class="treeview-menu">
+                                                                <li class="treeview CourseModule-State-Management" id="@courseModule.Type@courseModule.Id">
+                                                                    <a href="#">
+                                                                        @if (courseModule.ModuleExamList.Count() > 0)
+                                                                        {
+                                                                            <i class="fa fa-angle-left pull-left"></i>
+                                                                        }
+                                                                        <span>
+                                                                            @courseModule.Name
+                                                                            <button class='btn btn-info btn-xs View-Curriculum' data-id='@courseModule.Id~@courseModule.Type' title='View'>
+                                                                                <i class="fa fa-question-circle"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    </a>
+                                                                    @if (courseModule.ModuleExamList != null)
+                                                                    {
+                                                                        foreach (var modelExam in courseModule.ModuleExamList)
+                                                                        {
+                                                                            <ul class="treeview-menu">
+                                                                                <li>
+                                                                                    <a href="#">
+                                                                                        @*<i class="fa fa-angle-left pull-left"></i>*@
+                                                                                        <span>
+                                                                                            @modelExam.Name
+                                                                                            <button class='btn btn-info btn-xs View-Curriculum' data-id='@modelExam.Id~@modelExam.Type' title='View'>
+                                                                                                &nbsp;<i class=" fa fa-question-circle"></i>
+                                                                                            </button>
+                                                                                        </span>
+                                                                                    </a>
+                                                                                </li>
+                                                                            </ul>
+                                                                        }
+                                                                    }
+                                                                </li>
+                                                            </ul>
+                                                        }
+                                                    }
+                                                </li>
+                                            </ul>
+                                        }
+                                    }
+                                    @if (cat.LessonList != null)
+                                    {
+                                        foreach (var lesson in cat.LessonList)
+                                        {
+                                            <ul class="treeview-menu">
+                                                <li class="treeview CourseAndLesson-State-Management" id="@lesson.Type@lesson.Id">
+                                                    <a href="#">
+                                                        @if (lesson.LessonEvaluationTemplateViewList.Count() > 0)
+                                                        {
+                                                            <i class="fa fa-angle-left pull-left"></i>
+                                                        }
+                                                        <span>
+                                                            @lesson.Name
+                                                            <button class='btn btn-info btn-xs View-Curriculum' data-id='@lesson.Id~@lesson.Type' title='View'>
+                                                                <i class="fa fa-question-circle"></i>
+                                                            </button>
+                                                        </span>
+                                                    </a>
+
+                                                    @foreach (var eval in lesson.LessonEvaluationTemplateViewList)
+                                                    {
+                                                        <ul class="treeview-menu">
+                                                            <li>
+                                                                <a href="#">
+                                                                    <span>
+                                                                        @eval.Name
+                                                                        <button class='btn btn-info btn-xs View-Curriculum' data-id='@eval.Id~@eval.Type' title='View'>
+                                                                            &nbsp;<i class=" fa fa-question-circle"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    }
+                                                </li>
+                                            </ul>
+
+                                        }
+                                    }
+                                </li>
+                            </ul>
+                        }
+                    }
+                </li>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-0 col-xs-0"></div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="info-box  bg-gray">
+                            <span class="info-box-icon bg-yellow"><i class="fa fa-envelope-o"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">There is no program yet.</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-0 col-xs-0"></div>
+                </div>
+            }
+        }
+    </ul>
+</section>

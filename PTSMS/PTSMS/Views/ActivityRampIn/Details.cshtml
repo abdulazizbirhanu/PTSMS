@@ -1,0 +1,43 @@
+﻿@model PTSMSDAL.Models.Dispatch.ActivityRampIn
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ActivityRampIn</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ActivityRampOut.ActivityRampOutId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActivityRampOut.ActivityRampOutId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Hobbs)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hobbs)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tach)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tach)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ActivityRampInId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

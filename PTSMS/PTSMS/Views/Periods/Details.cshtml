@@ -1,0 +1,91 @@
+﻿@model PTSMSDAL.Models.Scheduling.Operations.Period
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Period</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PeriodTemplate.PeriodTemplateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PeriodTemplate.PeriodTemplateName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PreviousPeriod.PeriodName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousPeriod.PeriodName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PeriodName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PeriodName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.AMorPM)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AMorPM)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PeriodId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

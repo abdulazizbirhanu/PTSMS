@@ -1,0 +1,117 @@
+﻿
+
+@model IEnumerable<PTSMSDAL.Models.Enrollment.Relations.TraineeModuleExam>
+
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            @{
+                if (Model.Count() > 0)
+                {
+                    <div>
+                        @Model.FirstOrDefault().TraineeModule.Module.ModuleCode @Model.FirstOrDefault().TraineeModule.Module.ModuleTitle
+                    </div>
+                }
+            }
+            Module Exam List
+        </h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body no-padding">
+        @if (Model.Count() == 0)
+        {
+            <div class="alert alert-warning alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                <h5>The module has no exam.</h5>
+            </div>
+        }
+        <a href="#" title="MODULE LIST" class="moduleList" data-id="@ViewBag.CourseId">Back to Module List</a>
+
+        <table id="tblModuleExam" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+            <thead>
+                <tr>
+                    <th>
+                        No.
+                    </th>
+                    <th>
+                        Previous @Html.DisplayNameFor(model => model.Exam.PreviousExam.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Exam.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Exam.Weight)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Exam.Remark)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Exam.PassingMark)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Exam.EffectiveDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExamScore)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                    foreach (var item in Model)
+                    {
+                        string EffectiveDate = item.Exam.EffectiveDate.ToString("dd/MM/yyyy");
+                        <tr class="odd" role="row">
+                            <td>@(i++)</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Exam.PreviousExam.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Exam.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Exam.Weight)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Exam.Remark)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Exam.PassingMark)
+                            </td>
+                            <td>
+                                @EffectiveDate
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExamScore)
+                            </td>
+                            <td>
+                                <a href="#" title="DETAIL"><i class="fa fa-list-ul text-green moduleExamDetail" data-id="@item.TraineeModuleExamId"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#tblModuleExam').DataTable({
+            "order": [[1, "asc"]]
+        });
+    });
+</script>

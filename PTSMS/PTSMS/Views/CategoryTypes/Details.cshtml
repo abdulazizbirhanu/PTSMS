@@ -1,0 +1,71 @@
+﻿@model PTSMSDAL.Models.Curriculum.References.CategoryType
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Details Category Type";
+}
+
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Previous @Html.DisplayNameFor(model => model.PreviousCategoryType.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousCategoryType.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsTypeRating)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsTypeRating)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CategoryTypeId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

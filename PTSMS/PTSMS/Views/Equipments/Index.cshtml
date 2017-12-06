@@ -1,0 +1,290 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.References.Equipment>
+
+@{
+    ViewBag.Title = "List";
+    ViewBag.Name = "Equipment List";
+    ViewBag.TableId = "tblEquipment";
+    ViewBag.DefualtSortingColumnIndex = 0;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap-toggle.min.js"></script>*@
+
+@section scripts
+    {
+    <script>
+        function EditEstimatedRemainingHours(EquipmentId, EstimatedRemainingHours, ActualRemainingHours, TotalFlyingHours, EnableAutoForcast) {
+            var message = "<div class='form-group'>" +
+            //"<span class='errorMessage fa fa-exclamation-circle'> </span><br/>" +
+            "Estimated Remaining Hour/s:<input type='decimal' name='EstimatedRemainingHours'  placeholder='Hour/s'  id='EstimatedRemainingHours' class='form-control'>" +
+            "Actual Remaining Hour/s:<input type='decimal' name='ActualRemainingHours'  placeholder='Hour/s'  id='ActualRemainingHours' class='form-control'>" +
+            '<br/><input id="EnableAutoForcast" name="EnableAutoForcast" type="checkbox"><span style="color:orangered"> Enable Auto Forcast </span>' +
+             "</div>" +
+             "<div class='hide'> Total Flying Hour/s:<input type='decimal' name='TotalFlyingHours'  placeholder='Hour/s'  id='TotalFlyingHours' class='form-control'> </div";
+            debugger;
+
+            bootbox.dialog({
+                message: message,
+                title: "Estimated Remaining Hour/s Update",
+                onEscape: true,
+                backdrop: true,
+                buttons: {
+                    save: {
+                        label: "Save",
+                        className: "btn-success",
+                        callback: function () {
+                            var getUrl = "/Equipments/Update";
+                            var enableAutoForcast = $('#EnableAutoForcast').is(':checked');
+
+                            var postData = {
+                                EquipmentId: EquipmentId,
+                                EstimatedRemainingHours: $("#EstimatedRemainingHours").val(),
+                                TotalFlyingHours: TotalFlyingHours,
+                                ActualRemainingHours: $("#ActualRemainingHours").val(),
+                                EnableAutoForcast: enableAutoForcast
+                            };
+                            //var token = $('input[name="__RequestVerificationToken"]').val();
+                            debugger;
+                            if (postData.EquipmentId == 0 || postData.EquipmentId == "" ||
+                                postData.ActualRemainingHours == 0 ||   postData.ActualRemainingHours == "") {
+                                debugger;
+                                //$('#errorMessage').show();
+                                return false;
+                            }
+                            if (!($.isNumeric(postData.ActualRemainingHours))) {
+                                debugger;
+                                return false;
+                            }
+
+                            $.ajax({
+                                url: getUrl,
+                                type: 'POST',
+                                data: postData,
+                                //headers: { '__RequestVerificationToken': token },
+                                success: function (result) {
+                                    debugger;
+                                    bootbox.alert("Successfully Updated.");
+                                },
+                                error: function (err) {
+                                    debugger;
+                                    bootbox.alert("Error has occured while Updating!");
+                                }
+                            });
+
+                        }
+                    },
+                    cancle: {
+                        label: "Cancle",
+                        className: "btn-danger"
+                    }
+                }
+            }).
+             init(function () {
+                 $("#EstimatedRemainingHours").prop('disabled', true);
+
+                 if (EnableAutoForcast != "") {
+                     $('#EnableAutoForcast').prop('checked', true);
+                 } else {
+                     $('#EnableAutoForcast').removeAttr('checked');
+                 }
+                 $("#ActualRemainingHours").val(ActualRemainingHours);
+                 $("#EstimatedRemainingHours").val(EstimatedRemainingHours);
+
+                 $("#TotalFlyingHours").val(TotalFlyingHours);
+             });
+
+        }
+
+        function EditTotalFlyingHours(EquipmentId, EstimatedRemainingHours, ActualRemainingHours, TotalFlyingHours, EnableAutoForcast) {
+            var message = "<div class='form-group'>" +
+                                    "Total Flying Hour/s:<input type='decimal' name='TotalFlyingHours'  placeholder='Hour/s'  id='TotalFlyingHours' class='form-control'>" +
+                                    "</div>"+
+                "<div class='hide form-group'>" +
+            //"<span class='errorMessage fa fa-exclamation-circle'> </span><br/>" +
+            "Estimated Remaining Hour/s:<input type='decimal' name='EstimatedRemainingHours'  placeholder='Hour/s'  id='EstimatedRemainingHours' class='form-control'>" +
+            "Actual Remaining Hour/s:<input type='decimal' name='ActualRemainingHours'  placeholder='Hour/s'  id='ActualRemainingHours' class='form-control'>" +
+            '<br/><input id="EnableAutoForcast" name="EnableAutoForcast" type="checkbox"><span style="color:orangered"> Enable Auto Forcast </span>' +
+             "</div>";
+
+            bootbox.dialog({
+                message: message,
+                title: "Total Flying Hour/s Update",
+                onEscape: true,
+                backdrop: true,
+                buttons: {
+                    save: {
+                        label: "Save",
+                        className: "btn-success",
+                        callback: function () {
+                            var getUrl = "/Equipments/Update";
+                            var enableAutoForcast = $('#EnableAutoForcast').is(':checked');
+
+                            var postData = {
+                                EquipmentId: EquipmentId,
+                                EstimatedRemainingHours: EstimatedRemainingHours,
+                                TotalFlyingHours: $("#TotalFlyingHours").val(),
+                                ActualRemainingHours: ActualRemainingHours,
+                                EnableAutoForcast: enableAutoForcast
+                            };
+                            //var postData = {
+                            //    EstimatedRemainingHours: EstimatedRemainingHours,
+                            //    TotalFlyingHours: $("#TotalFlyingHours").val(),
+                            //    EquipmentId: EquipmentId
+                            //};
+                            //var token = $('input[name="__RequestVerificationToken"]').val();
+                            if (postData.EquipmentId == 0 || postData.EquipmentId == "" || postData.TotalFlyingHours == 0 ||
+                                  postData.TotalFlyingHours == "") {
+                                //debugger;
+                                //$('#errorMessage').show();
+                                return false;
+                            }
+
+                            if (!($.isNumeric(postData.TotalFlyingHours))) {
+                                //debugger;
+                                return false;
+                            }
+                            debugger;
+                            $.ajax({
+                                url: getUrl,
+                                type: 'POST',
+                                data: postData,
+                                //headers: { '__RequestVerificationToken': token },
+                                success: function (result) {
+                                    debugger;
+                                    bootbox.alert("Successfully Updated.");
+                                },
+                                error: function (err) {
+                                    debugger;
+                                    bootbox.alert("Error has occured while Updating!");
+                                }
+                            });
+                        }
+                    },
+                    cancle: {
+                        label: "Cancle",
+                        className: "btn-danger"
+                    }
+                }
+            }).
+             init(function () {
+                 $("#TotalFlyingHours").val(TotalFlyingHours);
+
+                 $("#EstimatedRemainingHours").prop('disabled', true);
+
+                 if (EnableAutoForcast != "") {
+                     $('#EnableAutoForcast').prop('checked', true);
+                 } else {
+                     $('#EnableAutoForcast').removeAttr('checked');
+                 }
+                 $("#ActualRemainingHours").val(ActualRemainingHours);
+                 $("#EstimatedRemainingHours").val(EstimatedRemainingHours);
+
+             });
+
+        }
+    </script>
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblEquipment">
+    @Html.AntiForgeryToken()
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameOrSerialNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentModel.EquipmentModelName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentStatus.EquipmentStatusName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkingHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Building)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location.LocationName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalFlyingHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActualRemainingHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++) </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NameOrSerialNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EquipmentModel.EquipmentModelName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EquipmentStatus.EquipmentStatusName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WorkingHours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Building)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location.LocationName)
+                    </td> 
+                    <td>
+                        <button class="btn btn-link" onclick="EditTotalFlyingHours('@item.EquipmentId','@item.EstimatedRemainingHours','@item.ActualRemainingHours','@item.TotalFlyingHours','@item.EnableAutoForcast');">
+                            @Html.DisplayFor(modelItem => item.TotalFlyingHours)
+                        </button>
+
+                        @*@Html.DisplayFor(modelItem => item.TotalFlyingHours)*@
+                    </td>
+                    <td>
+                        <button class="btn btn-link" onclick="EditEstimatedRemainingHours('@item.EquipmentId','@item.EstimatedRemainingHours','@item.ActualRemainingHours','@item.TotalFlyingHours','@item.EnableAutoForcast');">
+                            @Html.DisplayFor(modelItem => item.ActualRemainingHours)
+                        </button>
+
+                        @*@Html.DisplayFor(modelItem => item.EstimatedRemainingHours)*@
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.EquipmentId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.EquipmentId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.EquipmentId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

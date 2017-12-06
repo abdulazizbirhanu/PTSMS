@@ -1,0 +1,58 @@
+﻿@model PTSMSDAL.Models.Scheduling.Operations.Airport
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Airport Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AirportName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AirportName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AirportCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AirportCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AirportId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,92 @@
+﻿
+@model PTSMSDAL.Models.Enrollment.Relations.TraineeCourseExam
+
+
+<div>
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <h3 class="box-title"> @Model.TraineeCourse.Course.CourseCode @Model.TraineeCourse.Course.CourseTitle Course Exam Detail</h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+            <a href="#" title="COURSE EXAM LIST" class="courseExamList" data-id="@Model.TraineeCourse.CourseId">Back to Course Exam List</a>
+
+            <dl class="dl-horizontal">
+                <dt>
+                    Previous @Html.DisplayNameFor(model => model.Exam.PreviousExam.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Exam.PreviousExam.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Exam.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Exam.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Exam.Weight)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Exam.Weight)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Exam.Remark)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Exam.Remark)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Exam.PassingMark)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Exam.PassingMark)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Exam.EffectiveDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Exam.EffectiveDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Exam.RevisionNo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Exam.RevisionNo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Exam.Status)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Exam.Status)
+                </dd>
+
+            </dl>
+
+        </div>
+    </div>
+</div>
+
+
+

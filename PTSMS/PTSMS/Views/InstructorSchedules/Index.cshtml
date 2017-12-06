@@ -1,0 +1,90 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.View.InstructorModuleView>
+
+    @{
+        ViewBag.Title = "Index";
+        ViewBag.Name = "Module Instructor Schedule List.";
+        ViewBag.TableId = "tblModuleInstructorSchedule";
+        ViewBag.DefualtSortingColumnIndex = 1;
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+
+    <link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+
+    @section scripts
+    {
+        @*<script src="~/Scripts/bootstrap.min.js"></script>
+            <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>*@
+        <script src="~/Scripts/bootbox.min.js"></script>
+        <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                @{
+                if(ViewBag.InstructorModuleScheduleMessage != null)
+                {
+                    <text>
+                bootbox.alert('@ViewBag.InstructorModuleScheduleMessage');
+                </text>
+                    ViewBag.InstructorModuleScheduleMessage = null;
+                }
+            }
+            });
+        </script>
+    }
+
+
+    <br />
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblModuleInstructorSchedule">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>
+                    Instructor
+                </th>
+                <th>
+                    Course
+                </th>
+                <th>
+                    Module
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    <tr role="row" class="odd">
+                        <td>@(i++) </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Instructor.Person.FirstName)
+                            @Html.DisplayFor(modelItem => item.Instructor.Person.MiddleName) -
+                            @Html.DisplayFor(modelItem => item.Instructor.Person.CompanyId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Module.Course.CourseCode) -
+                            @Html.DisplayFor(modelItem => item.Module.Course.CourseTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Module.ModuleCode) -
+                            @Html.DisplayFor(modelItem => item.Module.ModuleTitle)
+                        </td>
+                        <td>
+                            @*@Html.ActionLink("Edit", "Edit", new { id = item.ModuleInstructorScheduleId }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.ModuleInstructorScheduleId }) |*@
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ModuleInstructorScheduleId })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>

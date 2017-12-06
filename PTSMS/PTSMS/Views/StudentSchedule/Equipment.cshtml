@@ -1,0 +1,737 @@
+﻿
+@{
+    ViewBag.Title = "Equipment Scheduler";
+    ViewBag.Name = "Equipment Scheduler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .headerBlock {
+        background: #517842;
+        border-radius: 10px;
+        width: auto;
+        height: auto;
+        display: block;
+        margin: 10px;
+        color: #ffffff;
+        padding: 10px;
+    }
+
+    .custom-Col {
+        border-right: 3px solid;
+        border-color: #517842;
+    }
+
+    .add-event {
+        border-radius: 10px;
+        display: block;
+        border: solid;
+        border-color: #517842;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+        font-size: 14px;
+    }
+
+    .datepicker {
+        z-index: 1151 !important;
+    }
+    /*#addScheduledEventModel*/
+    #EditScheduledEventModel .modal-dialog {
+        width: 70%;
+    }
+
+    #addScheduledEventModel .modal-dialog {
+        width: 80%;
+    }
+
+    #DragAndDropModelPopup .modal-dialog {
+        width: 60%;
+    }
+
+
+
+    /*#calendar {
+        max-width: 900px;
+        margin: 50px auto;
+    }*/
+</style>
+
+<style>
+    #scheduler-page .two-col {
+        margin: 60px 0 60px;
+    }
+
+    #scheduler-page #calendar {
+        font-size: 14px;
+    }
+
+        #scheduler-page #calendar .fc-event {
+            /* adjust hue */
+            background-color: #3b91ad;
+            border-color: #3b91ad;
+        }
+
+            #scheduler-page #calendar .fc-event:hover {
+                text-decoration: none; /* undo a previous rule */
+            }
+
+    #scheduler-page .larger-link-wrap {
+        margin-top: 2em;
+    }
+
+    #scheduler-page .larger-link-wrap,
+    #scheduler-page .sidebar ul {
+        font-size: 14px;
+    }
+
+    #scheduler-page .sidebar {
+        padding-left: 45px;
+    }
+
+        #scheduler-page .sidebar h3 {
+            margin-top: .4em;
+            font-size: 16px;
+        }
+
+        #scheduler-page .sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #scheduler-page .sidebar li {
+            margin: 1em 0;
+            padding: 0;
+        }
+
+    #scheduler-page h2 span {
+        text-transform: uppercase;
+        font-size: 12px;
+        padding: 0 2px;
+        border: 1px solid rgba(255, 255, 255, .4);
+        position: relative;
+        top: -2px;
+        left: 5px;
+    }
+
+    /*#scheduler-page #banner > div {
+            margin-top: 34px;
+            margin-bottom: 34px;
+        }*/
+
+    #scheduler-page .fc-left h2 {
+        margin-left: 30px;
+    }
+</style>
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+<link href="~/Content/FullCalendar/jquery-ui.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.css" rel="stylesheet" />
+
+
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/qtip/jquery.qtip.css" rel="stylesheet" />
+@*https://select2.github.io/examples.html#programmatic-control*@
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/ajax-progress-bar/css/jquery.progressTimer.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/validator.js"></script>
+
+@section scripts
+    {
+
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/lib/moment.min.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.js"></script>
+
+
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/qtip/jquery.qtip.js"></script>
+    <script src="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/ajax-progress-bar/js/jquery.progressTimer.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+    <script>
+
+        $(function () { // dom ready
+            var $AddDropDownTrainee = $("#dpdAddTrainee1").select2({
+                maximumSelectionLength: 1
+            });
+            var $AddDropDownLesson = $("#dpdAddLesson1").select2({
+                maximumSelectionLength: 1
+            });
+
+            //////////////////////////Begin, Get Current date //////////////////////////
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            today = mm + '/' + dd + '/' + yyyy;
+            //////////////////////////End, Get Current date //////////////////////////////
+
+            var todayDate = moment().startOf('day');
+            var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
+            var TODAY = todayDate.format('YYYY-MM-DD');
+            var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
+
+            //Make event color Equipment specific
+            var EquipmentList = null;
+            $.ajax({
+                url: "/Scheduler/ListScheduledEquipment",
+                type: 'GET',
+                success: function (result) {
+
+                    if (result.hasList) {
+                        EquipmentList = result.resultData;
+                    }
+                },
+                error: function () {
+                    bootbox.alert("Error has occured while coloring the event.");
+                }
+            });
+            //var revertFunc = null;
+
+            $('#calendar').fullCalendar({
+                theme: true,
+                resourceAreaWidth: 230,
+                editable: true,
+                disableDragging: true,
+                aspectRatio: 1.5,
+                scrollTime: '00:00',
+                header: {
+                    left: 'promptResource today prev,next',
+                    center: 'title',
+                    right: 'timelineDay,timelineThreeDays,agendaWeek,month'
+                },
+                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+                customButtons: {
+                    promptResource: {
+                        text: '+ Equipment',
+                        click: function () {
+                            var title = prompt('Equipment name');
+                            if (title) {
+                                $('#calendar').fullCalendar(
+                                    'addResource',
+                                    { title: title },
+                                    true // scroll to the new resource?
+                                );
+                            }
+                        }
+                    }
+                },
+                defaultView: 'timelineDay',
+                views: {
+                    timelineThreeDays: {
+                        type: 'timeline',
+                        duration: { days: 5 }
+                    }
+                },
+                resourceLabelText: '',//'Equipment List',
+                resourceColumns: [
+                {
+                    labelText: 'Equipment Model',
+                    field: 'EquipmentName'
+                },
+                //{
+                //    labelText: 'Working Hours',
+                //    field: 'WorkingHours'
+                //}
+                ],
+                resourceGroupField: 'equipmentModel',
+                resources: '/StudentSchedule/GetSchedulerResourceForTrainee/',
+                events: '/StudentSchedule/GetFTDandFlyingScheduledEventForTrainee/',
+                eventRender: function (event, element, view) {
+
+                    var date = new Date();
+
+                    //Assign equipment specific event background color
+                    if (EquipmentList != null) {
+                        jQuery.each(EquipmentList, function (index, item) {
+
+                            if (event.resourceId == item.EquipmentId) {
+                                $(element).css("backgroundColor", item.Color);
+                            }
+                        });
+                    }
+
+                    if (event.description.toLowerCase().indexOf("canceled") > 0) {
+                        $(element).css("backgroundColor", "red");
+                        setInterval(function () {
+                            element.fadeOut(900).delay(300).fadeIn(800);
+                        }, 2000);
+                    }
+
+                    if (event.title.toLowerCase().indexOf("briefing") >= 0 || event.title.toLowerCase().indexOf("debriefing") >= 0) {
+                        $(element).css("backgroundColor", "#FFA500");
+
+                    }
+
+                    element.qtip({
+                        content: {
+                            text: event.description
+                        },
+                        style: {
+                            classes: 'qtip-green qtip-shadow qtip-youtube'
+                        },
+                        position: {
+                            my: 'top left',  // Position my top left...
+                            at: 'bottom right', // at the bottom right of...
+                            //target: $('.selector') // my target
+                        }
+                    });
+                },
+                eventClick: function (event, jsEvent, view, resourceObj) {
+
+                    $("#btnEdit").removeAttr("disabled");
+
+                    if (event.title.toLowerCase().indexOf("briefing") >= 0 || event.title.toLowerCase().indexOf("debriefing") >= 0) {
+                        $('#lblBriefingAndDebriefing').html(event.description);
+                        $('#BriefingAndDebriefingModelPopup').modal('show');
+                    }
+                    else {
+
+                        //Assign the detail to view
+                        $('#lblEditAvailabilityMessage').html('');
+                        $('#txtfylingAndFTDScheduleId').val(event.id);
+
+                        $('#txtEventID').html(event.id);
+                        $('#txtDescription').html(event.description);
+
+                        ////////////////////////////////////GET EVENT DETAIL////////////////////////////////////
+                        var getListUrl = "/Scheduler/GetFlyingAndFTDScheduleDetail";
+
+                        var postData = {
+                            'flyingAndFTDScheduleId': event.id
+                        };
+
+                        $.ajax({
+                            url: getListUrl,
+                            type: 'POST',
+                            data: postData,
+                            success: function (result) {
+                                if (result.foundScheduledEventDetail) {
+
+                                    $('#txtLessonId').val(result.ScheduledEventData.LessonId);
+                                    $('#txtTraineeId').val(result.ScheduledEventData.TraineeId);
+                                    $('#txtSequence').val(result.ScheduledEventData.Sequence);
+                                }
+                            },
+                            error: function () {
+                                bootbox.alert("Error has occured while reading event detail!");
+                            }
+                        });
+                        $('#EditScheduledEventModel').modal('show');
+                    }
+                }
+            });
+
+        });
+
+        //Read just sizing after font load
+        $(window).on('load', function () {
+            $('#calendar').fullCalendar('render');
+        });
+
+        $(document).ready(function () {
+
+            $('#PTSHtmlBodyTag').addClass("sidebar-collapse");
+
+            //Initialize defualt values and setting
+            @{
+                if (ViewBag.FTDAndFlyingScheduleMessage != null)
+                {
+                    <text> bootbox.alert('@ViewBag.FTDAndFlyingScheduleMessage');</text>
+                    ViewBag.FTDAndFlyingScheduleMessage = null;
+                }
+            }
+
+            $('a[data-toggle="tab"]').on('click', function (e) {
+
+                //EvaluationItemContainer
+                // $('#evaluation-container > .EvaluationItemContainer:last').remove();
+                $('#lblEditAvailabilityMessage').html('');
+
+                var lessonId = $('#txtLessonId').val();
+                var traineeId = $('#txtTraineeId').val();
+                var sequence = $('#txtSequence').val();
+
+                var flyingFTDScheduleId = $('#txtEventID').text();
+                 
+
+                var target = $(e.target).attr("href");
+                if ((target == '#evaluation_tab')) {
+                    try {
+                        //Block of code to try
+
+                        //Check whether EVALUATION ITEMS has been generated for TraineeLesson
+                        $('#myEditModalLabel').html('Evaluation Template');
+                        $.ajax({
+                            url: "/TraineeEvaluationTemplate/IsTraineeLessonHasEvaluationItem",
+                            data: {
+                                'traineeId': traineeId,
+                                'lessonId': lessonId,
+                                'sequence': sequence,
+                                'flyingFTDScheduleId': flyingFTDScheduleId
+                            },
+                            type: 'POST',
+                            success: function (result) {
+
+                                if (result.IsThereEvaluationItem) {
+                                    if (result.IsAlreadyEvaluated) {
+                                        PopulateEvaluationTemplate(traineeId, lessonId, sequence, true);
+                                    }
+                                    else {
+                                        PopulateEvaluationTemplate(traineeId, lessonId, sequence, false);
+                                    }
+                                }
+                                else {
+                                    //Enable Generate Evaluation Item BUTTON
+                                    var htmlGUIData = '<div class=""> <div class="alert alert-warning alert-dismissible">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
+                                        '<h4><i class="icon fa fa-warning"></i> Alert!</h4>' + '<h5>This lesson is not evaluated so far. Result will be visible once your instructor evaluated it.</h5>' +
+                                        '</div>' + '</div>';
+                                    $('#evaluation-container').html(htmlGUIData);
+                                }
+                            },
+                            error: function () {
+                                bootbox.alert("Error has occured!!!.");
+                            }
+                        });
+                    }
+                    catch (err) {
+                        //Block of code to handle errors
+                        alert('Error has occured');
+                    }
+                }
+
+                if ((target == '#flightLog_tab')) {
+                    $('#myEditModalLabel').html('Flight log Record.');
+                    var flyingFTDScheduleId = $('#txtEventID').text();
+                    var url = "/FlightLogs/FlightLogDetail";
+
+                    url = url + '?flyingFTDScheduleId=' + flyingFTDScheduleId;
+                    $.get(url, function (data) {
+                        $('#flightLog-container').html(data);
+                    });
+                }
+
+                if ((target == '#detail_tab')) {
+                    $('#myEditModalLabel').html('Schedule Detail.');
+                }
+                return true;
+            });
+
+            $('body').on('click', "#btnGenerateEvaluationItem", function () {
+                //alert('btnGenerateEvaluationItem');
+                var lessonId = $('#txtLessonId').val();
+                var traineeId = $('#txtTraineeId').val();
+                var sequence = $('#txtSequence').val();
+                //Generate Evaluation Item if it doesn't generate so far.
+                $.ajax({
+                    url: "/TraineeEvaluationTemplate/PopulateEvaluationItemForTraineeLesson",
+                    data: {
+                        'traineeId': traineeId,
+                        'lessonId': lessonId,
+                        'sequence': sequence
+                    },
+                    type: 'POST',
+                    success: function (result) {
+
+                        if (result.IsEvaluationItemGenerated) {
+                            PopulateEvaluationTemplate(traineeId, lessonId, sequence, false);
+                        }
+                        else {
+                            bootbox.alert("Unable to generate Evaluation item.");
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+            });
+
+        });
+        //BEGIN, EVENT HANDLER FOR EVALUATION TEMPLATE.
+
+        function PopulateEvaluationTemplate(traineeId, lessonId, sequence, isAlreadAgreed) {
+            var url = "/TraineeEvaluationTemplate/TraineeEvaluationTemplate";
+            ///////////////////////////////////
+            url = url + '?traineeId=' + traineeId + '&lessonId=' + lessonId + '&sequence=' + sequence;
+
+            $.get(url, function (data) {
+                $('#evaluation-container').html(data);
+                if (isAlreadAgreed) {
+                    var htmlGUIData = '<div class=""> <div class="alert alert-warning alert-dismissible">' +
+                                      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
+                                      '<h4><i class="icon fa fa-warning"></i> Alert!</h4>' + '<h5>You are already agreed this evaluation template. You cannot agree again!</h5>' +
+                                      '</div>' + '</div>';
+                    $('#isAlreadedAgreed-Container').html(htmlGUIData);
+                    $('#btnAgree').attr('disabled', 'disabled');
+                    $('#txtPassword').attr('disabled', 'disabled');
+                }
+                else {
+                    $('#btnAgree').removeAttr('disabled');
+                    $('#txtPassword').removeAttr('disabled');
+                }
+            });
+        }
+
+
+        //Triggered whenever checkbox is checked
+        /* $('.FTDAndGFSchedulingContainer').on("click", ".grade-CheckBox", function (event) {
+
+             var Ids = $(this).val();
+             var IdsArray = Ids.split('~');
+
+             var categoryId = IdsArray[0];
+             var ItemId = IdsArray[1];
+             var ScoreLevelId = IdsArray[2];
+             var ItemClass = "Category" + categoryId + "-Item" + ItemId;
+
+             var isChecked = false;
+             if ($('#' + event.target.id).prop("checked") == true) {
+                 isChecked = true;
+             }
+             $('.' + ItemClass).prop('checked', false);  // Unchecks it
+
+             if (isChecked)
+                 $('#' + event.target.id).prop('checked', true);
+             else
+                 $('#' + event.target.id).prop('checked', false);
+
+             var ButtonGroupClass = "labelCategory" + categoryId + "Item" + ItemId;
+             var ClickedButtonId = ButtonGroupClass + ScoreLevelId;
+
+             $('.' + ButtonGroupClass).removeClass("btn-primary btn-default").addClass("btn-default");
+
+             if (isChecked)
+                 $('#' + ClickedButtonId).removeClass("btn-primary btn-default").addClass("btn-primary");
+             else
+                 $('#' + ClickedButtonId).removeClass("btn-primary btn-default").addClass("btn-default");
+         });
+
+         */
+
+        //Triggered whenever Evaluation submit button is clicked
+        $('body').on('click', ".btnTraineeEvaluationAcceptance", function (event) {
+            //$('.FTDAndGFSchedulingContainer').on("submit", "#btnEvaluationTemplate", function (event) {
+
+            //Get value to be posted
+            var traineeId = $('#txtTraineeId').val();
+            var lessonId = $('#txtLessonId').val();
+            //var password = $('#txtPassword').val();
+            var flyingFTDScheduleId = $('#txtEventID').text();
+            var isAccepted = $(this).data("id");
+
+
+            event.preventDefault();
+            //AcceptEvaluationTemplate(string traineeId, string lessonId, string password)
+            bootbox.prompt({
+                title: "Are you sure you want to agree this <b>Evaluation Template</b>? Please enter your password to confirm your AGREEMENT action:",
+                inputType: 'password',
+                buttons: {
+                    confirm: {
+                        label: 'Yes, Definitely!',
+                        className: 'btn-danger'
+                    },
+                    cancel: {
+                        label: 'No way!',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function (result) {
+
+                    if (result == "" || result == null) {
+                        bootbox.alert('Invalid Input! Please try again.');
+                    }
+                    else {
+                        var Url = "/TraineeEvaluationTemplate/AcceptEvaluationTemplate";
+
+                        Url = Url + "?traineeId=" + traineeId + "&lessonId=" + lessonId + "&password=" + result + "&isAccepted=" + isAccepted + "&flyingFTDScheduleId=" + flyingFTDScheduleId;
+                        location.href = Url;
+                    }
+                }
+            });
+
+            //var box = bootbox.confirm({
+            //    message: "Are you sure you want to agree this <b>Evaluation Template</b>?",
+            //    buttons: {
+            //        confirm: {
+            //            label: 'Yes, Definitely!',
+            //            className: 'btn-danger'
+            //        },
+            //        cancel: {
+            //            label: 'No way!',
+            //            className: 'btn-success'
+            //        }
+            //    },
+            //    callback: function (result) {
+            //        if (result) {
+
+            //            var Url = "/TraineeEvaluationTemplate/AcceptEvaluationTemplate";
+
+            //            Url = Url + "?traineeId=" + traineeId + "&lessonId=" + lessonId + "&password=" + password + "&isAccepted=" + isAccepted + "&flyingFTDScheduleId=" + flyingFTDScheduleId;
+            //            location.href = Url;
+            //        }
+            //        else {
+            //            box.modal('hide');
+            //        }
+            //    }
+            //});
+            //bootbox.confirm("Are you sure you want to agree this <b>Evaluation Template</b>?", function (result) {
+            //    if (result) {
+
+            //        var Url = "/TraineeEvaluationTemplate/AcceptEvaluationTemplate";
+
+            //        Url = Url + "?traineeId=" + traineeId + "&lessonId=" + lessonId + "&password=" + password;
+            //        location.href = Url;
+            //    }
+            //});
+        });
+        //END, EVENT HANDLER FOR EVALUATION TEMPLATE.
+
+    </script>
+}
+
+
+
+
+<br />
+<div class="FTDAndGFSchedulingContainer">
+
+    <div id='calendar'></div>
+
+
+    <!--Begin, Edit Even modal popup-->
+    <div class="modal modal-fade" id="EditScheduledEventModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="editModalPopup" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myEditModalLabel">Schedule Detail.</h4>
+                </div>
+                <div class="modal-body" id="editModalBody">
+                    Press ESC button to exit.
+                    <div style="color:red"><lable class="control-label" name="lblEditAvailabilityMessage" id="lblEditAvailabilityMessage"></lable></div>
+                    <div class="add-event">
+                        <br />
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs" id="EditContainerTab">
+                                <li class="active"><a href="#detail_tab" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                                <li class=""><a href="#flightLog_tab" data-toggle="tab" aria-expanded="false">Flight Log</a></li>
+                                <li class=""><a href="#evaluation_tab" data-toggle="tab" aria-expanded="false">Evaluation</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="detail_tab">
+                                    <div class="form-horizontal">
+                                        <div class="row">
+
+                                            <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 custom-Col">
+                                                <br /><br />
+                                                <div class="form-group hide">
+                                                    <lable class="control-label   col-md-4"><strong>Event Id</strong> </lable>
+                                                    <div class="col-md-6">
+                                                        <lable class="control-label" name="txtEventID" id="txtEventID"></lable>
+
+                                                        <input type="text" name="txtLessonId" id="txtLessonId" />
+                                                        <input type="text" name="txtTraineeId" id="txtTraineeId" />
+                                                        <input type="text" name="txtSequence" id="txtSequence" />
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <lable class="control-label" name="txtDescription" id="txtDescription"></lable>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="flightLog_tab">
+                                    <div id="flightLog-container">
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="evaluation_tab">
+                                    <div id="evaluation-container">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End, Edit Even modal popup-->
+    <!--start, Beriefing and Debriefing modal popup-->
+    <div class="modal modal-fade" id="BriefingAndDebriefingModelPopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="editModalPopup" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myBriefingModalLabel">Briefing And Debriefing Detail.</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Details for <span class="label label-warning">Briefing And Debriefing </span></h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body no-padding">
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <lable class="control-label" name="lblBriefingAndDebriefing" id="lblBriefingAndDebriefing"></lable>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--end, Beriefing and Denriefing modal popup-->
+</div>
+

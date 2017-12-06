@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "Welcome";
+}
+
+<style>
+    .welcome {
+        background-color: #ede7e7 !important;
+        border-radius: 25px;
+    }
+
+   .callout.callout-info   .timeline{
+        background-color: #00c0ef !important;
+        border-radius: 25px;
+    }
+    .timeline > li > .timeline-item {
+           border-radius: 25px;
+    }
+</style>
+ 
+@section scripts{
+     
+<script type="text/javascript">
+    $(document).ready(function () {
+         @{
+             if (ViewBag.GlobalMessage != null)
+             {
+                 <text> bootbox.alert('@ViewBag.GlobalMessage');</text>
+                 ViewBag.GlobalMessage = null;
+             }
+         }
+    });
+</script>
+    }
+<div class="welcome">
+
+    <div class="callout callout-info">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                <span class="fa fa-plane fa-5x pull-right"></span>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                @{
+                    string x = Session["SchoolName"].ToString(); 
+                    }
+                <h4>WELCOME TO ETHIOPIAN AIRLINES AVIATION ACADEMY TRAINING MANAGEMENT SYSTEM   <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong style="text-align:center">@Session["SchoolName"].ToString() </strong></h4>
+                @*<p style="text-align:justify">
+                    The Pilot Training school commissioned in 1964 is selected as the training center for African and Middle East countries. The development of this training facility has made Ethiopian Airlines self-sufficient in meeting its requirements for pilots. This is accomplished through the engagement of highly qualified and experienced Ethiopian Airlines training staff. Over the last 48 years, the Pilot training school has trained pilots for over 52 countries in Africa, the Middle East, Asia and Europe.
+                </p>*@
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                <span class="fa fa-plane fa-5x"></span>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <ul class="timeline">
+
+            <!-- timeline time label -->
+            <li class="time-label">
+                <span class="bg-red">
+                    Ethiopian Aviation Academy
+                </span>
+            </li>
+            <!-- /.timeline-label -->
+            <!-- timeline item -->
+            <li>
+                <!-- timeline icon -->
+                <i class="fa fa-plane bg-blue"></i>
+                <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> @DateTime.Now</span>
+
+                    <h3 class="timeline-header"><a href="#">Our Vision</a> ...</h3>
+
+                    <div class="timeline-body">
+                        Ethiopian Aviation Academy will be the most competitive and leading aviation training centre in Africa by 2025.
+                    </div>
+
+                    <div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs" href="http://www.ethiopianairlines.com/corporate/group/academy/vision-mission">See More</a>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <!-- timeline icon -->
+                <i class="fa fa-plane bg-aqua"></i>
+                <div class="timeline-item">
+                    @*<span class="time"><i class="fa fa-clock-o"></i> @DateTime.Now</span>*@
+
+                    <h3 class="timeline-header"><a href="#">Our Mission</a> </h3>
+
+                    <div class="timeline-body">
+                        To become the leading Aviation Academy in Africa by providing competitive global standard aviation training services.
+                    </div>
+
+                    <div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs" href="http://www.ethiopianairlines.com/corporate/group/academy/vision-mission">See More</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <!-- timeline icon -->
+                <i class="fa fa-plane bg-yellow"></i>
+                <div class="timeline-item">
+                    @*<span class="time"><i class="fa fa-clock-o"></i> @DateTime.Now</span>*@
+
+                    <h3 class="timeline-header"><a href="#">Our Values</a> </h3>
+
+                    <div class="timeline-body">
+                        <ul>
+                            <li> Professional-excellence</li>
+                            <li>   Integrity, respect, self-discipline commitment and teamwork</li>
+                            <li> Learning Institution with the objective for continuous quality improvement, innovation and knowledge sharing</li>
+                            <li>  Highest customer satisfaction and service</li>
+                            <li>  Innovation and creativity</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs" href="http://www.ethiopianairlines.com/corporate/group/academy/vision-mission">See More</a>
+                    </div>
+                </div>
+            </li>
+            <!-- END timeline item -->
+            ...
+
+        </ul>
+    </section>
+</div>
+@*<h2>Welcome</h2>
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Welcome to Ethiopian Airlines Aviation Academy</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class=""></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="2" class="active"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="item">
+                                <img src="~/Content/Images/Sliders/PTSimage0.jpg" alt="First slide">
+                                <div class="carousel-caption">
+                                    Pilot Trainee
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <img src="~/Content/Images/Sliders/PTSimage1.jpg" alt="First slide">
+                                <div class="carousel-caption">
+                                    Pilot Training Simulation
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <img src="~/Content/Images/Sliders/PTSimage2.jpg" alt="First slide">
+                                <div class="carousel-caption">
+                                    Pilot Trainee
+                                </div>
+                            </div>
+                            <div class="item">
+                                <img src="~/Content/Images/Sliders/PTSimage3.jpg" alt="First slide">
+                                <div class="carousel-caption">
+                                    Ethiopian Aviation Academy
+                                </div>
+                            </div>
+
+                            <div class="item active">
+                                <img src="~/Content/Images/Sliders/PTSimage4.jpg" alt="First slide">
+                                <div class="carousel-caption">
+                                    Pilot Trainee
+                                </div>
+                            </div>
+
+                        </div>
+                        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                            <span class="fa fa-angle-left"></span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                            <span class="fa fa-angle-right"></span>
+                        </a>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>*@

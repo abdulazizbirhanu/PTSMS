@@ -1,0 +1,297 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Enrollment.Relations.Batch>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Batch List.";
+    ViewBag.TableId = "tblBatch";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+
+@section scripts
+    {
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            //Initialize Select2 Elements
+            $(".select2").select2();
+
+
+            $('#tblBatch').on('click', '.Batch-Trainee', function () {
+                debugger;
+                var dataIds = $(this).attr('data-id');
+                var dataArray = dataIds.split('~');
+                var BatchId = dataArray[0];
+                var BatchName = dataArray[1];
+
+                var ListTraineeUrl = "/Batches/ListTrainee";
+                var AddTraineeUrl = "/Batches/EnrollTraineeAsync";//EnrollTrainee(int BatchId, int TraineeId)
+                $.ajax({
+                    url: ListTraineeUrl,
+                    type: 'GET',
+                    success: function (result) {
+
+                        var selectOption = "";
+                        var option = '<option value="">--Please Select--</option>';;
+                        jQuery.each(result.resultData, function (index, item) {
+                            option = option + '<option value="' + item.Name + '">' + item.Name + '</option>';
+                        });
+
+                        selectOption =
+                            '<select id="TraineeId" name="TraineeId" class="form-control select2" multiple="multiple" data-placeholder="Select trainee" data-val="true" data-val-required="Phase is required." data-placeholder="Select trainee" style="width: 100%;">'
+                            + option + '</select>';
+                        //Construct UI Element
+                        GUI = '<div class="form-horizontal">' + '  <br />' + ' <div class="form-group">' + '    <label class="control-label col-md-4">Batch</label>' +
+                            '   <div class="col-md-4">' + ' <input class="form-control" id="BatchId" name="BatchName" value="' + BatchName + '" readonly/>' + '   </div>' + ' </div>' + ' <div class="form-group">' +
+                            '    <label class="control-label col-md-4">Trainee</label>' + '    <div class="col-md-4">' + selectOption +
+                            '    </div>' + '</div>' + '</div>';
+                        $(".select2").select2();
+                        bootbox.dialog({
+                            title: "Add Trainee for specific Batch.",
+                            message: GUI,
+                            buttons: {
+                                success: {
+                                    label: "Save",
+                                    className: "btn-success",
+                                    callback: function () {
+                                        var traineeId = $('#TraineeId').val();
+                                        /////////////
+                                        $.ajax({
+                                            url: AddTraineeUrl,
+                                            type: 'GET',//int BatchId, string BatchClassName
+                                            data: { 'BatchId': parseInt(BatchId), 'TraineeId': traineeId.toString() },
+                                            success: function (result) {
+
+                                                var messageList = "";
+                                                var message = "";
+                                                var ResultList = result.ResultSet;
+                                                jQuery.each(ResultList, function (index, res) {
+                                                    debugger;
+                                                    if (res) {
+                                                        debugger;
+                                                        if (res.resultType == "BatchClassSuccess")
+                                                            messageList = messageList + "<br> Batch class created successfully for : " + res.resultValue;
+                                                        else if (res.resultType == "BatchClassFailed")
+                                                            messageList = messageList + "<br> Faild to create Batch class  for : " + res.resultValue;
+                                                        else if (res.resultType == "AccountSuccess")
+                                                            messageList = messageList + "<br> Account created successfully for : " + res.resultValue;
+                                                        else if (res.resultType == "AccountFailed")
+                                                            messageList = messageList + "<br> Faild to create account for : " + res.resultValue;
+                                                        else
+                                                            messageList = res.resultType;
+                                                    }
+                                                });
+                                                debugger;
+                                                if (messageList != "") {
+                                                    bootbox.alert(messageList);
+                                                }
+                                                else {
+                                                    bootbox.alert("Error has occured!!!.");
+                                                }
+                                            },
+                                            error: function () {
+                                                bootbox.alert("Error has occured!!!.");
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        });
+
+                        $(".select2").select2();
+
+                        //here
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+            });
+
+            //Generate-Syllabus
+
+            $('#tblBatch').on('click', '.Generate-Syllabus', function () {
+                debugger;
+                $('#EnrollmentEventModel').modal('show');
+                var batchId = $(this).attr('data-id');
+
+                var createSyllabusUrl = "/Batches/GenerateSyllabus";
+
+
+                $.ajax({
+                    url: createSyllabusUrl,
+                    type: 'POST',//int BatchId, string BatchClassName
+                    data: { 'BatchId': batchId },
+                    success: function (result) {
+                        $('#EnrollmentEventModel').modal('hide');
+                        if (result.ResultOne.status) {
+                            bootbox.alert("Generate Syllabus Successfully!");
+                            //location.reload();
+                        }
+                        else {
+                            bootbox.alert("Failed to Generate Syllabus due to " + result.ResultOne.message);
+                        }
+                    },
+                    error: function () {
+                        $('#EnrollmentEventModel').modal('hide');
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+
+            });
+
+
+            $('#tblBatch').on('click', '.Batch-Class', function () {
+
+                var dataIds = $(this).attr('data-id');
+                var dataArray = dataIds.split('~');
+                var BatchId = dataArray[0];
+                var BatchName = dataArray[1];
+
+                var createUrl = "/BatchClasses/CreateBatchClass";
+
+                //Construct UI Element
+                GUI = '<div class="form-horizontal">' + '  <br />' + ' <div class="form-group">' + '    <label class="control-label col-md-4">Batch</label>' +
+                    '   <div class="col-md-4">' + '       <input class="form-control" id="BatchId" name="BatchId" value="' + BatchName + '" readonly/>' + '   </div>' + ' </div>' + ' <div class="form-group">' +
+                    '    <label class="control-label col-md-4">Batch Class Name</label>' + '    <div class="col-md-4">' + '        <input class="form-control" id="BatchClassName" name="BatchClassName" />' +
+                    '    </div>' + '</div>' + '</div>';
+
+                bootbox.dialog({
+                    title: "Add Batch Class.",
+                    message: GUI,
+                    buttons: {
+                        success: {
+                            label: "Save",
+                            className: "btn-success",
+                            callback: function () {
+
+                                var batchClassName = $('#BatchClassName').val();
+                                /////////////
+                                $.ajax({
+                                    url: createUrl,
+                                    type: 'GET',//int BatchId, string BatchClassName
+                                    data: { 'BatchId': parseInt(BatchId), 'BatchClassName': batchClassName },
+                                    success: function (result) {
+                                        if (result.Result.status) {
+                                            bootbox.alert("Batch Class Successfully added to " + BatchName + "!");
+                                            //location.reload();
+                                        }
+                                        else {
+                                            bootbox.alert("Failed to create Batch Class due to " + result.Result.message);
+                                        }
+                                    },
+                                    error: function () {
+                                        bootbox.alert("Error has occured!!!.");
+                                    }
+                                });
+                                //////////
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblBatch">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Program.ProgramName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DayTemplateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PeriodTemplateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimatedEndDate)
+            </th>
+
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++) </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Program.ProgramName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BatchName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DayTemplate.DayTemplateName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PeriodTemplate.PeriodTemplateName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BatchStartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstimatedEndDate)
+                    </td>
+
+                    <td>
+                        <button class="btn btn-sm btn-success Batch-Class" data-id="@item.BatchId~@item.BatchName">Create Batch Class </button> |
+                        <button class="btn btn-sm btn-success Batch-Trainee" data-id="@item.BatchId~@item.BatchName">Create Trainee <i class="fa fa-users"></i> </button>
+                        @if (item.isGenerated == false)
+                        {
+                            <text>|
+                                <button class='btn btn-sm btn-success Generate-Syllabus' data-id='@item.BatchId'>Generate Syllabus<i class='fa fa-apple'></i> </button>|
+                            </text>
+                        }
+                        @*@Html.ActionLink("Create Batch Class", "Create", "BatchClasses", new { batchId = item.BatchId }, new { }) |*@
+                        @Html.ActionLink("Edit", "Edit", new { id = item.BatchId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.BatchId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.BatchId })
+                    </td>
+                </tr>
+
+            }
+        }
+    </tbody>
+</table>
+<div class="modal modal-fade" id="EnrollmentEventModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel"></h4>
+             </div>
+            <div class="modal-body">
+                <img src="~/Content/Images/giphy.gif" style="width:100%"/>
+                </div>
+</div>
+</div>
+</div>
+
+
+
+

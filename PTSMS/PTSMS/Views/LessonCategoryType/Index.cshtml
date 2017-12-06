@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.References.LessonCategoryType>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ <p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table id="tblClassRoom" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <tr>
+        <th>
+            No.
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LessonCategoryTypeId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LessonCategoryTypName)
+        </th>         
+        <th></th>
+    </tr>
+
+    @{
+        int i = 1;
+        foreach (var item in Model)
+        {
+            <tr class="odd" role="row">
+                <td>@(i++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LessonCategoryTypeId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LessonCategoryTypName)
+                </td>
+                 
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.LessonCategoryTypeId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.LessonCategoryTypeId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.LessonCategoryTypeId })
+                </td>
+            </tr>
+        }
+    }
+
+</table>

@@ -1,0 +1,81 @@
+﻿@model PTSMS.Models.RoleViewModel
+
+@{
+    ViewBag.Title = "Edit Role";
+}
+<section class="content-header">
+    <h1>
+        Edit Role
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Home/Welcome"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="/Roles/Index"><i class="fa fa-unlock"></i> Roles</a></li>
+        <li class="active">Edit Role</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            @Html.ActionLink("Back to List", "Index")
+            @*<div class="box-tools pull-right">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="input-group" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    }
+                </div>*@
+        </div>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="box-body form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RoleName, new { @class = "control-label col-md-2" })
+                    @Html.DisplayFor(model => model.RoleName, new { @class = "control-label col-md-10" })
+                    @Html.HiddenFor(model => model.RoleName, null)
+                </div>
+                @Html.Label("Privileges", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @foreach (var p in ViewBag.Privileges)
+                    {
+                        <div class="checkbox col-md-3">
+                            @if (ViewBag.Selected.ToString().Contains(p.Id))
+                            {
+                                <input type="checkbox" name="privilege" value="@p.Id" checked />
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="privilege" value="@p.Id" />
+                            }
+                            @Html.Label((string)p.Action, new { @for = (string)p.Id })
+                        </div>
+                    }
+                </div>
+
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div><!-- /.box-footer -->
+        }
+
+    </div><!-- /.box -->
+</section><!-- /.content -->
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

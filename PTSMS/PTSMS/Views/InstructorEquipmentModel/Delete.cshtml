@@ -1,0 +1,43 @@
+﻿@model PTSMSDAL.Models.Scheduling.Relations.InstructorEquipmentModel
+
+@{
+    ViewBag.Title = "Delete";
+ ViewBag.Name = "Delete";
+ Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="alert alert-warning alert-dismissible">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+    <h5>Are you sure you want to delete this?</h5>
+</div>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EquipmentModel.EquipmentModelName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EquipmentModel.EquipmentModelName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Instructor.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Instructor.CreatedBy)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Delete" class="btn btn-warning" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+    }
+</div>

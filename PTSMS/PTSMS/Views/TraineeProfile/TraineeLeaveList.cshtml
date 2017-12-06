@@ -1,0 +1,83 @@
+﻿
+@model IEnumerable<PTSMSDAL.Models.Enrollment.Operations.PersonLeave>
+
+@{
+    ViewBag.Title = "Trainee Leave List";
+    ViewBag.Name = "Trainee Leave List";
+    ViewBag.TableId = "tblPersonLeave";
+    ViewBag.DefualtSortingColumnIndex = 1;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #TraineeLicenseDetailModalPopup .modal-dialog {
+        width: 75%;
+    }
+</style>
+
+@if (Model.Count() == 0)
+{
+    <div class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+        <h5>You have no registered leave.</h5>
+    </div>
+ }
+
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblPersonLeave">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveType.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Person.CompanyId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FromDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>           
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                string fromDate = item.FromDate.ToString("MM/dd/yyyy");
+                string toDate = item.FromDate.ToString("MM/dd/yyyy");
+
+                <tr role="row" class="odd">
+                    <td>@(i++) </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LeaveType.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.CompanyId)
+                    </td>
+                    <td>
+                        @fromDate
+                    </td>
+                    <td>
+                       @toDate
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    @*<td>
+                        <a href="#" title="DETAIL"><i class="fa fa-list-ul text-green leaveDetail" data-id="@item.PersonLeaveId"></i></a>                       
+                    </td>*@
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+ 

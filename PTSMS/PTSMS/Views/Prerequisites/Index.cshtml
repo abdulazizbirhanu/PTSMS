@@ -1,0 +1,56 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.Prerequisite>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Title = "Prerequisite List.";
+    ViewBag.TableId = "tblPrerequisite";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblPrerequisite" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseCategory.Course.CourseCode)
+            </th>
+            <th>
+                Prerequisite @Html.DisplayNameFor(model => model.PrerequisiteCourse.CourseCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remark)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseCategory.Course.CourseCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrerequisiteCourse.CourseCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PrerequisiteId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.PrerequisiteId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.PrerequisiteId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

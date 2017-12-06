@@ -1,0 +1,57 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Enrollment.Relations.BatchClass>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Batch Class List.";
+    ViewBag.TableId = "tblBatchClass";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { batchId = 0 })
+</p>
+<table id="tblBatchClass" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Batch.BatchName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchClassName)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@i</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Batch.BatchName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BatchClassName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.BatchClassId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.BatchClassId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.BatchClassId })
+
+                        @*<span style="white-space : nowrap">
+                                <a href="@Html.ActionLink("Edit", "Edit", new { id = item.BatchClassId })" title="EDIT"><i class="fa fa-edit text-primary"></i></a> |
+                                <a href="@Html.ActionLink("Details", "Details", new { id = item.BatchClassId })" title="DETAIL"><i class="fa fa-info text-primary"></i></a> |
+                                <a href="@Html.ActionLink("Delete", "Delete", new { id = item.BatchClassId })" title="DELETE"><i class="fa fa-remove text-red"></i></a>
+                            </span>*@
+                    </td>
+                </tr>
+                i = i + 1;
+            }
+        }
+    </tbody>
+</table>

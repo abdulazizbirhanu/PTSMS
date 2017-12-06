@@ -1,0 +1,94 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Enrollment.Operations.Person>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Person List.";
+    ViewBag.TableId = "tblPerson";
+    ViewBag.DefualtSortingColumnIndex = 1;
+
+
+    
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+
+<table id="tblPerson" class="table table-responsive display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MiddleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sex)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Position)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegistrationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CompanyId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MiddleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sex)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Position)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegistrationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Edit", "Edit", new { id=item.PersonId }) |*@
+                        @Html.ActionLink("Details", "Details", new { id = item.PersonId })
+                        @*@Html.ActionLink("Delete", "Delete", new { id=item.PersonId })*@
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

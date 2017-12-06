@@ -1,0 +1,241 @@
+﻿
+
+@model PTSMSDAL.Models.Dispatch.ActivityRampIn
+
+<link href="~/Content/AdminLTE/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.timeentry.package-2.0.1/jquery.plugin.js"></script>
+<script src="~/Scripts/jquery.timeentry.package-2.0.1/jquery.timeentry.js"></script>
+@*@using (Html.BeginForm("Create", "ActivityRampIn", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnActivityRampIn" }))
+{
+    @Html.AntiForgeryToken()*@
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <h3 class="box-title">Activity Ramp-In </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+
+            @if (Model.ActivityRampOutId == 0)
+            {
+                <div class="alert alert-warning alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                    Sorry, Ramp out didn't made so far.
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12 hide" id="RampInMessage">
+                    <div class="row hide" id="RampInMessageSuccess">
+                        <div class="col-md-12">
+                            <div class="alert alert-success alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-hand-o-right"></i> Success!</h4>
+                                <ul>
+                                    <li><lable id="RampInMessageSuccessLabel"> </lable></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row hide" id="RampInMessageFail">
+                        <div class="col-md-12">
+                            <div class="alert alert-danger alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-hand-o-right"></i> Failed!</h4>
+                                <ul>
+                                    <li><lable id="RampInMessageFailLabel"> </lable></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-horizontal">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group hide">
+                        @Html.LabelFor(model => model.ActivityRampOutId, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.ActivityRampOutId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ActivityRampOutId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group hide">
+                        @Html.LabelFor(model => model.ActivityRampInId, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.ActivityRampInId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ActivityRampInId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="HobbsDiv">
+                        @Html.LabelFor(model => model.Hobbs, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.Hobbs, new { htmlAttributes = new { @class = "form-control", min = "" + Model.Hobbs } })
+                            @Html.ValidationMessageFor(model => model.Hobbs, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AdjustedArrivalTime, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-3">
+                            <div class="input-group date customDateTimePicker">
+                                @Html.EditorFor(model => model.AdjustedArrivalTime, new { htmlAttributes = new { @class = "form-control", id = "AdjustedArrivalTime", name = "AdjustedArrivalTime" } })
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.AdjustedArrivalTime, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-1">
+                            <input type="text" id="ArrivalTimetime" autocomplete="off" class="form-control" size="10">
+                        </div>
+                    </div>
+
+                    <div class="form-group hide" id="ArrivalTimeReasonIdDiv">
+                        @Html.LabelFor(model => model.ArrivalTimeReasonId, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-4">
+                            @Html.DropDownList("ArrivalTimeReasonId", null, htmlAttributes: new { @class = "form-control", id = "ArrivalTimeReasonId", name = "ArrivalTimeReasonId" })
+                            @Html.ValidationMessageFor(model => model.ArrivalTimeReasonId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group hide" id="RemarkDiv">
+                        @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control", id = "Remark", name = "Remark" } })
+                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-4">
+                            <input type="submit" value="Create" id="btnActivityRampIn" class="btn btn-info" />
+                        </div>
+                    </div>
+
+                    <div class="form-group hide">
+                        <input type="password" name="txtActivityRampInPassword" id="txtActivityRampInPassword" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+@*}*@
+
+
+<script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="~/Content/AdminLTE/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#timepicker').timepicker();
+        @{
+
+         if(ViewBag.ArrivalTimeReason != null)
+         {
+             <text>
+        $('#RemarkDiv').removeClass('hide');
+        $('#ArrivalTimeReasonIdDiv').removeClass('hide');
+        </text>
+                ViewBag.ArrivalTimeReason = null;
+            }
+            if (ViewBag.IsFlyingLesson != null)
+            {
+                bool IsFlyingLesson = (bool)ViewBag.IsFlyingLesson;
+                if (!IsFlyingLesson)
+                {
+                <text>
+        $('#HobbsDiv').addClass('hide');
+        </text>
+                    }
+                }
+            }
+        var Arrivalday = new Date('@ViewBag.AdjustedArrivalTime');
+        var minute = Arrivalday.getMinutes();
+        var hour = Arrivalday.getHours();
+        var dd = Arrivalday.getDate();
+        var mm = Arrivalday.getMonth() + 1; //January is 0!
+        var yyyy = Arrivalday.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        var time = hour + ':' + minute;
+        var ArrivalDate = mm + '/' + dd + '/' + yyyy;
+
+        $('#AdjustedArrivalTime').val(ArrivalDate);
+        $('#ArrivalTimetime').val(time);
+
+        $(".customDateTimePicker").datepicker({
+            format: "mm/dd/yyyy",
+            autoclose: true,
+            todayBtn: true,
+            //startDate: new Date(),
+            showMeridian: true
+        }).on('changeDate', function (ev) {
+
+            var ArrivalTimeReasonId = $('#ArrivalTimeReasonId').val();
+            var clickedDateTime = new Date(ArrivalTimeReasonId.toString());
+            var scheduledDateTime = new Date('@ViewBag.ArrivalTimeReasonId');
+
+            //alert('clickedDateTime=' + clickedDateTime + ' scheduledDateTime=' + scheduledDateTime);
+
+            if (clickedDateTime.valueOf() != scheduledDateTime.valueOf()) {
+                $('#RemarkDiv').removeClass('hide');
+                $('#ArrivalTimeReasonIdDiv').removeClass('hide');
+            }
+            else {
+                $('#Remark').val('');
+                $('#ArrivalTimeReasonId').val('');
+                $('#RemarkDiv').addClass('hide');
+                $('#ArrivalTimeReasonIdDiv').addClass('hide');
+            }
+            });
+
+        $("#ArrivalTimetime").timeEntry({ show24Hours: true });
+        $('#btnActivityRampIn').on('click', function (e) {
+            debugger;
+            var data = {
+                "ActivityRampOutId": $('#ActivityRampOutId').val(),
+                "ActivityRampInId": $('#ActivityRampInId').val(),
+                "Hobbs": $('#Hobbs').val(),
+                "AdjustedArrivalTime": $('#AdjustedArrivalTime').val() + ' ' + $('#ArrivalTimetime').val()
+            }
+
+            $.ajax({
+                url: "/ActivityRampIn/CreateJson",
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    $('#RampInMessage').removeClass("hide");
+                    if (result.isSuccess) {
+                        $('#RampInMessageSuccess').removeClass("hide");
+                        $('#RampInMessageFail').addClass("hide");
+                        $('#RampInMessageSuccessLabel').html(result.Message);
+                    }
+                    else {
+                        $('#RampInMessageFail').removeClass("hide");
+                        $('#RampInMessageSuccess').addClass("hide");
+                        $('#RampInMessageFailLabel').html(result.Message);
+                    }
+
+                },
+                error: function () {
+                    $('#RampInMessageFail').removeClass("hide");
+                    $('#RampInMessageSuccess').addClass("hide");
+                    $('#RampInMessageFailLabel').html("Error has occured while coloring the event.");
+                }
+            });
+        });
+    });
+</script>

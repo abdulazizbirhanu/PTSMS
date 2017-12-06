@@ -1,0 +1,49 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.Relations.InstructorEquipmentModel>
+
+    @{
+            ViewBag.Title = "Index";
+            ViewBag.Name = "Instructor Equipment Model List";
+            ViewBag.TableId = "tblInstructorEquipmentModel";
+            ViewBag.DefualtSortingColumnIndex = 1;
+            Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    <br />
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblInstructorEquipmentModel">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Instructor.Person.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EquipmentModel.EquipmentModelName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+            int i=1;
+            foreach (var item in Model) {
+            <tr role="row" class="odd">
+                <td>@(i++) </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Instructor.Person.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquipmentModel.EquipmentModelName)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.InstructorEquipmentModelId }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.InstructorEquipmentModelId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.InstructorEquipmentModelId })
+                </td>
+            </tr>
+            }
+            }
+        </tbody>
+    </table>

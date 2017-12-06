@@ -1,0 +1,115 @@
+﻿@model PTSMSDAL.Models.Others.Messaging.Message
+
+@{
+    ViewBag.Title = "Create";
+    ViewBag.Name = "Compose Mail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+
+@section scripts
+    {
+
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var $AddDropDownRole = $("#RecipientName").select2({
+                maximumSelectionSize: 6
+            });
+
+        });
+    </script>
+
+    <script src="~/Content/AdminLTE/plugins/ckeditor/ckeditor.js"></script>
+    <script src="~/Content/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+
+
+    @*<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/bootstrap-multiselect.js"></script>
+    <link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(function () {
+            $("#RecipientName").multiselect({
+                includeSelectAllOption: true,
+                columns: 1,
+                placeholder: 'Select Recipient Name/s',
+                search: true,
+                selectAll: true
+            });
+        });
+    </script>*@
+
+
+    <script>
+
+        $(window).on('load', function () {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            var editor = CKEDITOR.replace('Body', {
+                toolbar: '1',
+                htmlEncodeOutput: true
+            });
+            CKEDITOR.editorConfig = function (config) {
+                config.language = 'en',
+                ignoreEmptyParagraph = true,
+                config.autoParagraph = false,
+                config.allowedContent = true
+            };
+            $(".textarea").wysihtml5();
+        });
+    </script>
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.RecipientName, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(m => m.RecipientName, (SelectList)ViewBag.SelectRecipients, new { @class = "form-control", @multiple = "multiple" })
+                @*@Html.DropDownList("Role", (SelectList)ViewBag.Roles, new { @id = "Role", @name = "Role", @class = "form-control select2", multiple = "multiple", style = "width: 100%;" })*@
+                @Html.ValidationMessageFor(model => model.RecipientName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-8">
+                @Html.TextAreaFor(model => model.Body, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <input type="submit" value="Send" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

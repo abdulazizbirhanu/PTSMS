@@ -1,0 +1,166 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.Relations.FlightLog>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ArrivalAirports.AirportName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartureAirports.AirportName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Equipment.NameOrSerialNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EquipmentModel.EquipmentModelName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FlyingFTDSchedule.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartureTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ArrivalTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PilotInCommand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CoPilot)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Dual)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FlightEngineerFlightTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FlightTimeDay)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FlightTimeNight)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InstrumentFlightTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SyntheticTrainerTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DayTakeOff)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NightTakeOff)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DayLanding)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NightLanding)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InstrumentApproach)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PilotFunctionOnBoard)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remark)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ArrivalAirports.AirportName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DepartureAirports.AirportName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Equipment.NameOrSerialNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EquipmentModel.EquipmentModelName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlyingFTDSchedule.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DepartureTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ArrivalTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PilotInCommand)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CoPilot)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Dual)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlightEngineerFlightTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlightTimeDay)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlightTimeNight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InstrumentFlightTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SyntheticTrainerTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DayTakeOff)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NightTakeOff)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DayLanding)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NightLanding)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InstrumentApproach)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PilotFunctionOnBoard)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remark)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.FlightLogId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.FlightLogId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.FlightLogId })
+        </td>
+    </tr>
+}
+
+</table>

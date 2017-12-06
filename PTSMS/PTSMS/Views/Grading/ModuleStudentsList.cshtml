@@ -1,0 +1,66 @@
+﻿<div id="partialView">
+    <table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="StudentResult">
+        @Html.AntiForgeryToken()
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>
+                    Student ID
+                    @*@Html.DisplayNameFor(model => model.NameOrSerialNo)*@
+                </th>
+                <th>
+                    Full Name
+                    @*@Html.DisplayNameFor(model => model.EquipmentModel.EquipmentModelName)*@
+                </th>
+                <th>
+                    Grade
+                    @*@Html.DisplayNameFor(model => model.EquipmentStatus.EquipmentStatusName)*@
+                </th>
+                <th>
+                    Re-Grade
+                    @*@Html.DisplayNameFor(model => model.WorkingHours)*@
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr role="row" class="odd">
+                            <td>@(i++) </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NameOrSerialNo)*@
+                                ID
+                            </td>
+                            <td>
+                                FullName
+                                @*@Html.DisplayFor(modelItem => item.EquipmentModel.EquipmentModelName)*@
+                            </td>
+                            <td>
+                                Grade
+                                @*@Html.DisplayFor(modelItem => item.EquipmentStatus.EquipmentStatusName)*@
+                            </td>
+                            <td>
+                                RE-exam
+                                @*@Html.DisplayFor(modelItem => item.WorkingHours)*@
+                            </td>
+                            <td>
+                                @*@Html.ActionLink("Edit", "Edit", new { id = item.EquipmentId }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.EquipmentId }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.EquipmentId })*@
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+
+
+
+</div>

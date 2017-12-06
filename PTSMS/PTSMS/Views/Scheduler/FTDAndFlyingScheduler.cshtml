@@ -1,0 +1,1147 @@
+﻿@{
+    ViewBag.Title = "FTD And Flying Scheduler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    ViewBag.Name = "FTD and GF Scheduler";
+}
+<style>
+    .headerBlock {
+        background: #517842;
+        border-radius: 10px;
+        width: auto;
+        height: auto;
+        display: block;
+        margin: 10px;
+        color: #ffffff;
+        padding: 10px;
+    }
+
+    .add-event {
+        border-radius: 10px;
+        display: block;
+        border: solid;
+        border-color: #517842;
+    }
+</style>
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+<link href="~/Content/FullCalendar/jquery-ui.min.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/fullcalendar/fullcalendar.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/qtip/jquery.qtip.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/ajax-progress-bar/css/jquery.progressTimer.css" rel="stylesheet" />
+
+<link href="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+<!---->
+
+<style>
+    #addScheduledEventModel .modal-dialog {
+        width: 60%;
+    }
+</style>
+
+
+
+@section scripts
+    {
+    <script src="~/Scripts/validator.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+    <script src="~/Scripts/FullCalendar/moment.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/qtip/jquery.qtip.js"></script>
+    <script src="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/ajax-progress-bar/js/jquery.progressTimer.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+    <script type="text/javascript">
+        //$(document).on('ready page:load', function(){
+
+        $(document).ready(function () {
+
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+            var isSubmit = false;
+            //disable Batch Class dropdown list as long as Equipment type is unselected.
+            $("#dpdAddBatchClass").attr("disabled", "disabled");
+            $("#dpdAddTrainee").select2();
+            $("#dpdAddLesson").select2();
+            //Timepicker
+            $("#txtAddStartingTime").timepicker({
+                showInputs: false,
+                showMeridian: false,
+                minuteStep: 5
+            });
+
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            today = mm + '/' + dd + '/' + yyyy;
+
+            //Get List of event to be diplayed in the Calendar
+            var sources = {
+                sourceone: {
+                    url: "/Scheduler/GetFTDandFlyingScheduledEvent",
+                    type: 'POST',
+                    cache: false,       //this is optional
+                    color: '#6C92A8',   //this is optional
+                    textColor: 'white'  //this is optional
+                }
+            }
+
+            $('#calendar').fullCalendar({
+                theme: true,
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultDate: today,
+                editable: true,
+                //eventColor: ' #ff0000',
+                selectable: true,
+                //eventLimit: true,
+                eventSources: [sources.sourceone],
+                //axisFormat: 'HH:mm',
+                //timeFormat: {
+                //    agenda: 'H(:mm)'
+                //},
+                //minTime: 0,
+                //maxTime: 24,
+                dayClick: function (date, jsEvent, view) {
+                    //alert('Clicked on: ' + date.format());
+                    $("#btnAddEvent").removeAttr('disabled');
+                    var clickedDate = new Date(date);
+                    var dd1 = clickedDate.getDate();
+                    var mm1 = clickedDate.getMonth() + 1;
+                    var yyyy1 = clickedDate.getFullYear();
+
+                    if (dd1 < 10) {
+                        dd1 = '0' + dd1
+                    }
+                    if (mm1 < 10) {
+                        mm1 = '0' + mm1
+                    }
+                    var ActualclickedDate = new Date(mm1 + '/' + dd1 + '/' + yyyy1 + ' 12:00' + ' AM');
+
+                    //Do not add event to the already passed date.
+                    if (!(ActualclickedDate < new Date((mm + '/' + dd + '/' + yyyy)))) {
+
+                        $('#txtAddDate').val(mm1 + '/' + dd1 + '/' + yyyy1);
+
+                        //1. Fetch Batch Class
+                        //2. When batch Selected, select time
+                        //3. When Time Selected, populate equipment available that time
+                        //4. When Equipment Selected, populate Instructor
+                        //5. When Instructor Selected, populate trainee Based on the selected Batch Class
+                        //6. When trainee selected, populate all Lesson Based on Category and Trainee
+
+                        $(this).css('background-color', 'red');
+
+                        var AddBatchClassDropDown = $('#dpdAddBatchClass');
+                        AddBatchClassDropDown.empty();
+
+                        var AddEquipmentTypeIdDropDown = $('#dpdAddEquipmentType');
+                        AddEquipmentTypeIdDropDown.empty();
+
+                        //And Initialize the first/defualt option for all of those elements
+                        $('#dpdAddBatchClass').append($('<option>', {
+                            value: '',
+                            text: '--Select Batch Class--'
+                        }));
+
+                        $('#dpdAddEquipmentType').append($('<option>', {
+                            value: '',
+                            text: '--Select Equipment Type--'
+                        }));
+                        //Get Equipment Type
+                        var UrlEquipmentType = "/Scheduler/get_EquipmentType";
+                        $.ajax({
+                            url: UrlEquipmentType,
+                            type: 'POST',
+                            success: function (result) {
+                                if (result.hasList) {
+                                    ///////
+                                    jQuery.each(result.resultData, function (index, EquipmentTypeItem) {
+                                        $('#dpdAddEquipmentType').append($('<option>', {
+                                            value: EquipmentTypeItem.Id + '',
+                                            text: EquipmentTypeItem.Name + ''
+                                        }));
+                                    });
+                                }
+                                else {
+                                    $("#lblAddAvailabilityMessage").html("There is no available equipment type.");
+                                    $("#btnAddEvent").attr("disabled", "disabled");
+                                }
+                            },
+                            error: function () {
+                                bootbox.alert("Error has occured!!!.");
+                            }
+                        });
+
+
+                        //Populate Free Instructors of this specific date from the server
+                        var Url = "/Scheduler/get_BatchClass";
+                        $.ajax({
+                            url: Url,
+                            type: 'POST',
+                            success: function (result) {
+                                if (result.hasList) {
+                                    ///////
+                                    jQuery.each(result.resultData, function (index, BatchClassItem) {
+                                        $('#dpdAddBatchClass').append($('<option>', {
+                                            value: BatchClassItem.Id + '',
+                                            text: BatchClassItem.Name + ''
+                                        }));
+                                    });
+                                }
+                                else {
+                                    $("#lblAddAvailabilityMessage").html("There is no available batch class.");
+                                    $("#btnAddEvent").attr("disabled", "disabled");
+                                }
+                            },
+                            error: function () {
+                                bootbox.alert("Error has occured!!!.");
+                            }
+                        });
+                        jQuery.noConflict();
+                        $('#addScheduledEventModel').modal('show');
+                        return false;
+                    }
+                    else {
+                        bootbox.alert("It is impossible to add event for the already passed date.");
+                        return false;
+                    }
+                },
+                eventRender: function (event, element, view) {
+
+                    var date = new Date(); //this is todays date
+                    if (event.start >= date)
+                        $(element).css("backgroundColor", "#6B8E23");
+                    if (event.start == date)
+                        $(element).css("backgroundColor", "yellow");
+                    if (event.start < date)
+                        $(element).css("backgroundColor", "#FF4500");
+                    ////var val = $("input").val();
+                    ////var myString = val.substr(val.indexOf("?") + 1)
+
+                    //jQuery.each(InstructorList, function (index, item) {
+
+                    //    if (event.title.substr(event.title.indexOf("~") + 1) == item.InstructorId) {
+                    //        //if (event.title.indexOf(item.InstructorId) >= 0) {
+                    //        $(element).css("backgroundColor", item.Color);
+                    //    }
+                    //});
+
+                    element.qtip({
+                        content: {
+                            text: event.description
+                        },
+                        style: {
+                            classes: 'qtip-green qtip-shadow qtip-youtube'
+                        },
+                        position: {
+                            my: 'top left',  // Position my top left...
+                            at: 'bottom right', // at the bottom right of...
+                            //target: $('.selector') // my target
+                        }
+                        //content: event.description,
+                        //style: {
+                        //        width: 250,
+                        //        tip: 'leftMiddle',
+                        //        color: 'white',
+                        //        background:'#66CC33',
+                        //        name: 'green'
+                        //    }
+                    });
+                },
+
+                eventClick: function (event, jsEvent, view) {
+
+                    unAssigned = null;
+                    //Assign the detail to view
+                    $("#lblAvailabilityMessage").html("");
+                    $("#btnEdit").removeAttr("disabled");
+                    //$("#lblAttendAvailabilityMessage").html("");
+                    //$("#btnAttenSave").removeAttr("disabled");
+
+                    $('#txtAttenModuleScheduleId').val(event.id);
+
+                    $('#txtEventID').html(event.id);
+                    $('#txtTitle').html(event.title);
+                    $('#txtDescription').html(event.description);
+                    $('#txtEventStart').html(event.start.format("DD/MM/YYYY hh:mm"));
+                    $('#txtEventEnd').html(event.end.format("DD/MM/YYYY hh:mm"));
+
+                    //txtEditDate,dpdEditEquipmentType,dpdEditBatchClass,dpdEditLesson,dpdEditEquipment,txtEditStartingTime,
+                    //dpdEditTrainee,dpdEditInstructor
+
+                    $(this).css('background-color', 'blue'); //To indicate visited/rescheduled events.
+
+                    var getListUrl = "/Scheduler/get_FreeTimeSlotAndRoom";
+
+                    var postData = {
+                        'ModuleScheduleId': event.id
+                    };
+
+                    //Clear the existing dropdown option of Day, Period, Class Room and instructor
+                    var DateDropdown = $('#dpdDate');
+                    DateDropdown.empty();
+                    var ClassRoomDropdown = $('#dpdClassRoom');
+                    ClassRoomDropdown.empty();
+                    var InstructorDropdown = $('#dpdInstructor');
+                    InstructorDropdown.empty();
+                    var PeriodDropdown = $('#dpdPeriod');
+                    PeriodDropdown.empty();
+
+                    //For Attendance
+                    $('#txtAttenTakenDate').val('');
+                    $('#txtAttenNote').val('');
+
+                    var AttendInstructorDropdown = $('#dpdAttenInstructor');
+                    AttendInstructorDropdown.empty();
+                    var AttendClassRoomDropdown = $('#dpdAttenClassRoom');
+                    AttendClassRoomDropdown.empty();
+                    //$("#dpdAttenAbsentTrainee").select2("val", "");
+                    //jQuery.noConflict();
+                    //$('#dpdAttenAbsentTrainee').select2('data', null);
+                    //$remote.select2('dpdAttenAbsentTrainee', { id: null, text: null });
+
+
+                    //And Initialize the first/defualt option for all of those elements
+                    $('#dpdDate').append($('<option>', {
+                        value: '',
+                        text: 'Select Date'
+                    }));
+                    $('#dpdPeriod').append($('<option>', {
+                        value: '',
+                        text: 'Select Period'
+                    }));
+                    $('#dpdClassRoom').append($('<option>', {
+                        value: '',
+                        text: 'Select Class Room'
+                    }));
+                    $('#dpdInstructor').append($('<option>', {
+                        value: '',
+                        text: 'Select Instructor'
+                    }));
+                    //For Attendance
+                    $('#dpdAttenInstructor').append($('<option>', {
+                        value: '',
+                        text: 'Select Instructor'
+                    }));
+                    $('#dpdAttenClassRoom').append($('<option>', {
+                        value: '',
+                        text: 'Select Class Room'
+                    }));
+                    $('#dpdAttenAbsentTrainee').append($('<option>', {
+                        value: '',
+                        text: 'Select Absent Trainee/s'
+                    }));
+                    //Get data(free timeslot and room) from the server for the module its event triggered
+                    $.ajax({
+                        url: getListUrl,
+                        type: 'POST',
+                        data: postData,
+                        success: function (result) {
+                            if (result.hasList) {//dpdDate,dpdPeriod,dpdClassRoom
+
+                                $("#btnEdit").removeAttr("disabled");
+                                unAssigned = result.resultData;//Golobaly Hold the cascade List for furture utility
+                                jQuery.each(result.resultData, function (index, InstructorItem) {
+                                    $('#dpdInstructor').append($('<option>', {
+                                        value: InstructorItem.FreeInstructor.InstructorId + '',
+                                        text: InstructorItem.FreeInstructor.NameAndCompanyId + ''
+                                    }));
+                                });
+                            }
+                            else {
+                                $("#lblAvailabilityMessage").html("There is no fittest resource to reschedule the selected module.");
+                                $("#btnEdit").attr("disabled", "disabled");
+                            }
+                            progress.progressTimer('complete', {
+                                successText: 'Fetching data is completed, get started!',
+                                onFinish: function () {
+
+                                }
+                            });
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured!!!.");
+
+                            progress.progressTimer('error', {
+                                errorText: 'ERROR!',
+                                onFinish: function () {
+                                }
+                            });
+                        }
+                    });
+                    //Get Attendance data from the server GetAttendaceData(int moduleScheduleId)
+                    var URL = "/Scheduler/GetAttendaceData";
+                    var URLData = {
+                        'moduleScheduleId': event.id
+                    };
+                    ////dpdAttenInstructor,dpdAttenClassRoom,dpdAttenAbsentTrainee
+
+                    $.ajax({
+                        url: URL,
+                        type: 'POST',
+                        data: URLData,
+                        success: function (result) {
+                            if (result.hasList) {
+
+                                $("#btnAttenSave").removeAttr("disabled");
+                                $("#lblAttendAvailabilityMessage").html('');
+                                //Initialize all dropdown lists.
+                                jQuery.each(result.resultData.PotentialInstructors, function (index, instructorItem) {
+                                    $('#dpdAttenInstructor').append($('<option>', {
+                                        value: instructorItem.InstructorId + '',
+                                        text: instructorItem.NameAndCompanyId + ''
+                                    }));
+                                });
+                                jQuery.each(result.resultData.ClassRooms, function (index, classRoomItem) {
+                                    $('#dpdAttenClassRoom').append($('<option>', {
+                                        value: classRoomItem.ClassRoomId + '',
+                                        text: classRoomItem.Building.BuildingName + '-' + classRoomItem.RoomNo + ''
+                                    }));
+                                });
+                                jQuery.each(result.resultData.Trainees, function (index, traineeItem) {
+                                    $('#dpdAttenAbsentTrainee').append($('<option>', {
+                                        value: traineeItem.TraineeId + '',
+                                        text: traineeItem.TraineeNameAndCompanyId + ''
+                                    }));
+                                });
+                            }
+                            else {
+                                $("#lblAttendAvailabilityMessage").html("There is no resource available to to fill the dropdown list.");
+                                $("#btnAttenSave").attr("disabled", "disabled");
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured!!!.");
+                        }
+                    });
+                    jQuery.noConflict();
+                    $('#editScheduledEventModel').modal('show');
+                    return false;
+                }
+            });
+
+
+
+
+            $(document).on('submit', '#btnAddEvent', function () {
+                //Check for validation
+                isSubmit = true;
+                if (isSubmit) {
+                    //use the native submit so we wont trigger this handler again
+                    this.submit();
+                }
+                else {
+                    //prevent form submission
+                    //e.preventDefault();
+                }
+
+            });
+        });
+
+
+        //Begin, Adding new Event Code
+        //In order to DISABLE BATCH CLASS DROPDOWN as long as the Equipment type is unselected
+        $('.FTDAndGFSchedulingContainer').on("change", "#dpdAddEquipmentType", function () {
+            $('#InstructionContainer').addClass('hide');
+            var EquipmentTypeId = $('#dpdAddEquipmentType').val();
+
+            if (EquipmentTypeId != "" && EquipmentTypeId != null) {
+                $("#dpdAddBatchClass").removeAttr("disabled");
+            }
+            else {
+                $("#dpdAddBatchClass").attr("disabled", "disabled");
+            }
+        });
+
+        //Event handler to get LESSON List.
+        $('.FTDAndGFSchedulingContainer').on("change", "#dpdAddBatchClass", function () {
+
+            $('#InstructionContainer').addClass('hide');
+
+            var BatchClassId = $('#dpdAddBatchClass').val();
+            var EquipmentTypeId = $('#dpdAddEquipmentType').val();
+
+            if (BatchClassId != "" && BatchClassId != null) {
+
+                $("#lblAddAvailabilityMessage").html("");
+                //Get data to be posted
+
+                var Url = "/Scheduler/GetTraineeLessons";
+
+                var postData = {
+                    'batchClassId': BatchClassId,
+                    'equipmentTypeId': EquipmentTypeId
+                };
+
+                var AddLessonDropDown = $('#dpdAddLesson');
+                AddLessonDropDown.empty();
+
+                //And Initialize the first/defualt option for all of those elements
+                $('#dpdAddLesson').append($('<option>', {
+                    value: '',
+                    text: '--Select Lesson--'
+                }));
+
+                //Get Equipment of Spefific Batch
+                $.ajax({
+                    url: Url,
+                    type: 'POST',
+                    data: postData,
+                    success: function (result) {
+                        if (result.hasList) {
+
+                            jQuery.each(result.resultData, function (index, lnItem) {
+                                $('#dpdAddLesson').append($('<option>', {
+                                    value: lnItem.Id + '',
+                                    text: lnItem.Name + ''
+                                }));
+                            });
+                        }
+                        else {
+                            $("#lblAddAvailabilityMessage").html("There is no available lesson in the selected trainee.");
+                            $("#btnAddEvent").attr("disabled", "disabled");
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+            }
+            else {
+                var AddLessonDropDown = $('#dpdAddLesson');
+                AddLessonDropDown.empty();
+
+                //Initialize the first/defualt option for all of those elements
+                $('#dpdAddLesson').append($('<option>', {
+                    value: '',
+                    text: '--Select Lesson--'
+                }));
+            }
+        });
+
+        //Event handler to get EQUIPMENT List.
+        $('.FTDAndGFSchedulingContainer').on("change", "#dpdAddLesson", function () {
+            $('#InstructionContainer').addClass('hide');
+            var LessonId = $('#dpdAddLesson').val();
+            if (LessonId != "" && LessonId != null) {
+
+                $("#lblAddAvailabilityMessage").html("");
+
+                //Get data to be posted
+                var EquipmentTypeId = $('#dpdAddEquipmentType').val();
+                var BatchClassId = $('#dpdAddBatchClass').val();
+                var date = $('#txtAddDate').val();
+
+                // alert('time= ' + time + ' BatchClassId=' + BatchClassId + ' EquipmentTypeId=' + EquipmentTypeId);
+                var Url = "/Scheduler/get_Equipment";
+
+                var postData = {
+                    'equipmentTypeId': EquipmentTypeId,
+                    'batchClassId': BatchClassId,
+                    'lessonId': LessonId,
+                    'date': date
+                };
+
+                var AddEquipmentDropDown = $('#dpdAddEquipment');
+                AddEquipmentDropDown.empty();
+
+                //And Initialize the first/defualt option for all of those elements
+                $('#dpdAddEquipment').append($('<option>', {
+                    value: '',
+                    text: '--Select Equipment--'
+                }));
+
+                //Get Equipment of Spefific Batch
+                $.ajax({
+                    url: Url,
+                    type: 'POST',
+                    data: postData,
+                    success: function (result) {
+
+                        if (result.hasList) {
+
+                            jQuery.each(result.resultData, function (index, EquipmentItem) {
+                                $('#dpdAddEquipment').append($('<option>', {
+                                    value: EquipmentItem.Id + '',
+                                    text: EquipmentItem.Name + ''
+                                }));
+                            });
+                        }
+                        else {
+                            $("#lblAddAvailabilityMessage").html("There is no available equipment.");
+                            $("#btnAddEvent").attr("disabled", "disabled");
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+
+
+            }
+            else {
+                var AddInstructorDropDown = $('#dpdAddInstructor');
+                AddInstructorDropDown.empty();
+
+                //And Initialize the first/defualt option for all of those elements
+                $('#dpdAddInstructor').append($('<option>', {
+                    value: '',
+                    text: '--Select Instructor--'
+                }));
+            }
+        });
+
+        //Event Inorder to get EQUIPMENT RESERVATION time.
+        $('.FTDAndGFSchedulingContainer').on("change", "#dpdAddEquipment", function () {
+            var equipmentId = $('#dpdAddEquipment').val();
+
+            if (equipmentId != "") {
+                $("#lblAddAvailabilityMessage").html("");
+
+                //Get data to be posted
+                var EquipmentTypeId = $('#dpdAddEquipmentType').val();
+                var date = $('#txtAddDate').val();
+
+                //alert('equipmentId= ' + equipmentId + ' EquipmentTypeId=' + EquipmentTypeId);
+                var Url = "/Scheduler/GetReservedDateTimes";
+
+                var postData = {
+                    'equipmentId': equipmentId,
+                    'date': date
+                };
+
+                var AddReservedDateTimesDropDown = $('#dpdReservedDateTimes');
+                AddReservedDateTimesDropDown.empty();
+                //And Initialize the first/defualt option for all of those elements
+
+
+                //Get Equipment of Spefific Batch
+                $.ajax({
+                    url: Url,
+                    type: 'POST',
+                    data: postData,
+                    success: function (result) {
+
+                        if (result.hasList) {
+
+                            jQuery.each(result.resultData, function (index, DisplayOptionTimeItem) {
+                                $('#InstructionContainer').removeClass('hide');
+                                $('#dpdReservedDateTimes').append($('<li>', {
+                                    value: DisplayOptionTimeItem.Id,
+                                    text: DisplayOptionTimeItem.Name
+                                }));
+
+                            });
+                        }
+                        else {
+
+                            $("#lblAddAvailabilityMessage").html("Equipment is not scheduled yet.");
+                            $("#btnAddEvent").attr("disabled", "disabled");
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+            }
+            else {
+                var AddReservedDateTimesDropDown = $('#dpdReservedDateTimes');
+                AddReservedDateTimesDropDown.empty();
+            }
+        });
+
+        //Event to get the TRAINEE List
+        $('.FTDAndGFSchedulingContainer').on("click", ".Search-Equipment", function () {
+
+            $("#lblAddAvailabilityMessage").html("");
+            //Get data to be posted
+            var batchClassId = $('#dpdAddBatchClass').val();
+            var date = $('#txtAddDate').val();
+            var time = $('#txtAddStartingTime').val();
+            var lessonId = $('#dpdAddLesson').val();
+            var equipmentId = $('#dpdAddEquipment').val();
+            // CheckConstraints(int equipmentId, int lessonId, string date, string time)
+            //check whether the scheduled time is in beetween the selected equipment working hours.
+            var EquipmentWorkingHourUrl = "/Scheduler/CheckConstraints";
+
+            var EquipmentWorkingHourData = {
+                'equipmentId': equipmentId,
+                'lessonId': lessonId,
+                'date': date,
+                'time': time
+            };
+            $.ajax({
+                url: EquipmentWorkingHourUrl,
+                type: 'POST',
+                data: EquipmentWorkingHourData,
+                success: function (result) {
+
+                    if (result.isInBetweenEquipmentWorkingHour && !result.isInBetweenEquipmentDowntime && !result.isInBetweenRecurringDowntimeSchedule && result.isEquipmentFree) {
+
+                        var Url = "/Scheduler/GetBatchTrainee";
+                        //GetBatchTrainee(int batchClassId, int lessonId, int equipmentId, string date, string time)
+                        //alert(' batchClassId = ' + batchClassId + ' lessonId = ' + lessonId + ' equipmentId = ' + equipmentId + ' date = ' + date + ' time = ' + time);
+                        var postData = {
+                            'batchClassId': batchClassId,
+                            'lessonId': lessonId,
+                            'equipmentId': equipmentId,
+                            'date': date,
+                            'time': time
+                        };
+
+                        var AddTraineeDropDown = $('#dpdAddTrainee');
+                        AddTraineeDropDown.empty();
+
+                        //Get Equipment of Spefific Batch
+                        $.ajax({
+                            url: Url,
+                            type: 'POST',
+                            data: postData,
+                            success: function (result) {
+
+                                if (result.hasList) {
+
+                                    jQuery.each(result.resultData, function (index, traneeItem) {
+                                        $('#dpdAddTrainee').append($('<option>', {
+                                            value: traneeItem.Id + '',
+                                            text: traneeItem.Name + ''
+                                        }));
+                                    });
+                                }
+                                else {
+                                    $("#lblAddAvailabilityMessage").html("There is no available trainee in the selected batch class.");
+                                    $("#btnAddEvent").attr("disabled", "disabled");
+                                }
+                            },
+                            error: function () {
+                                bootbox.alert("Error has occured!!!.");
+                            }
+                        });
+                    }
+                    else {
+
+                        $("#lblAddAvailabilityMessage").html(result.Message);
+                        $("#btnAddEvent").attr("disabled", "disabled");
+                    }
+                },
+                error: function () {
+                    bootbox.alert("Error has occured!!!.");
+                }
+            });
+        });
+
+        //Event In order to get INSTRUCTOR List
+        $('.FTDAndGFSchedulingContainer').on("change", "#dpdAddTrainee", function () {
+
+            var traineeId = $('#dpdAddTrainee').val();
+
+            if (traineeId != "" && traineeId != null) {
+
+                $("#lblAddAvailabilityMessage").html("");
+                //Get data to be posted
+
+                var EquipmentTypeId = $('#dpdAddEquipmentType').val();
+                var EquipmentId = $('#dpdAddEquipment').val();
+                var date = $('#txtAddDate').val();
+                var time = $('#txtAddStartingTime').val();
+                var lessonId = $('#dpdAddLesson').val();
+
+
+                //alert('equipmentId= ' + equipmentId + ' EquipmentTypeId=' + EquipmentTypeId);
+                var Url = "/Scheduler/GetFTDandFlyingInstructors";
+
+                var postData = {
+                    'equipmentId': EquipmentId,
+                    'equipmentTypeId': EquipmentTypeId,
+                    'date': date,
+                    'time': time,
+                    'lessonId': lessonId,
+                    'traineeId': traineeId
+                };
+
+                var AddInstructorDropDown = $('#dpdAddInstructor');
+                AddInstructorDropDown.empty();
+
+                //And Initialize the first/defualt option for all of those elements
+                $('#dpdAddInstructor').append($('<option>', {
+                    value: '',
+                    text: '--Select Instructor--'
+                }));
+
+                //Get Equipment of Spefific Batch
+                $.ajax({
+                    url: Url,
+                    type: 'POST',
+                    data: postData,
+                    success: function (result) {
+
+                        if (result.hasList) {
+
+                            jQuery.each(result.resultData, function (index, InstructorItem) {
+                                $('#dpdAddInstructor').append($('<option>', {
+                                    value: InstructorItem.Id + '',
+                                    text: InstructorItem.Name + ''
+                                }));
+                            });
+                        }
+                        else {
+                            $("#lblAddAvailabilityMessage").html("There is no available instructor.");
+                            $("#btnAddEvent").attr("disabled", "disabled");
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+
+            }
+            else {
+                var AddInstructorDropDown = $('#dpdAddInstructor');
+                AddInstructorDropDown.empty();
+
+                //And Initialize the first/defualt option for all of those elements
+                $('#dpdAddInstructor').append($('<option>', {
+                    value: '',
+                    text: '--Select Instructor--'
+                }));
+            }
+        });
+
+        //End New Code
+    </script>
+
+}
+
+<div class="FTDAndGFSchedulingContainer">
+
+    <div id='calendar'></div>
+
+
+
+
+    <!-- Begin, Add Even modal popup-->
+    <div class="modal modal-fade" id="addScheduledEventModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Schedule/Event.</h4>
+                </div>
+                <div class="modal-body">
+                    Press ESC button to exit.
+                    <div style="color:red"><lable class="control-label" name="lblAddAvailabilityMessage" id="lblAddAvailabilityMessage"></lable></div>
+                    <div class="form-horizontal add-event">
+
+                        @using (Html.BeginForm("AddNewTraineeLessonSchedule", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnAddEvent" }))
+                        {
+                            <div style="color:red">
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary()
+                            </div>
+
+                            <div class="headerBlock">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <div class="input-group date">
+                                            <input type="text" class="form-control input-sm PTSMSDatepicker" name="txtAddDate" id="txtAddDate" readonly />
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar PTSMSDatepicker"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <select class="form-control input-sm" type="text" name="dpdAddEquipmentType" id="dpdAddEquipmentType" width="300">
+                                            <option value="">--Select Equipment Type--</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <select class="form-control input-sm" type="text" name="dpdAddBatchClass" id="dpdAddBatchClass" width="300">
+                                            <option value="">--Select Batch Class--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <lable class="control-label col-md-4">Lesson</lable>
+                                        <div class="col-md-8">
+                                            <select class="form-control input-sm select2" type="text" name="dpdAddLesson" id="dpdAddLesson" width="300" multiple="multiple">
+                                                @*data-val="true" data-val-required="Phase is required."*@
+                                                <option value="">--Select Lesson--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lable class="control-label col-md-4">Equipment</lable>
+                                        <div class="col-md-8">
+                                            <select class="form-control input-sm" type="text" name="dpdAddEquipment" id="dpdAddEquipment" width="300">
+                                                <option value="">--Select Equipment--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lable class="control-label col-md-4">Start Time </lable>
+                                        <div class="col-md-8">
+                                            <div class="input-group  bootstrap-timepicker timepicker">
+                                                <input type="text" class="form-control" id="txtAddStartingTime" name="txtAddStartingTime">
+                                                <div class="input-group-addon Search-Equipment">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lable class="control-label col-md-4">Trainee</lable>
+                                        <div class="col-md-8">
+                                            <select class="form-control input-sm select2" type="text" name="dpdAddTrainee" id="dpdAddTrainee" width="300" multiple="multiple"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lable class="control-label col-md-4">Instructor</lable>
+                                        <div class="col-md-8">
+                                            <select class="form-control input-sm" type="text" name="dpdAddInstructor" id="dpdAddInstructor" width="300">
+                                                <option value="">--Select Instructor--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-6 pull-right">
+                                            <button class="btn btn-success btn-sm" type="submit"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Save</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 hide" id="InstructionContainer">
+                                    <div class="col-md-12">
+                                        <div class="callout callout-info">
+                                            <h4>Instructions!</h4>
+                                            <ul type="text" name="dpdReservedDateTimes" id="dpdReservedDateTimes" width="300"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="form-group hide">
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" id="txtPhaseScheduleId" name="txtPhaseScheduleId" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End, Add Even modal popup-->
+
+
+    <!--Begin, Edit Even modal popup-->
+    <div class="modal modal-fade" id="EditScheduledEventModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Schedule/Event.</h4>
+                </div>
+                <div class="modal-body">
+                    Press ESC button to exit.
+                    <div style="color:red"><lable class="control-label" name="lblEditAvailabilityMessage" id="lblEditAvailabilityMessage"></lable></div>
+
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#detail_tab" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#update_tab" data-toggle="tab" aria-expanded="false">Update</a></li>
+                            <li class=""><a href="#attendance_tab" data-toggle="tab" aria-expanded="false">Attendance</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="detail_tab">
+                                <div class="form-horizontal">
+                                   
+                                    <div class="form-group hide">
+                                        <lable class="control-label   col-md-4"><strong>Event Id</strong> </lable>
+                                        <div class="col-md-6">
+                                            <lable class="control-label" name="txtEventID" id="txtEventID"></lable>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lable class="control-label   col-md-4"><strong>Title</strong> </lable>
+                                        <div class="col-md-6">
+                                            <lable class="control-label" name="txtTitle" id="txtTitle"></lable>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <lable class="control-label col-md-4"><strong>Description</strong> </lable>
+                                        <div class="col-md-6">
+                                            <lable class="control-label" name="txtDescription" id="txtDescription"></lable>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lable class="control-label col-md-4"><strong>Event Start </strong></lable>
+                                        <div class="col-md-6">
+                                            <lable class="control-label" name="txtEventStart" id="txtEventStart"></lable>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <lable class="control-label col-md-4"><strong>Event End</strong></lable>
+                                        <div class="col-md-6">
+                                            <lable class="control-label" name="txtEventEnd" id="txtEventEnd"></lable>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="update_tab">
+                                <div class="form-horizontal Edit-event">
+
+                                    @using (Html.BeginForm("EditNewTraineeLessonSchedule", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnEditEvent" }))
+                                    {
+                                        <div style="color:red">
+                                            @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        </div>
+                                        
+                                        <div class="headerBlock">
+                                            <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <div class="input-group date">
+                                                        <input type="text" class="form-control input-sm PTSMSDatepicker" name="txtEditDate" id="txtEditDate" readonly data-val="true" data-val-required="Date is required" required />
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-calendar PTSMSDatepicker"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <select class="form-control input-sm" type="text" name="dpdEditEquipmentType" id="dpdEditEquipmentType" width="300" data-val="true" data-val-required="Equipment type is required" required>
+                                                        <option value="">--Select Equipment Type--</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <select class="form-control input-sm" type="text" name="dpdEditBatchClass" id="dpdEditBatchClass" width="300" data-val="true" data-val-required="Batch class is required" required>
+                                                        <option value="">--Select Batch Class--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <lable class="control-label col-md-4">Lesson</lable>
+                                                    <div class="col-md-8">
+                                                        <select class="form-control input-sm select2" type="text" name="dpdEditLesson" id="dpdEditLesson" width="300" multiple="multiple" data-val="true" data-val-required="Lesson is required" required>
+                                                            @*data-val="true" data-val-required="Phase is required."*@
+                                                            <option value="">--Select Lesson--</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <lable class="control-label col-md-4">Equipment</lable>
+                                                    <div class="col-md-8">
+                                                        <select class="form-control input-sm" type="text" name="dpdEditEquipment" id="dpdEditEquipment" width="300" data-val="true" data-val-required="Equipment is required" required>
+                                                            <option value="">--Select Equipment--</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <lable class="control-label col-md-4">Start Time </lable>
+                                                    <div class="col-md-8">
+                                                        <div class="input-group  bootstrap-timepicker timepicker">
+                                                            <input type="text" class="form-control" id="txtEditStartingTime" name="txtEditStartingTime" data-val="true" data-val-required="Starting time is required" required>
+                                                            <div class="input-group-addon Search-Equipment">
+                                                                <i class="fa fa-clock-o"></i>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.input group -->
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <lable class="control-label col-md-4">Trainee</lable>
+                                                    <div class="col-md-8">
+                                                        <select class="form-control input-sm select2" type="text" name="dpdEditTrainee" id="dpdEditTrainee" width="300" multiple="multiple" data-val="true" data-val-required="Trainee is required" required></select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <lable class="control-label col-md-4">Instructor</lable>
+                                                    <div class="col-md-8">
+                                                        <select class="form-control input-sm" type="text" name="dpdEditInstructor" id="dpdEditInstructor" width="300" data-val="true" data-val-required="Instructor is required" required>
+                                                            <option value="">--Select Instructor--</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-6 pull-right">
+                                                        <button class="btn btn-success btn-sm" type="submit" id="btnEdit"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Save</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6 hide" id="InstructionContainer">
+                                                <div class="col-md-12">
+                                                    <div class="callout callout-info">
+                                                        <h4>Instructions!</h4>
+                                                        <ul type="text" name="dpdEditReservedDateTimes" id="dpdEditReservedDateTimes" width="300"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="form-group hide">
+                                        <div class="col-md-6">
+                                            <input class="form-control" type="text" id="txtPhaseScheduleId" name="txtPhaseScheduleId" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="attendance_tab">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End, Edit Even modal popup-->
+</div>

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<PTSMS.Models.RegisterViewModel>
+
+@{
+    ViewBag.Title = "Accounts";
+    ViewBag.Name = "Account List.";
+    ViewBag.TableId = "tblAccounts";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+@section scripts{
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        @{
+            if(ViewBag.AccountMessage != null)
+            {
+                <text>bootbox.alert('@ViewBag.AccountMessage');</text>
+                ViewBag.AccountMessage = null;
+            }
+        }
+    });
+</script>
+    }
+
+<section class="content-header">
+    <h1>
+        Account
+        <small>List of PTSMS accounts</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Home/Welcome"><i class="fa fa-home"></i> Home</a></li>
+        <li class="active">Accounts</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <a class="box-title" href="/Account/Register"><i class="fa fa-user text-primary"></i> Create New</a>
+            @*<div class="box-tools pull-right">
+                @using (Html.BeginForm())
+                {
+                    <div class="input-group" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                }
+            </div>*@
+        </div>
+        <div class="box-body table-responsive no-padding">
+            <table id="tblAccounts" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Username)
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr class="odd" role="row">
+                                <td>@(i++)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Username)
+                                </td>
+                                <td>
+                                    <span style="white-space : nowrap">
+                                        <a href="@Url.Action("Update", new { userName = item.Username })" title="EDIT"><i class="fa fa-edit text-primary"></i></a>
+
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <div class="box-footer">
+        </div><!-- /.box-footer-->
+    </div><!-- /.box -->
+</section><!-- /.content -->

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.EvaluationCategory>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "List";
+    ViewBag.TableId = "tblEvaluationCategory";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblEvaluationCategory" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvaluationTemplate.EvaluationTemplateName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvaluationCategoryName)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        foreach (var item in Model)
+        {
+            <tr role="row" class="odd">
+                <td>@(i++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EvaluationTemplate.EvaluationTemplateName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EvaluationCategoryName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.EvaluationCategoryId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.EvaluationCategoryId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.EvaluationCategoryId })
+                </td>
+            </tr>
+        }
+        }
+    </tbody>
+</table>

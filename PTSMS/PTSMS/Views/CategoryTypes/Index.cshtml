@@ -1,0 +1,80 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.References.CategoryType>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Create Category Type";
+    ViewBag.TableId = "tblCategoryType";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblCategoryType" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Previous @Html.DisplayNameFor(model => model.PreviousCategoryType.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsTypeRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EffectiveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RevisionNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PreviousCategoryType.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsTypeRating)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EffectiveDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RevisionNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.CategoryTypeId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.CategoryTypeId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.CategoryTypeId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

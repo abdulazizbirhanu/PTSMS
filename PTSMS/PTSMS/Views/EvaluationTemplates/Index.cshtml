@@ -1,0 +1,70 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.EvaluationTemplate>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Evaluation Template List.";
+    ViewBag.TableId = "tblEvaluationTemplate";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblEvaluationTemplate" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Previous @Html.DisplayNameFor(model => model.PreviousEvaluationTemplate.EvaluationTemplateName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvaluationTemplateName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EffectiveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RevisionNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                string effectiveDate = item.EffectiveDate.ToString("dd/MM/yyy");
+                <tr role="row" class="odd">
+                    <td>@(i++)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PreviousEvaluationTemplate.EvaluationTemplateName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EvaluationTemplateName)
+                    </td>
+                    <td>
+                        @effectiveDate
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RevisionNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.EvaluationTemplateId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.EvaluationTemplateId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.EvaluationTemplateId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

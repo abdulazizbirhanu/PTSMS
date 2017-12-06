@@ -1,0 +1,32 @@
+﻿@model PTSMSDAL.Models.Curriculum.Operations.EvaluationItem
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Evaluation Item Details.";
+}
+
+<div>
+    <br />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EvaluationCategory.EvaluationCategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EvaluationCategory.EvaluationCategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EvaluationItemName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EvaluationItemName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EvaluationItemId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

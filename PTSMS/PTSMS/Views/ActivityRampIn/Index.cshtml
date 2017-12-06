@@ -1,0 +1,46 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Dispatch.ActivityRampIn>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ActivityRampOut.ActivityRampOutId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hobbs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tach)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ActivityRampOut.ActivityRampOutId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Hobbs)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tach)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ActivityRampInId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ActivityRampInId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ActivityRampInId })
+        </td>
+    </tr>
+}
+
+</table>

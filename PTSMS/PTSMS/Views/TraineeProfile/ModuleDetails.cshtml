@@ -1,0 +1,238 @@
+﻿
+@model PTSMSDAL.Models.Curriculum.Operations.Module
+
+<link href="~/Content/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Module Details</h3>
+        <div class="">
+            <a href="#" title="MODULE LIST" class="moduleList" data-id="@Model.CourseId">Back to Module List</a>
+        </div>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body no-padding">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-lg-6 col-xs-12">
+                    <br />
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Previous @Html.DisplayNameFor(model => model.Course.CourseTitle)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Course.CourseTitle)
+                        </dd>
+
+                        <dt>
+                            Previous @Html.DisplayNameFor(model => model.PreviousModule.ModuleCode)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.PreviousModule.ModuleCode)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ModuleCode)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ModuleCode)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ModuleTitle)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ModuleTitle)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Duration)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Duration)
+                        </dd>
+
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ExternalChapter)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ExternalChapter)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ExternalReference)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ExternalReference)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.HasExam)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.HasExam)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ModuleWeight)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ModuleWeight)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.EffectiveDate)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.EffectiveDate)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.RevisionNo)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.RevisionNo)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Status)
+                        </dd>
+
+                    </dl>
+
+                </div>
+
+                <div class="col-md-6 col-sm-12 col-lg-6 col-xs-12" id="FileContainer">
+                    <br />
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LearningTeachingMethod, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-8">
+                            @Html.DisplayFor(model => model.LearningTeachingMethod, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LearningTeachingMethod, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AssessmentMethod, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-8">
+                            @Html.DisplayFor(model => model.AssessmentMethod, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.AssessmentMethod, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ReferenceMaterial, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-8">
+                            @Html.DisplayFor(model => model.ReferenceMaterial, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ReferenceMaterial, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @if (Model.DropDownFileLists.Count > 0)
+                        {
+                            <label class="control-label  col-md-5">Module File/s</label>
+                            <div class="col-md-10">
+                                <ul>
+                                    @{
+                                        foreach (var item in @Model.DropDownFileLists)
+                                        {
+                                            <li><a href="#" class="File-Link" data-id='@item.Value~@item.Text'>@item.Text</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                                        }
+                    </div>
+
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                @Html.LabelFor(model => model.MuduleObjective, htmlAttributes: new { @class = "control-label col-md-6" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.MuduleObjective, new { htmlAttributes = new { id = "MuduleObjective", name = "MuduleObjective", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MuduleObjective, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+ 
+ 
+
+<script src="~/Content/AdminLTE/plugins/ckeditor/ckeditor.js"></script>
+<script src="~/Content/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        CKEDITOR.replace('MuduleObjective', { toolbar: '1', htmlEncodeOutput: true });
+
+        CKEDITOR.config.readOnly = true;
+        CKEDITOR.editorConfig = function (config) {
+            config.language = 'en',
+            ignoreEmptyParagraph = true,
+            config.autoParagraph = false,
+            config.allowedContent = true
+        };
+        $(".textarea").wysihtml5();
+
+        var muduleObjective = $('#MuduleObjective').val();
+
+        $("#MuduleObjective").html(muduleObjective).text();
+
+        $('#FileContainer').on('click', '.File-Link', function (event) {
+
+            var dataIds = $(this).attr('data-id');
+            var dataArray = dataIds.split('~');
+
+            var moduleId = dataArray[0];
+            var fileName = dataArray[1];
+
+            //FilesView(string moduleCode, string fileName)
+            var url = "/Modules/FilesView";
+            location.href = url + "?fileName=" + fileName + "&moduleId=" + moduleId;
+        });
+
+        
+    });
+    /*
+    $(window).on('load', function () {
+
+        // Replace the <textarea id="editor1"> with a CKEditor        
+        CKEDITOR.replace('MuduleObjective', { toolbar: '1', htmlEncodeOutput: true });
+       
+        CKEDITOR.config.readOnly = true;
+        CKEDITOR.editorConfig = function (config) {
+            config.language = 'en',
+            ignoreEmptyParagraph = true,
+            config.autoParagraph = false,
+            config.allowedContent = true
+        };
+        $(".textarea").wysihtml5();
+    });*/
+</script>
+  

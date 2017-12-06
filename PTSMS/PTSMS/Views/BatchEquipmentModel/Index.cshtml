@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.Relations.BatchEquipmentModel>
+
+    @{
+    ViewBag.Title = "List";
+    ViewBag.Name = "Batch Equipment Model List";
+    ViewBag.TableId = "tblBatchEquipmentModel";
+    ViewBag.DefualtSortingColumnIndex = 1;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblBatchEquipmentModel">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BatchClass.BatchClassName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EquipmentModel.EquipmentModelName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+            int i=1;
+            foreach (var item in Model) {
+            <tr role="row" class="odd">
+                <td>@(i++) </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BatchClass.BatchClassName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquipmentModel.EquipmentModelName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.BatchEquipmentModelId }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.BatchEquipmentModelId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.BatchEquipmentModelId })
+                    @*<a href="@Url.Action(" Edit", new { id=item.BatchEquipmentModelId })" title="EDIT"><i class="fa fa-edit text-success"></i></a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a href="@Url.Action(" Details", new { id=item.BatchEquipmentModelId })" title="DETAILS"><i class="fa fa-list-ul text-primary"></i></a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a href="@Url.Action(" Delete", new { id=item.BatchEquipmentModelId })" title="DELETE"><i class="fa fa-trash text-danger"></i></a>*@
+                </td>
+            </tr>
+            }
+            }
+        </tbody>
+    </table>

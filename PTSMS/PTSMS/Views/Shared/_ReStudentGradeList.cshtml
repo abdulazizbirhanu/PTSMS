@@ -1,0 +1,102 @@
+﻿@model  IEnumerable<PTSMSDAL.Models.Grading.GradingFilterList>
+
+@{
+
+    ViewBag.TableId = "ReStudentResult";
+    ViewBag.DefualtSortingColumnIndex = 0;
+
+}
+
+<script>
+    //////////////////
+    $('#' + '@ViewBag.TableId').DataTable({
+        "order": [[@ViewBag.DefualtSortingColumnIndex, "asc"]]
+    });
+</script>
+
+
+
+
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="ReStudentResult">
+    @Html.AntiForgeryToken()
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Student ID</th>
+            <th>Full Name</th>
+            <th>ReExamCount</th>
+            @if (Model != null && Model.Count() > 0)
+            {
+                if (!Model.FirstOrDefault().IsPassFailExam)
+                {
+                    <th>Grade</th>
+                }
+                else
+                {
+                    <th>Pass/Fail</th>
+                }
+            }
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            List<string> traineeIDList = new List<string>();
+            if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    traineeIDList.Add(item.TraineeID);
+                    <tr role="row" class="odd">
+                        <td>@(i++) </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TraineeID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReExamCount)
+                        </td>
+                        @if (!Model.FirstOrDefault().IsPassFailExam)
+                        {
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Grade, new { @class = "form-control", @id = "ReGrade_" + item.TraineeID, type = "number", min = "0", max = "100", maxlength = "3" })
+                            </td>
+                        }
+                        else
+                        {
+
+                            <td>
+                                @Html.DropDownListFor(modelItem => item.PassFailExamResultId, (List<SelectListItem>)item.PassFailExamResult, "Select One", htmlAttributes: new { @class = "form-control", @id = "RePassFailExamResultId_" + @item.TraineeID })
+                            </td>
+
+                        }
+                        <td>
+                            @if (item.TraineeModuleId != 0 && item.TraineeCourseId == 0)
+                            {
+                                <a class="btn btn-success" id="ReSave_" @item.TraineeID onclick="ReSaveStudentRecord('@item.TraineeCourseId','@item.TraineeModuleId','@item.TraineeID','@item.ExamId','@item.ReExamCount','@item.IsPassFailExam');">Save Re-Grade</a>
+                            }
+                            @if (item.TraineeCourseId != 0 && item.TraineeModuleId == 0)
+                            {
+                                <a class="btn btn-success" id="ReSave_" @item.TraineeID onclick="ReSaveStudentRecord('@item.TraineeCourseId','@item.TraineeModuleId','@item.TraineeID','@item.ExamId','@item.ReExamCount','@item.IsPassFailExam');">Save Re-Grade</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+    @*<tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a class="btn btn-warning" id="SaveAll" onclick="ReSaveAllStudentRecord('@traineeIDList');">Save All</a></td>
+        </tr>
+    </tfoot>*@
+</table>

@@ -1,0 +1,230 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.References.EquipmentMaintenance>
+@using PTSMSDAL.Models.Scheduling.References
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewBag.Name = "Equipment Maintenance List.";
+    ViewBag.TableId = "tblEquipmentMaintenance";
+    ViewBag.DefualtSortingColumnIndex = 0;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<style type="text/css">
+    .datepicker {
+        z-index: 1151 !important;
+    }
+</style>
+
+@section scripts
+    {
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+
+        //////////////////////////////////        
+        function ClearPopUp(EquipmentMaintenanceId, ScheduledCalanderStartDate, ScheduledMaintenanceHour, ActualMaintenanceHour) {
+            
+             var message = "<div class='form-group'>"+
+                "Actual Start Date:<input type='text' name='ActualCalanderStartDate' placeholder='mm/dd/yyyy' id='ActualCalanderStartDate' class='form-control PTSMSDatepicker' required>" +
+                "</div>"+
+                "<div class='form-group'>"+
+                "Actual End Date:<input type='text' name='ActualCalanderEndDate'  placeholder='mm/dd/yyyy'  id='ActualCalanderEndDate' class='form-control PTSMSDatepicker' required>" +
+                "</div>"+
+                "<div class='form-group'>"+
+                "Actual Maintenance Hour:<input type='decimal' name='ActualMaintenanceHour'  placeholder='Hour'  id='ActualMaintenanceHour' class='form-control' required>" +
+                "</div>";
+
+            bootbox.dialog({
+                message: message,
+                title: "Clear Equipment Maintenances",
+                onEscape: true,
+                backdrop: true,
+                buttons: {
+                    save: {
+                        label: "Save",
+                        className: "btn-success",
+                        callback: function () {
+                            var getUrl = "/EquipmentMaintenances/Clear";
+                            var postData = {
+                                ActualCalanderStartDate: $("#ActualCalanderStartDate").val(),
+                                ActualCalanderEndDate: $("#ActualCalanderEndDate").val(),
+                                ActualMaintenanceHour: $("#ActualMaintenanceHour").val(),
+                                EquipmentMaintenanceId: EquipmentMaintenanceId
+                            };
+
+                            $.ajax({
+                                url: getUrl,
+                                type: 'POST',
+                                data: postData,
+                                success: function (result) {
+                                    bootbox.alert("Successfully Cleared.");
+                                },
+                                error: function (err) {
+                                    bootbox.alert("Error has occured while Clearing!");
+                                }
+                            });
+
+                        }
+                    },
+                    cancle: {
+                        label: "Cancle",
+                        className: "btn-danger"
+                    }
+                }
+            })
+                .init(function () {
+                    $('.PTSMSDatepicker').datepicker({
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                    var formattedDate = new Date();
+                    var d = formattedDate.getDate();
+                    var m = formattedDate.getMonth();
+                    m += 1;  // JavaScript months are 0-11
+                    var y = formattedDate.getFullYear();
+                    var formatedDate = m + "/" + d + "/" + y;
+
+                    var startDate = new Date(ScheduledCalanderStartDate);
+                    var d = startDate.getDate();
+                    var m = startDate.getMonth();
+                    m += 1;  // JavaScript months are 0-11
+                    var y = startDate.getFullYear();
+                    var formatedstartDate = m + "/" + d + "/" + y;
+
+                    if (formatedstartDate == "NaN/NaN/NaN") {
+                        formatedstartDate = "";
+                    }
+
+                    $("#ActualCalanderEndDate").val(formatedDate);
+                    $("#ActualCalanderStartDate").val(formatedstartDate);
+                    if (ActualMaintenanceHour != "")
+                        $("#ActualMaintenanceHour").val(ActualMaintenanceHour);
+                    else
+                        $("#ActualMaintenanceHour").val(ScheduledMaintenanceHour);
+                });
+
+        }
+    </script>
+}
+
+@*<div class='form-group'>
+        Actual Start Date:<input type='text' name='ActualCalanderStartDate' id='ActualCalanderStartDate' class='form-control PTSMSDatepicker'>
+    </div>
+    <div class='form-group'>
+        Actual End Date:<input type='text' name='ActualCalanderEndDate' id='ActualCalanderEndDate' class='form-control PTSMSDatepicker'>
+    </div>
+    <div class='form-group'>
+        Actual Maintenance Hour:<input type='text' name='ActualMaintenanceHour' id='ActualMaintenanceHour' class='form-control PTSMSDatepicker'>
+    </div>
+*@
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblEquipmentMaintenance">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Equipment.NameOrSerialNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaintenanceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParameterType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduledCalanderStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduledMaintenanceHour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActualCalanderStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActualCalanderEndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActualMaintenanceHour)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Remark)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Equipment.NameOrSerialNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaintenanceName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EventType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParameterType)
+                </td>
+                <td>
+                    @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.ScheduledCalanderStartDate))
+                    @*@Html.DisplayFor(modelItem => item.ScheduledCalanderStartDate, "{0:dd/MM/yyyy}")*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScheduledMaintenanceHour)
+                </td>
+                <td>
+                    @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.ActualCalanderStartDate))
+                    @*@Html.DisplayFor(modelItem => item.ActualCalanderStartDate, "{0:dd/MM/yyyy}")*@
+                </td>
+                <td>
+                    @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.ActualCalanderEndDate))
+                    @*@Html.DisplayFor(modelItem => item.ActualCalanderEndDate, "{0:dd/MM/yyyy}")*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActualMaintenanceHour)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.EquipmentMaintenanceId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.EquipmentMaintenanceId })
+                    @*@Html.ActionLink("Delete", "Delete", new { id = item.EquipmentMaintenanceId }) |*@
+                    @if (item.Status != StatusType.Completed && item.Status != StatusType.Canceled)
+                    {
+                        <text> |</text> @Html.ActionLink("Cancle", "Cancle", new { id = item.EquipmentMaintenanceId })
+                    }
+                    @if (item.Status != StatusType.Completed && item.Status != StatusType.Canceled)
+                    {
+                        <text> |</text> <button class="btn-link" onclick="ClearPopUp('@item.EquipmentMaintenanceId','@item.ScheduledCalanderStartDate','@item.ScheduledMaintenanceHour','@item.ActualMaintenanceHour');">Clear</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

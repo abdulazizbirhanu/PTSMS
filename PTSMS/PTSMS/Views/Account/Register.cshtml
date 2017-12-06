@@ -1,0 +1,126 @@
+﻿@model PTSMS.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    ViewBag.Name = "Account Registration";
+}
+
+
+<link href="~/Content/AdminLTE/plugins/select2/select2.css" rel="stylesheet" />
+
+@section scripts
+    {
+
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var $AddDropDownRole = $("#Role").select2({
+                maximumSelectionSize: 6
+            });
+
+        });
+
+        //$(function () { //shorthand document.ready function
+        //    $('#AccountRegistrationForm').on('submit', function (e) { //use on if jQuery 1.7+
+        //        var roles = $.map($("#Role option:selected"), function (el, i) {
+        //            return $(el).text();
+        //        });
+        //        var textToAppend = "";
+        //        var roles = $("#selMulti option:selected").each(function () {
+        //            textToAppend += (textToAppend == "") ? "" : ",";
+        //            textToAppend += $(this).text();
+        //        });
+        //        alert(roles);
+        //        $("#Role").text(roles.join(", "));
+        //    });
+        //});
+
+    </script>
+
+}
+
+
+
+
+<section class="content-header">
+    <h1>
+        Create Account
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Home/Welcome"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="/Account/Index"><i class="fa fa-unlock"></i> Accounts</a></li>
+        <li class="active">Create account</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            @Html.ActionLink("Back to List", "Index")
+            @*<div class="box-tools pull-right">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="input-group" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    }
+                </div>*@
+        </div>
+
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" , id="AccountRegistrationForm"}))
+        {
+            @Html.AntiForgeryToken()
+            <div class="box-body">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Role, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">                      
+                        @Html.DropDownList("Role", (SelectList)ViewBag.Roles, new { @id = "Role", @name = "Role", @class = "form-control select2", multiple = "multiple", style = "width: 100%;" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-4">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    </div>
+                </div>
+
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-4">
+                        <input type="submit" class="btn btn-primary" value="Register" />
+                    </div>
+                </div>
+            </div><!-- /.box-footer -->
+        }
+
+    </div><!-- /.box -->
+</section><!-- /.content -->

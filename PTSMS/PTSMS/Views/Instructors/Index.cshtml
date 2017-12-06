@@ -1,0 +1,71 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Enrollment.Operations.Instructor>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Instructor List";
+    ViewBag.TableId = "tblInstructor";
+    ViewBag.DefualtSortingColumnIndex = 1;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblInstructor">
+    <thead>
+        <tr>
+            <th>No.</th>           
+            <th>
+                @Html.DisplayNameFor(model => model.Person.CompanyId)
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+               Short Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Person.Position)
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.Person.RegistrationDate)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++) </td>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.CompanyId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.FirstName) @Html.DisplayFor(modelItem => item.Person.MiddleName) @Html.DisplayFor(modelItem => item.Person.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.ShortName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.Position)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Person.RegistrationDate)
+                    </td>
+                                        
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.InstructorId }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.InstructorId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.InstructorId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

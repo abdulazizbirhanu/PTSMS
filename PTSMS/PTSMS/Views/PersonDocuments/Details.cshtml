@@ -1,0 +1,51 @@
+﻿@model PTSMSDAL.Models.Enrollment.Operations.PersonDocument
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PersonDocument</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentType.DocumentTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentType.DocumentTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.CompanyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Person.CompanyId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentURL)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PersonDocumentId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

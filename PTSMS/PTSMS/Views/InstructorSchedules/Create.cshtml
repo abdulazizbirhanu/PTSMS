@@ -1,0 +1,252 @@
+﻿@{
+    ViewBag.Title = "Create";
+    ViewBag.Name = "Create Instructor Module Schedules.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section scripts
+    {
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+ 
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+           // window.asd = $('.ddlMultiSlectBox').SumoSelect({ csvDispCount: 4 });
+            //alert('ddlMultiSlectBox');
+            $(document).on("click", ".chkclass", function () {
+                debugger;
+                //$('.chkclass').click(function () {
+                var getchkid = $(this).attr('id');
+                var isChecked = $('#' + getchkid).is(':checked');
+
+                if ($('#' + getchkid).is(':checked') == true) {
+                    $('#td' + $(this).val()).css("color", "white");
+                    $('#td' + $(this).val()).css("background-color", "green");
+                    //$('#td' + $(this).val()).addClass("chkselected");
+                }
+                else {
+                    $('#td' + $(this).val()).css("color", "black");
+                    $('#td' + $(this).val()).css("background-color", "white");
+                }
+            });
+
+
+            $(".InstructorScheduleContainer").on('click', "#btnSave", function () {
+
+                ///////////////////////////////////
+                var selectedItems='';
+
+                $('input:checkbox:checked').each(function () {
+                    selectedItems += $(this).attr('value') + "~";
+                });
+
+                $("#SelectedModules").val(selectedItems);
+
+               $("#formSelection").submit();
+
+            });
+
+            $('body').on('change', "#CourseId", function () {
+
+                //alert("1");
+                var getListUrl = "";
+                getListUrl = "/InstructorSchedules/FilteredListModules";
+
+                var data = $("#CourseId").val();
+
+                //
+                $.ajax({
+                    url: getListUrl,
+                    type: 'GET',
+                    data: { CourseId: data },
+                    success: function (result) {
+                        if (result.hasList) {
+                            // alert('hasList');
+                            //var selectOption = "";
+
+                            //var option = '<option value="">--Please Select--</option>';
+                            //SelectedList = $('#dpdSelectedExam').empty();
+                            //SelectedList.append($('<option></option>').val(null).html(option));
+
+
+                            //jQuery.each(result.resultData, function (index, item) {
+                            //    SelectedList.append($('<option></option>').val(item.Id).html(item.Name));
+                            //});
+
+                        }
+                        else {
+                            bootbox.alert("There is no registered" + Selected);
+                        }
+                    },
+                    error: function () {
+                        //  bootbox.alert("Error has occured!!!.");
+                    }
+                });
+                //////////
+            });
+
+
+            $('#ProgramId').on('change', function () {
+                debugger;
+                // var PhaseCourseId = $('#dpdAddPhaseCourses').val();
+
+                var programId = $(this).val();
+                var instructorId = $("#InstructorId").val();
+
+                var Url = "/InstructorSchedules/GetModuleByProgram";
+                var Data = {
+                    'programId': programId,
+                    'instructorId': instructorId
+                };
+                //  alert(phaseScheduleId);
+                $.ajax({
+                    url: Url,
+                    type: 'GET',
+                    data: Data,
+                    success: function (result) {
+                        debugger;
+                        if (result.hasList) {
+                                
+                            var innerText = '<table class="table display dataTable no-footer"><tr><th></th></tr>';
+                            jQuery.each(result.resultData, function (index, item) {
+
+                                innerText += '<tr id="'+"td"+item.Value+'">';
+                                innerText += '<td>';
+
+                                innerText += 
+                                    '<input type="checkbox" id=' + '"chb' + item.Value + '"' + ' class="chkclass" value="' + item.Value + '">' + item.Text + '</input>';
+
+                                innerText += '</td>';
+                                innerText += '</tr>';
+                            });
+                            innerText += '</table>';
+
+                            $('#contentSection').html(innerText);
+                        }
+                        else {
+                            $('#contentSection').html('<table><tr><th></th></tr></table>');
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+
+            });
+
+            $('#ProgramId').change();
+
+        });
+    </script>
+
+
+}
+
+ <br />
+
+@*@using (Html.BeginForm())
+    {*@
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal InstructorScheduleContainer">
+     
+    @*<div class="form-group row">
+        @Html.LabelFor(model => model.InstructorId, "InstructorId", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.DropDownList("ProgramId", null, htmlAttributes: new { @class = "form-control" })
+            
+        </div>
+    </div>*@
+
+    @*<div class="form-group ">
+            <div class="col-md-2">
+                @Html.DropDownListFor(model => model.Module, (IEnumerable<SelectListItem>)ViewBag.CourseId, "Select Course", htmlAttributes: new { id = "CourseId", name = "CourseCode", @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group ">
+            <div class="col-md-2">
+                @Html.DropDownList("CourseId", (IEnumerable<SelectListItem>)ViewBag.CourseId, new { multiple = "multiple" })
+               @Html.DropDownListFor(m => m.Module, new SelectList(Model.Module, "Value", "Text"), new { @multiple = "multiple", @placeholder = "Please select Module", @class = "ddlMultiSlectBox" })
+            </div>
+        </div>*@
+    <form id="formSelection" method="post" action="@Url.Action("CreateModuleInstructorSchedule", "InstructorSchedules")">
+        <input type="hidden" name="SelectedModules" id="SelectedModules" />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.InstructorId, "InstructorId", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-4">
+                @Html.DropDownList("InstructorId", null, htmlAttributes: new { @class = "form-control" })
+                <br />
+                @Html.DropDownList("ProgramId", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="section" id="contentSection">
+            @*<table class="table display dataTable no-footer">
+                <tr>
+                    <th></th>
+                    <th>Modules</th>
+                </tr>
+
+                @foreach (var names in @Model.Module)
+                {
+                    var checkBoxId = "chk" + names.Value;
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="@checkBoxId" class="chkclass" value="@names.Value" />
+                        </td>
+                        <td>
+                            @names.Text
+                        </td>
+                    </tr>
+                }
+            </table>*@
+            @*
+            <div class="form-group">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div id="divCheckBox" style="height: 400px; overflow: auto;border:solid; width:500px;">
+
+                            @foreach (var names in @Model.Module)
+                            {
+                                var checkBoxId = "chk" + names.Value;
+                                var tdId = "td" + names.Value;
+                                <table>
+                                    <tr>
+                                        <td style="width:auto">
+                                            <input type="checkbox" id="@checkBoxId" class="chkclass" value="@names.Value" />
+                                        </td>
+                                        <td id="@tdId" style="width:auto">
+                                            @names.Text
+                                        </td>
+                                    </tr>
+
+                                </table>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            *@
+    </div>
+</form>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-4">
+            <input type="button" value="Save" id="btnSave" class="btn btn-success" />
+        </div>
+    </div>
+</div>
+@*}*@
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

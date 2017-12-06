@@ -1,0 +1,106 @@
+﻿@model PTSMSDAL.Models.Enrollment.Operations.Batch
+
+@{
+    ViewBag.Title = "Edit";
+    ViewBag.Name = "Edit Batch.";
+}
+
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+@section scripts{
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.PTSMSDatepicker').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+    </script>
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+       <br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.BatchId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProgramId, "ProgramId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("ProgramId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ProgramId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BatchName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.BatchName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <!--dfds-->
+        <div class="form-group">
+            @Html.LabelFor(model => model.DayTemplateId, "DayTemplateId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("DayTemplateId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DayTemplateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PeriodTemplateId, "PeriodTemplateId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PeriodTemplateId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PeriodTemplateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <!---->
+        <div class="form-group">
+            @Html.LabelFor(model => model.BatchStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <div class="input-group date">                   
+                    @Html.EditorFor(model => model.BatchStartDate, new { htmlAttributes = new { @class = "form-control pull-right PTSMSDatepicker", id = "BatchStartDateDatepicker" } })
+                    <div class="input-group-addon ">
+                        <i class="fa fa-calendar PTSMSDatepicker"></i>
+                    </div>
+                </div>               
+                @Html.ValidationMessageFor(model => model.BatchStartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EstimatedEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <div class="input-group date">
+                    @Html.EditorFor(model => model.EstimatedEndDate, new { htmlAttributes = new { @class = "form-control pull-right PTSMSDatepicker", id = "EstimatedEndDateDatepicker" } })
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar PTSMSDatepicker"></i>
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.EstimatedEndDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <input type="submit" value="Save" class="btn btn-info" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

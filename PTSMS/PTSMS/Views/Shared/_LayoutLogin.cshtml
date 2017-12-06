@@ -1,0 +1,46 @@
+﻿
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@ViewBag.Title | EAATMS</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")   
+</head>
+
+<body class="skin-blue sidebar-mini">
+    <div class="wrapper">
+        @*@Html.Partial("_header")*@
+        <!-- Left side column. contains the logo and sidebar -->
+        @*@Html.Partial("_sideBarLeft")*@
+        <div class="content-wrapper">
+            <div class="Container-custom">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><lable class="control-label" id="PageTitle">@ViewBag.Name</lable></h3>
+                    </div>
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_footer")       
+        <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+
+    @Html.Partial("ErrorMessageBox")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/AdminLTE")
+
+    <link href="~/Content/BootstrapDataTable/BootstrapDataTableCSS.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/BootstrapDataTables/BootstrapDataTables.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

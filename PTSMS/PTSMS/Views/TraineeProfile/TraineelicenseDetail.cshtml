@@ -1,0 +1,99 @@
+﻿
+@model PTSMSDAL.Models.Enrollment.Operations.License
+
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Trainee License Detail</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body no-padding">
+        @Html.ActionLink("Back to Licence List", "TraineeLicenseList")
+        <div>
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.LicenseType.Type)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.LicenseType.Type)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Person.CompanyId)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Person.CompanyId)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PersonDocument.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PersonDocument.Description)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.LicenseNo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.LicenseNo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IssueDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IssueDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ExpiryDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ExpiryDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Threshold)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Threshold)
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+         @{
+             if (ViewBag.TraineeProfileMessage != null)
+             {
+                 <text> bootbox.alert('@ViewBag.TraineeProfileMessage');</text>
+                 ViewBag.TraineeProfileMessage = null;
+             }
+         }
+    });
+</script>*@

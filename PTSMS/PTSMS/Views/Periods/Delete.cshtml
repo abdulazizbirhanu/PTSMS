@@ -1,0 +1,97 @@
+﻿@model PTSMSDAL.Models.Scheduling.Operations.Period
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Period</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PeriodTemplate.PeriodTemplateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PeriodTemplate.PeriodTemplateName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PreviousPeriod.PeriodName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousPeriod.PeriodName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PeriodName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PeriodName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AMorPM)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AMorPM)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

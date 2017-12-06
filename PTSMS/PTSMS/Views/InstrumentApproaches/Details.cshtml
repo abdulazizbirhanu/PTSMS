@@ -1,0 +1,50 @@
+﻿@model PTSMSDAL.Models.Dispatch.Master.InstrumentApproach
+
+<div>
+    <h4>InstrumentApproach</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousInstrumentApproach.InstrumentApproachName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InstrumentApproachName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InstrumentApproachName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.InstrumentApproachId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

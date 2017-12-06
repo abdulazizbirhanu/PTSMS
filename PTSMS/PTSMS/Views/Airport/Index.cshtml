@@ -1,0 +1,68 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.Operations.Airport>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "List of Airport";
+    ViewBag.TableId = "tblAirport";
+    ViewBag.DefualtSortingColumnIndex = 1;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="box-body table-responsive no-padding">
+    <table id="tblAirport" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.AirportName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AirportCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EffectiveDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RevisionNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AirportName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AirportCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EffectiveDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RevisionNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.AirportId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.AirportId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.AirportId })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</div>

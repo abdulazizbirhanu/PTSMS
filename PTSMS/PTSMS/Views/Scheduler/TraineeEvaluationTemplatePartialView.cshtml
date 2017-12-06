@@ -1,0 +1,442 @@
+﻿@model  List<PTSMSDAL.Models.Scheduling.View.TraineeEvaluationTemplateView>
+
+<style>
+    .ScrollStyle {
+        /*max-height: 350px;
+        overflow-y: scroll;*/
+    }
+
+    .evaluation-Template {
+        border-radius: 10px !important;
+        /*display: block!important;*/
+        border: 3px solid;
+        border-color: #517842;
+        background-color: #f2f6f6;
+
+    }
+   
+</style>
+@*@section scripts
+    {
+
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/lib/moment.min.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-2.9.1/fullcalendar.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/fullcalendar-scheduler-1.3.3/scheduler.min.js"></script>
+
+
+    <script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/qtip/jquery.qtip.js"></script>
+    <script src="~/Content/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <script src="~/Content/AdminLTE/plugins/ajax-progress-bar/js/jquery.progressTimer.js"></script>
+
+    <script src="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+    <script>
+
+    </script>
+    }*@
+
+@using (Html.BeginForm("SaveEvaluationTemplate", "Scheduler", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnEvaluationTemplate" }))
+{
+
+    @Html.AntiForgeryToken()
+    <div style="color:red"> @Html.ValidationSummary()</div>
+    <div class="EvaluationItemContainer">
+        @*<div class="row">
+                <div class="form-group">
+                    <lable class="control-label col-md-2">Password: </lable>
+                    <div class="col-md-4">
+                        <input type="password" class="form-control" id="txtEvaluationTemplatePassword" name="txtEvaluationTemplatePassword" autocomplete="off" data-val="true" data-val-required="Password is required." />
+                    </div>
+                </div>
+            </div>*@
+
+        <br />
+        <div >
+            <div>
+@{
+    if (ViewBag.trainee != null)
+    {
+      
+       
+        <div class="row hide">
+            <div class="col-lg-4"  style="width:33.33333333333333%;float:left">
+                <div class="form-group">
+                    <label class="control-label col-md-5" style="width:41.66666666666667%;float:left">TIME IN</label>
+                    <div class="col-md-7" style="width:58.333333333333336%;float:left">
+                        <div class="input-group  bootstrap-timepicker timepicker">
+                            <input type="text" class="form-control" id="txtTimeIn" name="txtTimeIn" value='@ViewBag.TimeIn'>
+                            <div class="input-group-addon Search-Equipment">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-4"  style="width:33.33333333333333%;float:left">
+                <div class="form-group">
+                    <label class="control-label col-md-5" style="width:41.66666666666667%;float:left">TIME OUT</label>
+                    <div class="col-md-7" style="width:58.333333333333336%;float:left">
+                        <div class="input-group  bootstrap-timepicker timepicker">
+                            <input type="text" class="form-control" id="txtTimeOut" name="txtTimeOut" value='@ViewBag.TimeOut'>
+                            <div class="input-group-addon Search-Equipment">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4"  style="width:33.33333333333333%;float:left">
+                <div class="form-group">
+                    <label class="control-label col-md-7">FLIGHT TIME</label>
+                    <div class="col-md-5" style="width:41.66666666666667%;float:left">
+                        <div class="input-group ">
+                            <input class="form-control" id="txtFliTime" name="txtFliTime" value='@ViewBag.FlightTime'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <br />
+            <div class="row">
+
+            <div class="col-lg-6 hide">
+                <div class="form-group">
+                    <label class="control-label col-md-4" style="width:33.3333%;float:left">DATE </label>
+                    <div class="col-md-8" style="width:66.6666%;float:left">
+                        
+                            <input type="text" class="form-control  " name="txtEditDate" id="txtEditDate"  value='@ViewBag.FlightDate'/>
+                           
+                        
+                    </div>
+                </div>
+            </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-5" style="width:41.66666666666667%;float:left">OVERALL GRADE </label>
+                        <div class="col-md-7" style="width:58.333333333333336%;float:left">
+                            @Html.DropDownList("OverallGradeId", null, htmlAttributes: new { @class = "form-control", id = "OverallGradeId", name = "OverallGradeId" })
+                            @*<input type="number" min="0" class="form-control" id="txtOverallGrade" name="txtOverallGrade" data-val="true" data-val-required="Overall grade is required." placeholder="Overall Grade">*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+                   <input class="hide" value='@ViewBag.trainee.Person.FirstName<text>&nbsp;</text> @ViewBag.trainee.Person.MiddleName<text>&nbsp;</text> @ViewBag.trainee.Person.LastName' id="NM_text" />
+                    <input class="hide" value='@ViewBag.flyingFTDSchedule.Equipment.NameOrSerialNo' id="AC_text" />
+                    <input class="hide" value='@ViewBag.flyingFTDSchedule.Instructor.Person.FirstName<text>&nbsp;</text> @ViewBag.flyingFTDSchedule.Instructor.Person.MiddleName<text>&nbsp;</text> @ViewBag.flyingFTDSchedule.Instructor.Person.LastName' id="Inst_NM_text" />
+                    <input class="hide" value='@ViewBag.flyingFTDSchedule.Lesson.LessonName' id="Lesson_text" />
+            }
+            }
+        </div>
+            <div class="ScrollStyle" id="printingDiv">
+
+                @{
+                    if (ViewBag.IsRampInDone != null)
+                    {
+                        if (ViewBag.IsRampInDone)
+                        {
+                            if (Model != null)
+                            {
+                                int index = 0;
+                                int numberOfItems = 0;
+                                int count = Model[0].EvaluationCategory.Count();
+                                if (Model[0].EvaluationCategory.Count > 0)
+                                {
+                                    <div class="row">
+                                        <div class="col-lg-6" width="50%" style="width:50%; float:left;padding-right:3px">
+                                            @for (int i = 0; i < Model[0].EvaluationCategory.Count(); i++)
+                                            {
+                                                index++;
+                                                int categoryId = Model[0].EvaluationCategory[i].Id;
+                                                <div class="col-lg-12 " style="padding:0">
+                                                    <!--Display the even number indexed categories item in the first column-->
+                                                    <table class="table table-responsive table-bordered display evaluation-Template" cellspacing="0" role="grid" style="width:100%; margin:0px">
+                                                        <thead class="alert-success">
+                                                            <tr>
+                                                                <th style="padding:0"><text>[@(i + 1)]  </text>@Model[0].EvaluationCategory[i].Name </th>
+                                                                @for (int j = 0; j < Model[0].LessonScores.Count(); j++)
+                                                                {
+                                                                    <th style="padding:0">@Model[0].LessonScores[j].Name</th>
+                                                                }
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model[0].EvaluationCategory[i].EvaluationItem)
+                                                            {
+                                                                numberOfItems = numberOfItems + 1;
+                                                                string ItemSpecificClass = "Category" + categoryId + "-Item" + item.Id;
+                                                                string cssClass = "flat-red grade-CheckBox " + ItemSpecificClass;
+                                                                string id = "Category" + categoryId + "Item" + item.Id;
+
+                                                                string ButtonGroupId = "labelCategory" + categoryId + "Item" + item.Id;
+                                                                string ButtonGroupCssClass = "btn btn-default btn-sm " + ButtonGroupId;
+                                                                string ButtonGroupCssClassIfEvaluated = "btn btn-primary btn-sm " + ButtonGroupId;
+                                                                int width = 40 / Model[0].LessonScores.Count();
+                                                                <tr style="padding:2px">
+                                                                    <td style="padding:0px 5px;width:60%">@item.Name</td>
+
+                                                                    @for (int j = 0; j < Model[0].LessonScores.Count(); j++)
+                                                                    {
+                                                                        string ButtonGroup = ButtonGroupId + Model[0].LessonScores[j].Id;
+                                                                        string ItemIdAndName = id + Model[0].LessonScores[j].Id;
+                                                                        if (item.ScoreLevelId == Model[0].LessonScores[j].Id)
+                                                                        {
+                                                                            <td style="padding:0px;width:@width%">
+                                                                                <input type="checkbox" class='@cssClass' style="margin:0px" value="@categoryId~@item.Id~@Model[0].LessonScores[j].Id" id="@ItemIdAndName" name="@ItemIdAndName" checked /></td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="padding:0px;width:@width%">
+                                                                                <input type="checkbox" class='@cssClass' style="margin:0px" value="@categoryId~@item.Id~@Model[0].LessonScores[j].Id" id="@ItemIdAndName" name="@ItemIdAndName" /></td>
+                                                                        }
+                                                                    }
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+
+                                            }
+                                        </div>
+                                        <div class="col-lg-6"  width="50%" style="width:50%; float:right;padding-left:3px">
+                                            @for (int i = 0; i < Model[1].EvaluationCategory.Count(); i++)
+                                            {
+                                                index++;
+                                                int categoryId = Model[1].EvaluationCategory[i].Id;
+                                                <div class="col-lg-12 " style="padding:0">
+                                                    <!--Display the even number indexed categories item in the first column-->
+                                                    <table class="table table-responsive table-bordered display evaluation-Template" cellspacing="0" role="grid" style="width:100%; margin:0px">
+                                                        <thead class="alert-success">
+                                                            <tr>
+                                                                <th  style="padding:0"><text>[@(i + 1+ Model[0].EvaluationCategory.Count())]  </text>@Model[1].EvaluationCategory[i].Name </th>
+                                                                @for (int j = 0; j < Model[1].LessonScores.Count(); j++)
+                                                                {
+                                                                    <th style="padding:0">@Model[1].LessonScores[j].Name</th>
+                                                                }
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model[1].EvaluationCategory[i].EvaluationItem)
+                                                            {
+                                                                numberOfItems = numberOfItems + 1;
+                                                                string ItemSpecificClass = "Category" + categoryId + "-Item" + item.Id;
+                                                                string cssClass = "flat-red grade-CheckBox " + ItemSpecificClass;
+                                                                string id = "Category" + categoryId + "Item" + item.Id;
+
+                                                                string ButtonGroupId = "labelCategory" + categoryId + "Item" + item.Id;
+                                                                string ButtonGroupCssClass = "btn btn-default btn-sm " + ButtonGroupId;
+                                                                string ButtonGroupCssClassIfEvaluated = "btn btn-primary btn-sm " + ButtonGroupId;
+                                                                int width = 40 / Model[1].LessonScores.Count();
+                                                                <tr style="padding:2px">
+                                                                    <td style="padding:0px 5px;width:60%">@item.Name</td>
+
+                                                                    @for (int j = 0; j < Model[1].LessonScores.Count(); j++)
+                                                                    {
+                                                                        string ButtonGroup = ButtonGroupId + Model[1].LessonScores[j].Id;
+                                                                        string ItemIdAndName = id + Model[1].LessonScores[j].Id;
+                                                                        if (item.ScoreLevelId == Model[1].LessonScores[j].Id)
+                                                                        {
+                                                                            <td style="padding:0px;width:@width%">
+                                                                                <input type="checkbox" class='@cssClass' style="margin:0px" value="@categoryId~@item.Id~@Model[1].LessonScores[j].Id" id="@ItemIdAndName" name="@ItemIdAndName" checked />
+                                                                        </td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="padding:0px;width:@width%">
+                                                                                <input type="checkbox" class='@cssClass' style="margin:0px" value="@categoryId~@item.Id~@Model[1].LessonScores[j].Id" id="@ItemIdAndName" name="@ItemIdAndName" />
+                                                                        </td>
+                                                                        }
+                                                                    }
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                                    if (numberOfItems > 0)
+                                                    {
+                                                        <div class="form-group hide">
+                                                            <div class="col-md-8">
+                                                                <div class="input-group  bootstrap-timepicker timepicker">
+                                                                    <input type="text" class="form-control" id="txtnumberOfItems" name="txtnumberOfItems" value="@numberOfItems">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                            }
+
+                                            if (index == 0)
+                                            {
+                                                        <div class="alert alert-warning alert-dismissible">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                                            No evaluation template found for this lesson.
+                                                        </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                        <div class="alert alert-warning alert-dismissible">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                                            No evaluation template found for this lesson.
+                                                        </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                        <div class="alert alert-warning alert-dismissible">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                                            No evaluation template found for this lesson.
+                                                        </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                        <div class="alert alert-warning alert-dismissible">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                            <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                                            Ramp In is not done so far. Evaluating this lesson will be possible right after Ramp In is done.
+                                                        </div>
+                        }
+                    }
+             
+
+                }
+            </div>
+        </div>
+        <br />
+        <div id="evaluationFooter">
+            <div class="row">
+
+                <div class="col-md-6 col-lg-6" style="width:100%">
+                    <div class="form-group">
+                        <lable class="control-label col-md-2">Remark: </lable>
+                        <div class="col-md-8">
+                            <textarea class="form-control" id="txtRemark" name="txtRemark" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6 " style="width:50%">
+                    <div class="form-group">
+                        <lable class="control-label col-md-4">Instructor Sig. : </lable>
+                        <div class="col-md-8">
+                            <input class="form-control" id="txtInsSig" name="txtInsSig" rows="5" style="border-width:0px 0px 2px 0px" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 " style="width:50%">
+                    <div class="form-group">
+                        <lable class="control-label col-md-4">Student Sig. : </lable>
+                        <div class="col-md-8">
+                            <input class="form-control" id="txtStuSig" name="txtStuSig" rows="5" style="border-width:0px 0px 2px 0px" />
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 hide">
+                    <button class="btn btn-info btn-sm" type="button" id="btnOverallGradeUpdateRequest" name="btnOverallGradeUpdateRequest"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Request Overall Grade Update</button>
+                </div>
+                <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <div class="col-md-6 ">
+                            <button class="btn btn-success btn-sm" type="submit"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Save</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-success btn-sm" type="button" id="printTheEvaluation"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Print</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row hide">
+                <div class="col-md-7 col-lg-7 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <textarea class="form-control" id="EvaluationItem" name="EvaluationItem"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                            }
+
+
+
+
+@*
+    <script src="~/Scripts/validator.js"></script>*@
+
+@*<link href="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+<link href="~/Content/AdminLTE/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="~/Content/AdminLTE/plugins/timepicker/bootstrap-timepicker.min.js"></script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //Begin, for trainee evaluation template
+        $("#txtTimeIn,#txtTimeOut").timepicker({
+            showInputs: false,
+            showMeridian: false,
+            minuteStep: 5
+        });
+        $('.PTSMSDatepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            startDate: new Date()
+        });
+
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+        //evaluationHeader,evaluationFooter
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        //$('#txtEditDate').val(dd+'/'+mm+'/'+yyyy);
+        if (@Model[0].EvaluationCategory.Count() == 0) {
+            $('#evaluationHeader').addClass('hide');
+            $('#evaluationFooter').addClass('hide');
+        }
+        else
+        {
+            $('#evaluationHeader').removeClass('hide');
+            $('#evaluationFooter').removeClass('hide');
+            //Get value to be posted
+
+            if('@Model[0].IsEvaluated' == 'True')
+            {
+                @*$('#OverallGradeId').val(@Model.OverallGrade);*@
+                @*$('#txtEvaluationDate').val('@Model.Date');
+                $('#txtTimeIn').val('@Model.TimeIn');
+                $('#txtTimeOut').val('@Model.TimeOut');*@
+                $('#txtRemark').val('@Model[0].Remark');
+            }
+        }
+    });
+</script>

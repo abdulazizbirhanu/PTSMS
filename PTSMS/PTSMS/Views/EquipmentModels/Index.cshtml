@@ -1,0 +1,52 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Scheduling.References.EquipmentModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EquipmentType.EquipmentTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EquipmentModelName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsMultiEngine)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.EquipmentType.EquipmentTypeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EquipmentModelName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsMultiEngine)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.EquipmentModelId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.EquipmentModelId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.EquipmentModelId })
+        </td>
+    </tr>
+}
+
+</table>

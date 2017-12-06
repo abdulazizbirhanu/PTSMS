@@ -1,0 +1,86 @@
+﻿@model IEnumerable<PTSMS.Models.ApplicationPrivilege>
+
+@{
+    ViewBag.Title = "Privileges";
+    ViewBag.Name = "Privileges List.";
+    ViewBag.TableId = "tblPrivileges";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+ 
+
+<section class="content-header">
+    <h1>
+        Privileges
+        <small>List of PTSMS Privileges</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Home/Welcome"><i class="fa fa-home"></i> Home</a></li>
+        <li class="active">Privileges</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <a class="box-title" href="/Privileges/Create"><i class="fa fa-filter text-primary"></i> Create New</a>
+            @*<div class="box-tools pull-right">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="input-group" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    }
+                </div>*@
+        </div>
+
+        <div class="box-body table-responsive no-padding">
+
+            <table id="tblPrivileges" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+                <thead>
+                    <tr>
+                        <th>
+                            No.
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Action)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        int i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr class="odd" role="row">
+                                <td>@(i++)</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Action)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    <span style="white-space : nowrap">
+                                        <a href="@Url.Action("Edit", new { paction = item.Action })" title="EDIT"><i class="fa fa-edit text-primary"></i></a> |
+                                        <a href="@Url.Action("Delete", new { paction = item.Action })" title="DELETE"><i class="fa fa-remove text-red"></i></a>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <div class="box-footer">
+        </div><!-- /.box-footer-->
+    </div><!-- /.box -->
+</section><!-- /.content -->

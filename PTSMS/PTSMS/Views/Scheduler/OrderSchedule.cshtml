@@ -1,0 +1,131 @@
+﻿@{
+    ViewBag.Title = "Order Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Name = "Scheduler.";
+}
+<style>
+    .progress-bar {
+        color: black !important;
+    }
+</style>
+<link href="~/Content/AdminLTE/plugins/ajax-progress-bar/css/jquery.progressTimer.css" rel="stylesheet" />
+@section scripts
+    {
+    @*<script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>*@
+    <script src="~/Content/AdminLTE/plugins/ajax-progress-bar/js/jquery.progressTimer.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //SeeScheduledEvent
+            ////AgreedSchedule,NotAgreedSchedule,SeeScheduledEvent    
+            $('#NotAgreedSchedule').addClass('hide');
+            $('#SeeScheduledEvent').addClass('hide');
+            Schedule();
+            $('#Scheduler').on('click', '.Agree-Schedule', function (event) {
+                Schedule();
+            });
+        });
+
+        function Schedule()
+        {
+            var GUI = "<span class='bg-yellow'>Note: It will erase the previously scheduled modules and lessons and replace them by the new ones. </span> ";
+            GUI = GUI + '<div class="form-group">' + '<label class="col-md-4 control-label" for="name"> Select Lesson Category </label> '
+                                + '<div class="col-md-4">' +
+                                    '<select id="dpdlessoncategory" name="dpdlessoncategory" class="required form-control" data-val="true" data-val-required="Lesson category is required.">'
+                                            + "<option value=''> -- Select -- </option>"
+                                            + "<option value='Ground'> Ground </option>"
+                                            + "<option value='FTDAndFlying'> FTD and Flying </option>"
+                                            + '</select>'
+                                + '</div> ' + '</div> ';
+            
+            //</div>";
+            bootbox.dialog({
+                title: "Are you sure you want to start module scheduler?",
+                message: GUI,
+                buttons: {
+                    success: {
+                        label: "Yes",
+                        className: "btn-success",
+                        callback: function () {
+
+                            var LessonCategoryName = $('#dpdlessoncategory').val();
+
+                            $('#AgreedSchedule').removeClass('hide');
+                            $('#NotAgreedSchedule').addClass('hide');
+                            //Create an instance of progress bar
+                            var progress = $(".loading-progress").progressTimer({
+                                timeLimit: 10800,
+                                onFinish: function () {
+                                }
+                            });
+
+                            //var URL = "";
+                            //if (LessonCategoryName == 'Ground')
+                            //{
+                            //    URL = "/Scheduler/OrderSchedule";
+                            //}
+                            //else {
+                            //    URL = "/Scheduler/OrderSchedule";
+                            //}
+
+                            //Order Schedule                         
+                            $.ajax({
+                                url: "/Scheduler/OrderSchedule",
+                                type: 'POST',
+                                data: {
+                                    'LessonCategoryName': LessonCategoryName
+                                },
+                                success: function (result) {
+                                    if (result.isSuccess) {
+                                        progress.progressTimer('complete', {
+                                            successText: 'Scheduling event has done successfully!',
+                                            onFinish: function () {
+
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        progress.progressTimer('complete', {
+                                            successText: 'Unsuccessful scheduling.',
+                                            onFinish: function () {
+
+                                            }
+                                        });
+                                    }
+                                    $('#AgreedSchedule').addClass('hide');
+                                    $('#SeeScheduledEvent').removeClass('hide');
+                                },
+                                error: function () {
+                                    
+                                    progress.progressTimer('error', {
+                                        errorText: 'ERROR!',
+                                        onFinish: function () {
+                                        }
+                                    });
+                                    bootbox.alert("Error has occured!!!.");
+                                    $('#AgreedSchedule').addClass('hide');
+                                    $('#NotAgreedSchedule').removeClass('hide');
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+}
+<div id="Scheduler">
+    <div class="loading-progress" id="progressBarDiv"></div>
+    <span class="info-box-text hide" id="AgreedSchedule">
+        Do you want to stop the scheduler? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-sm btn-warning">Stop</button>
+    </span>
+    <span class="info-box-text" id="NotAgreedSchedule">
+        Start Scheduler? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="submit" class="btn btn-sm btn-success Agree-Schedule">Schedule</button>
+    </span> 
+    <span class="info-box-text hide" id="SeeScheduledEvent">
+       Do you want to check the scheduled module? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <a href="@Url.Action("GroundClassSchedule", "Scheduler")"><i class="fa fa-space-shuttle"></i> <span>Scheduled Module</span></a>
+    </span>    
+</div>

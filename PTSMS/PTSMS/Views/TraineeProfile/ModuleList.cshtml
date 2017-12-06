@@ -1,0 +1,126 @@
+﻿
+
+@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.Module>
+
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title"> @Model.FirstOrDefault().Course.CourseCode @Model.FirstOrDefault().Course.CourseTitle  Module List</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body no-padding">
+        <table id="tblModule" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+            <thead>
+                <tr>
+                    <th>
+                        No.
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Course.CourseTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ModuleCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ModuleTitle)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Duration)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExternalChapter)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExternalReference)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HasExam)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.ModuleWeight)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EffectiveDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RevisionNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th>Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                    foreach (var item in Model)
+                    {
+                        string EffectiveDate = item.EffectiveDate.ToString("dd/MM/yyyy");
+                        <tr role="row" class="odd">
+                            <td>@(i++)</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Course.CourseTitle)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ModuleCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ModuleTitle)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Duration)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExternalChapter)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExternalReference)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.HasExam)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ModuleWeight)
+                            </td>
+                            <td>
+                                @EffectiveDate
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RevisionNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                <a href="#" title="DETAIL"><i class="fa fa-list-ul text-green moduleDetail" data-id="@item.ModuleId"></i></a>
+                                <a href="#" title="TRAINEE MODULE EXAM LIST" class="moduleExamList" data-id="@item.ModuleId">Exam</a> 
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#tblModule').DataTable({
+            "order": [[1, "asc"]]
+        });
+    });
+</script>

@@ -1,0 +1,70 @@
+﻿
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title"> Create Module Activity for <lable class="label-info">@ViewBag.ModuleCode</lable> </h3>
+        <div class="">
+            <a href="#" title="MODULE ACTIVITY LIST" class="moduleActivityList" data-id="@ViewBag.ModuleId">Back to List</a>
+        </div>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+            @*<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>*@
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body no-padding">
+        @using (Html.BeginForm("Create", "ModuleActivity", FormMethod.Post, new { enctype = "multipart/form-data", id = "btnAddEvent" }))
+        {
+            <div style="color:red">
+                @Html.AntiForgeryToken()
+            </div>
+            <div id="ModuleActivityNameAndDurationContainer">
+                <div class="form-group row">
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-sm btn-info btn-flat" id="btnAdd" name="btnAdd">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-md-6">
+                        <lable class="control-label">Activity Name</lable>
+                        <input class="form-control input-sm" type="text" name="txtModuleActivityName1" data-id="1" id="txtModuleActivityName1" width="300" style="width: 100%;" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <lable class="control-label">Duration</lable>
+                        <input class="form-control input-sm" type="number" min="1" value="1" name="txtModuleActivityDuration1" data-id="1" id="txtModuleActivityDuration1" width="300" style="width: 100%;" />
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6 pull-right">
+                    <button class="btn btn-info btn-sm" type="submit"><span class="glyphicon glyphicon-add"></span>&nbsp;&nbsp;Save</button>
+                </div>
+            </div>
+
+            <div class="row hide">
+                <input type="text" id="txtModuleId" name="txtModuleId" class="form-control" />
+                <input type="text" id="txtNumberOfModuleActivityNameAndDurationAdded" name="txtNumberOfModuleActivityNameAndDurationAdded" class="form-control" />
+                <input type="text" id="txtNumberOfModuleActivityNameAndDurationRemoved" name="txtNumberOfModuleActivityNameAndDurationRemoved" class="form-control" />
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#txtModuleId').val('@ViewBag.ModuleId');
+        $('#txtNumberOfModuleActivityNameAndDurationAdded').val('1');
+        $('#txtNumberOfModuleActivityNameAndDurationRemoved').val('0');
+    });
+</script>
+

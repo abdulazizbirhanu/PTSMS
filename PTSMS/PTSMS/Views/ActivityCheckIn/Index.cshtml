@@ -1,0 +1,106 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Dispatch.ActivityCheckIn>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ArrivalAirport.AirportName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartureAirport.AirportName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Equipment.NameOrSerialNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FlyingFTDSchedule.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Instructor.CreatedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Observer.CreatedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sequence)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DestinationId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ParkingSpotId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StatusId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ArrivalAirport.AirportName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DepartureAirport.AirportName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Equipment.NameOrSerialNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FlyingFTDSchedule.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Instructor.CreatedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observer.CreatedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sequence)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DestinationId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParkingSpotId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusId)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ActivityCheckInId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ActivityCheckInId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ActivityCheckInId })
+        </td>
+    </tr>
+}
+
+</table>

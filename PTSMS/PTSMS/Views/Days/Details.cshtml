@@ -1,0 +1,58 @@
+﻿@model PTSMSDAL.Models.Scheduling.Operations.Day
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Day</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DayTemplate.DayTemplateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DayTemplate.DayTemplateName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DayName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DayName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RevisionNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RevisionNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.DayId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,93 @@
+﻿@model PTSMSDAL.Models.Users
+
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@ViewBag.Title | EAATMS</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <title>Login</title>
+</head>
+<body class="hold-transition login-page">
+
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../../index2.html"><b>PTS</b>TMS</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group has-feedback">
+                    <div class="input-group">
+                        <input type="text" id="UserName" name="UserName" class="form-control" placeholder="Username">   
+                        <span class="input-group-addon btn-default">
+                            <span class="fa fa-envelope">
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group has-feedback">
+                    <div class="input-group">
+                        <input type="password" id="Password" name="Password" class="form-control" placeholder="Password">
+                        <span class="input-group-addon btn-default">
+                            <span class="fa fa-lock">
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="checkbox icheck">
+                            <label>
+                                <input type="checkbox"> Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            }            
+            <!-- /.social-auth-links -->
+            <a href="#">I forgot my password</a><br>
+            <a href="@Url.Action("Create", "Users")" class="text-center">Register a new membership</a>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    @Html.Partial("ErrorMessageBox")         
+    <!-- /.login-box -->
+    @Html.Partial("ErrorMessageBox")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/AdminLTE")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @if (ViewBag.ErrorMessage != null)
+            {
+                 <text>
+            $('#Message').html('@ViewBag.ErrorMessage');
+            $('#Error').modal('show');
+            </text>
+                ViewBag.ErrorMessage = null;
+            }
+        });
+    </script>
+    @*@RenderSection("scripts", required: false)*@
+</body>
+</html>

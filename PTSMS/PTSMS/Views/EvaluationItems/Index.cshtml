@@ -1,0 +1,58 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Curriculum.Operations.EvaluationItem>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "List of Evaluation Items.";
+    ViewBag.TableId = "tblEvaluationItem";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="tblEvaluationItem" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvaluationCategory.EvaluationTemplate.EvaluationTemplateName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvaluationCategory.EvaluationCategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvaluationItemName)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        foreach (var item in Model)
+        {
+            <tr class="odd" role="row">
+                <td>@(i++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EvaluationCategory.EvaluationTemplate.EvaluationTemplateName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EvaluationCategory.EvaluationCategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EvaluationItemName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.EvaluationItemId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.EvaluationItemId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.EvaluationItemId })
+                </td>
+            </tr>
+        }
+        }
+    </tbody>
+
+</table>

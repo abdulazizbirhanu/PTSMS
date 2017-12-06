@@ -1,0 +1,373 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2E2BAEA9-3167-4846-AD8F-AAC4AD2B9F3C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PTSMSDAL</RootNamespace>
+    <AssemblyName>PTSMSDAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GAF, Version=2.2.5.20942, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\GAF.2.2.4\lib\net45\GAF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\PTSMS\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Access\Curriculum\Operations\CategoryAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\CourseAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\CurriculumAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\EvaluationCategoryAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\EvaluationItemAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\EvaluationTemplateAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\ExamAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\GroundLessonAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\LessonAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\ModuleAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\ModuleActivityAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\ModuleActivityLogAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\PrerequisiteAccess.cs" />
+    <Compile Include="Access\Curriculum\Operations\ReferenceAccess.cs" />
+    <Compile Include="Access\Curriculum\References\CategoryNameAccess.cs" />
+    <Compile Include="Access\Curriculum\References\CategoryTypeAccess.cs" />
+    <Compile Include="Access\Curriculum\References\PhaseAccess.cs" />
+    <Compile Include="Access\Curriculum\References\ProgramAccess.cs" />
+    <Compile Include="Access\Curriculum\References\StageAccess.cs" />
+    <Compile Include="Access\Curriculum\Relations\CourseCategoryAccess.cs" />
+    <Compile Include="Access\Curriculum\Relations\CourseExamAccess.cs" />
+    <Compile Include="Access\Curriculum\Relations\CourseReferenceAccess.cs" />
+    <Compile Include="Access\Curriculum\Relations\LessonEvaluationTemplateAccess.cs" />
+    <Compile Include="Access\Curriculum\Relations\LessonReferenceAccess.cs" />
+    <Compile Include="Access\Curriculum\Relations\ModuleExamAccess.cs" />
+    <Compile Include="Access\Curriculum\Relations\ModuleReferenceAccess.cs" />
+    <Compile Include="Access\Dispatch\ActivityAuthorizationAccess.cs" />
+    <Compile Include="Access\Dispatch\ActivityCheckInAccess.cs" />
+    <Compile Include="Access\Dispatch\ActivityRampInAccess.cs" />
+    <Compile Include="Access\Dispatch\ActivityRampOutAccess.cs" />
+    <Compile Include="Access\Dispatch\ArrivalTimeReasonAccess.cs" />
+    <Compile Include="Access\Dispatch\Master\ArrivalTimeReasonAccess.cs" />
+    <Compile Include="Access\Dispatch\Master\DepartureTimeReasonAccess.cs" />
+    <Compile Include="Access\Dispatch\Master\DestinationAccess.cs" />
+    <Compile Include="Access\Dispatch\Master\InstrumentApproachAccess.cs" />
+    <Compile Include="Access\Dispatch\Master\operationAreaAccess.cs" />
+    <Compile Include="Access\Dispatch\Master\OverallGradeAccess.cs" />
+    <Compile Include="Access\Dispatch\Master\ParkingSpotAccess.cs" />
+    <Compile Include="Access\Dispatch\OverallGradeUpdateRequestAccess.cs" />
+    <Compile Include="Access\Enrollment\Operations\BatchAccess.cs" />
+    <Compile Include="Access\Enrollment\Operations\BatchClassAccess.cs" />
+    <Compile Include="Access\Enrollment\Operations\InstructorAccess.cs" />
+    <Compile Include="Access\Enrollment\Operations\LicenseAccess.cs" />
+    <Compile Include="Access\Enrollment\Operations\PersonAccess.cs" />
+    <Compile Include="Access\Enrollment\Operations\PersonDocumentAccess.cs" />
+    <Compile Include="Access\Enrollment\Operations\PersonLeaveAccess.cs" />
+    <Compile Include="Access\Enrollment\Operations\TraineeAccess.cs" />
+    <Compile Include="Access\Enrollment\References\DocumentAccess.cs" />
+    <Compile Include="Access\Enrollment\References\LicenseTypeAccess.cs" />
+    <Compile Include="Access\Enrollment\Relations\TraineeBatchAccess.cs" />
+    <Compile Include="Access\Enrollment\Relations\TraineeBatchClassAccess.cs" />
+    <Compile Include="Access\Grading\GradingAccess.cs" />
+    <Compile Include="Access\Others\MessageAccess.cs" />
+    <Compile Include="Access\Others\NotificationAccess.cs" />
+    <Compile Include="Access\Others\SchoolAccess.cs" />
+    <Compile Include="Access\Others\UserNotificationAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\AirportAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\ClassRoomAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\DayAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\DayTemplateAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\FlightLogAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\FTDAndFlyingSchedulerAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\HolidayBreakAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\PeriodAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\PeriodTemplateAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\QualificationTypeAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\RescheduleReasonAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\ToolAccess.cs" />
+    <Compile Include="Access\Scheduling\References\BuildingAccess.cs" />
+    <Compile Include="Access\Scheduling\References\EquipmentMaintenanceAcess.cs" />
+    <Compile Include="Access\Scheduling\References\EquipmentTypeAccess.cs" />
+    <Compile Include="Access\Scheduling\References\LessonCategoryTypeAccess.cs" />
+    <Compile Include="Access\Scheduling\References\LocationAccess.cs" />
+    <Compile Include="Access\Scheduling\References\LocationLogic.cs" />
+    <Compile Include="Access\Scheduling\Relations\AttendanceExceptionAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\BatchEquipmentModelAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\BriefingAndDebriefingAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\EquipmentScheduleBriefingDebriefingAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\TraineeEvaluationTemplateAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\InstructorEquipmentModelAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\PhaseScheduleAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\EquipmentAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\EquipmentCertificateAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\ModuleInstructorScheduleAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\ModuleScheduleAccess.cs" />
+    <Compile Include="Access\Scheduling\Relations\ModuleToolScheduleAccess.cs" />
+    <Compile Include="Access\Scheduling\Operations\SchedulerAccess.cs" />
+    <Compile Include="Access\Utility\UtilityClass.cs" />
+    <Compile Include="Context\EAA_API_Context.cs" />
+    <Compile Include="Context\PTSContext.cs" />
+    <Compile Include="Generic\AuditAttribute.cs" />
+    <Compile Include="Generic\Constants.cs" />
+    <Compile Include="InstructorProfile\InstructorProfileAccess.cs" />
+    <Compile Include="Migrations\201710261318447_m.cs" />
+    <Compile Include="Migrations\201710261318447_m.Designer.cs">
+      <DependentUpon>201710261318447_m.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710261324571_m1.cs" />
+    <Compile Include="Migrations\201710261324571_m1.Designer.cs">
+      <DependentUpon>201710261324571_m1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\APIModels\TraineeInfoBO.cs" />
+    <Compile Include="Models\Curriculum\Operations\Category.cs" />
+    <Compile Include="Models\Curriculum\Operations\Course.cs" />
+    <Compile Include="Models\Curriculum\Operations\EvaluationCategory.cs" />
+    <Compile Include="Models\Curriculum\Operations\EvaluationItem.cs" />
+    <Compile Include="Models\Curriculum\Operations\EvaluationTemplate.cs" />
+    <Compile Include="Models\Curriculum\Operations\Exam.cs" />
+    <Compile Include="Models\Curriculum\Operations\GroundLesson.cs" />
+    <Compile Include="Models\Curriculum\Operations\Lesson.cs" />
+    <Compile Include="Models\Curriculum\Operations\LessonScore.cs" />
+    <Compile Include="Models\Curriculum\Operations\Module.cs" />
+    <Compile Include="Models\Curriculum\Operations\ModuleActivity.cs" />
+    <Compile Include="Models\Curriculum\Operations\ModuleActivityLog.cs" />
+    <Compile Include="Models\Curriculum\Operations\PassFailExamResult.cs" />
+    <Compile Include="Models\Curriculum\Operations\Prerequisite.cs" />
+    <Compile Include="Models\Curriculum\Operations\Reference.cs" />
+    <Compile Include="Models\Curriculum\References\CategoryName.cs" />
+    <Compile Include="Models\Curriculum\References\CategoryType.cs" />
+    <Compile Include="Models\Curriculum\References\Phase.cs" />
+    <Compile Include="Models\Curriculum\References\Program.cs" />
+    <Compile Include="Models\Curriculum\References\Stage.cs" />
+    <Compile Include="Models\Curriculum\Relations\CategoryLesson.cs" />
+    <Compile Include="Models\Curriculum\Relations\CourseCategory.cs" />
+    <Compile Include="Models\Curriculum\Relations\CourseExam.cs" />
+    <Compile Include="Models\Curriculum\Relations\CourseModule.cs" />
+    <Compile Include="Models\Curriculum\Relations\CourseReference.cs" />
+    <Compile Include="Models\Curriculum\Relations\EvaluationTemplateCategory.cs" />
+    <Compile Include="Models\Curriculum\Relations\LessonCategory.cs" />
+    <Compile Include="Models\Curriculum\Relations\LessonEvaluationTemplate.cs" />
+    <Compile Include="Models\Curriculum\Relations\LessonPrerequisite.cs" />
+    <Compile Include="Models\Curriculum\Relations\LessonReference.cs" />
+    <Compile Include="Models\Curriculum\Relations\ModuleExam.cs" />
+    <Compile Include="Models\Curriculum\Relations\ModuleGroundLesson.cs" />
+    <Compile Include="Models\Curriculum\Relations\ModuleReference.cs" />
+    <Compile Include="Models\Curriculum\Relations\ProgramCategory.cs" />
+    <Compile Include="Models\Curriculum\View\EvaluationTemplateView.cs" />
+    <Compile Include="Models\Curriculum\View\ProgramHierarchy.cs" />
+    <Compile Include="Models\Dispatch\ActivityAuthorization.cs" />
+    <Compile Include="Models\Dispatch\ActivityCheckIn.cs" />
+    <Compile Include="Models\Dispatch\ActivityRampIn.cs" />
+    <Compile Include="Models\Dispatch\ActivityRampOut.cs" />
+    <Compile Include="Models\Dispatch\Master\ArrivalTimeReason.cs" />
+    <Compile Include="Models\Dispatch\Master\CheckInStatus.cs" />
+    <Compile Include="Models\Dispatch\Master\DepartureTimeReason.cs" />
+    <Compile Include="Models\Dispatch\Master\Destination.cs" />
+    <Compile Include="Models\Dispatch\Master\InstrumentApproach.cs" />
+    <Compile Include="Models\Dispatch\Master\OperationArea.cs" />
+    <Compile Include="Models\Dispatch\Master\OverallGrade.cs" />
+    <Compile Include="Models\Dispatch\Master\OverallGradeUpdateRequest.cs" />
+    <Compile Include="Models\Dispatch\Master\ParkingSpot.cs" />
+    <Compile Include="Models\Enrollment\Operations\Instructor.cs" />
+    <Compile Include="Models\Enrollment\Operations\License.cs" />
+    <Compile Include="Models\Enrollment\Operations\Person.cs" />
+    <Compile Include="Models\Enrollment\Operations\PersonDocument.cs" />
+    <Compile Include="Models\Enrollment\Operations\PersonLeave.cs" />
+    <Compile Include="Models\Enrollment\Operations\Trainee.cs" />
+    <Compile Include="Models\Enrollment\References\Document.cs" />
+    <Compile Include="Models\Enrollment\References\DocumentType.cs" />
+    <Compile Include="Models\Enrollment\References\LicenseType.cs" />
+    <Compile Include="Models\Enrollment\Relations\Batch.cs" />
+    <Compile Include="Models\Enrollment\Relations\BatchCategory.cs" />
+    <Compile Include="Models\Enrollment\Relations\BatchClass.cs" />
+    <Compile Include="Models\Enrollment\Relations\BatchCourse.cs" />
+    <Compile Include="Models\Enrollment\Relations\BatchCourseExam.cs" />
+    <Compile Include="Models\Enrollment\Relations\BatchCoursePrerequisite.cs" />
+    <Compile Include="Models\Enrollment\Relations\BatchLesson.cs" />
+    <Compile Include="Models\Enrollment\Relations\BatchModule.cs" />
+    <Compile Include="Models\Enrollment\Relations\BatchModuleExam.cs" />
+    <Compile Include="Models\Enrollment\Relations\TraineeBatchClass.cs" />
+    <Compile Include="Models\Enrollment\Relations\TraineeCourse.cs" />
+    <Compile Include="Models\Enrollment\Relations\TraineeCourseExam.cs" />
+    <Compile Include="Models\Enrollment\Relations\TraineeEvaluationCategory.cs" />
+    <Compile Include="Models\Enrollment\Relations\TraineeEvaluationItem.cs" />
+    <Compile Include="Models\Enrollment\Relations\TraineeLesson.cs" />
+    <Compile Include="Models\Enrollment\Relations\TraineeModule.cs" />
+    <Compile Include="Models\Enrollment\Relations\TraineeModuleExam.cs" />
+    <Compile Include="Models\Enrollment\View\BatchTraineeView.cs" />
+    <Compile Include="Models\Grading\GradingFilterBO.cs" />
+    <Compile Include="Models\Others\Messaging\MessageBO.cs" />
+    <Compile Include="Models\Others\Messaging\Notification.cs" />
+    <Compile Include="Models\Others\Messaging\UserNotification.cs" />
+    <Compile Include="Models\Others\NotificationView.cs" />
+    <Compile Include="Models\Others\School\School.cs" />
+    <Compile Include="Models\Others\View\CurriculumChangeView.cs" />
+    <Compile Include="Models\Others\View\InstructorProfileView.cs" />
+    <Compile Include="Models\Others\View\TraineeProfileView.cs" />
+    <Compile Include="Models\Others\UserMenu.cs" />
+    <Compile Include="Models\Report\AircraftFlownReport.cs" />
+    <Compile Include="Models\Report\EqipmentReportView.cs" />
+    <Compile Include="Models\Report\InstructerReportView.cs" />
+    <Compile Include="Models\Report\InstructorFlownTime.cs" />
+    <Compile Include="Models\Report\LessonReportBO.cs" />
+    <Compile Include="Models\Report\ScheduledFlights.cs" />
+    <Compile Include="Models\Scheduling\Operations\Airport.cs" />
+    <Compile Include="Models\Scheduling\Operations\RescheduleReason.cs" />
+    <Compile Include="Models\Scheduling\References\EquipmentMaintenance.cs" />
+    <Compile Include="Models\Scheduling\References\LessonCategoryType.cs" />
+    <Compile Include="Models\Scheduling\Operations\EquipmentScheduleFactor.cs" />
+    <Compile Include="Models\Scheduling\Relations\BriefingAndDebriefing.cs" />
+    <Compile Include="Models\Scheduling\Relations\EquipmentScheduleBriefingDebriefing.cs" />
+    <Compile Include="Models\Scheduling\Relations\FlightLog.cs" />
+    <Compile Include="Models\Scheduling\Relations\FlyingFTDSchedule.cs" />
+    <Compile Include="Models\Scheduling\Operations\FTDRecurringDownTime.cs" />
+    <Compile Include="Models\Scheduling\References\EquipmentDowntimeSchedule.cs" />
+    <Compile Include="Models\Scheduling\References\EquipmentType.cs" />
+    <Compile Include="Models\Scheduling\Relations\BatchEquipmentModel.cs" />
+    <Compile Include="Models\Scheduling\Relations\BatchModuleSequence.cs" />
+    <Compile Include="Models\Scheduling\Relations\InstructorEquipmentModel.cs" />
+    <Compile Include="Models\Scheduling\View\BatchModuleView.cs" />
+    <Compile Include="Models\Scheduling\Operations\ClassRoom.cs" />
+    <Compile Include="Models\Scheduling\Operations\Day.cs" />
+    <Compile Include="Models\Scheduling\Operations\DayTemplate.cs" />
+    <Compile Include="Models\Scheduling\Operations\FlyingSchedule.cs" />
+    <Compile Include="Models\Scheduling\Operations\FTDLessonBreakTime.cs" />
+    <Compile Include="Models\Scheduling\Operations\FTDScheduleFactor.cs" />
+    <Compile Include="Models\Scheduling\Operations\HolidayBreak.cs" />
+    <Compile Include="Models\Scheduling\Operations\Period.cs" />
+    <Compile Include="Models\Scheduling\Operations\PeriodTemplate.cs" />
+    <Compile Include="Models\Scheduling\Operations\ScheduleFactor.cs" />
+    <Compile Include="Models\Scheduling\Operations\Tool.cs" />
+    <Compile Include="Models\Scheduling\References\Building.cs" />
+    <Compile Include="Models\Scheduling\References\CertificateType.cs" />
+    <Compile Include="Models\Scheduling\References\DowntimeReason.cs" />
+    <Compile Include="Models\Scheduling\References\Equipment.cs" />
+    <Compile Include="Models\Scheduling\References\EquipmentMaintenanceSchedule.cs" />
+    <Compile Include="Models\Scheduling\References\EquipmentModel.cs" />
+    <Compile Include="Models\Scheduling\References\EquipmentStatus.cs" />
+    <Compile Include="Models\Scheduling\References\LeaveType.cs" />
+    <Compile Include="Models\Scheduling\References\Location.cs" />
+    <Compile Include="Models\Scheduling\References\QualificationType.cs" />
+    <Compile Include="Models\Scheduling\Relations\ActualModuleTaken.cs" />
+    <Compile Include="Models\Scheduling\Relations\AttendanceException.cs" />
+    <Compile Include="Models\Scheduling\Relations\PhaseSchedule.cs" />
+    <Compile Include="Models\Scheduling\Relations\EquipmentCertificate.cs" />
+    <Compile Include="Models\Scheduling\Relations\InstructorQualification.cs" />
+    <Compile Include="Models\Scheduling\Relations\InstructorSchedule.cs" />
+    <Compile Include="Models\Scheduling\Relations\ModuleInstructorSchedule.cs" />
+    <Compile Include="Models\Scheduling\Relations\ModuleSchedule.cs" />
+    <Compile Include="Models\Scheduling\Relations\ModuleToolSchedule.cs" />
+    <Compile Include="Models\Scheduling\View\EvaluationTemplateView.cs" />
+    <Compile Include="Models\Scheduling\View\InstructorModuleView.cs" />
+    <Compile Include="Models\Scheduling\View\PhaseScheduleView.cs" />
+    <Compile Include="Models\Scheduling\View\TraineeLessonScheduleView.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TraineeProfile\TraineeProfileAccess.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201710261318447_m.resx">
+      <DependentUpon>201710261318447_m.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710261324571_m1.resx">
+      <DependentUpon>201710261324571_m1.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

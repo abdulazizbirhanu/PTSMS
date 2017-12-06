@@ -1,0 +1,91 @@
+﻿@model IEnumerable<PTSMSDAL.Models.Others.Messaging.Message>
+
+@using PTSMSDAL.Models.Others.Messaging
+@using PTSMS.Others;
+@using System.Text.RegularExpressions;
+
+@{
+    ViewBag.Title = "List";
+    ViewBag.Name = "Inbox List";
+    ViewBag.TableId = "tblMessage";
+    ViewBag.DefualtSortingColumnIndex = 0;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table table-striped display dataTable" cellspacing="0" role="grid" width="100%" id="tblMessage">
+    @Html.AntiForgeryToken()
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>
+                @Html.DisplayNameFor(model => model.SenderName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Body)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MessageTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MessageState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SeenDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReadDate)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            string messageBGcolor = "background-color: #FFFFFF;";
+            foreach (var item in Model)
+            {
+                if (item.MessageState != MessageState.READ)
+                {
+                    messageBGcolor = "background-color: #E8DADA;";
+                }
+
+                <tr role="row" class="odd" style='@messageBGcolor'>
+                    <td>@(i++) </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SenderName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.Raw(item.Body)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MessageTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MessageState)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SeenDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReadDate)
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.MessageId }) |*@
+                        @Html.ActionLink("Details", "Details", new { id = item.MessageId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.MessageId })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

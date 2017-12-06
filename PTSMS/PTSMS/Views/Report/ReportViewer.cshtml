@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Report Viewer";
+    ViewBag.Name = "Report Viewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section scripts
+    {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var url = "http://SVHQBOPO01.ethiopianairlines.com:8080/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AR5SBDH08qJCpaWE56AKzQo";
+            var myIFrame = document.getElementById('iframeReportViewer');
+            if(myIFrame !== null)
+            {
+                if (myIFrame.src) {
+                    myIFrame.src = url;
+                }
+                else if (myIFrame.contentWindow !== null && myIFrame.contentWindow.location !== null)
+                {
+                    myIFrame.contentWindow.location = url;
+                }
+                else {
+                    myIFrame.setAttribute("src", url);
+                }
+            }
+        });
+
+        function ReportValidationCheck()
+        {
+           
+        }
+
+    </script>
+}
+<br />
+<iframe id="iframeReportViewer" style="height:3500px; width:99%" frameborder="0" scrolling="no"></iframe>

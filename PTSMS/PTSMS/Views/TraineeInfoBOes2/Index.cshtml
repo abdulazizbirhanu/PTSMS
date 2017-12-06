@@ -1,0 +1,70 @@
+﻿@model IEnumerable<PTSMSDAL.APIModels.Models.TraineeInfoBO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+   @* @Html.ActionLink("Create New", "Create")*@
+</p>
+
+@Html.ActionLink("Export with Excel", "Export")
+
+<table id="tblTrainee" class="table table-responsive display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Salutation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CellPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplyingForProgram)
+            </th>
+            @*<th></th>*@
+        </tr>
+        </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Salutation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CellPhone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplyingForProgram)
+                </td>
+                @*<td>
+                        @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+                        @Html.ActionLink("Details", "Details", new { id=item.id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id=item.id })
+                    </td>*@
+            </tr>
+        }
+        </tbody>
+</table>

@@ -1,0 +1,90 @@
+﻿
+@model IEnumerable<PTSMSDAL.Models.Enrollment.Operations.Batch>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Name = "Batch List.";
+    ViewBag.TableId = "tblBatch";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+
+
+@section scripts
+    {
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+        });
+    </script>
+}
+<br />
+
+<table class="table display dataTable" cellspacing="0" role="grid" width="100%" id="tblBatch">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Program.ProgramName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DayTemplateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PeriodTemplateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimatedEndDate)
+            </th>
+
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model)
+            {
+                <tr role="row" class="odd">
+                    <td>@(i++) </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Program.ProgramName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BatchName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DayTemplate.DayTemplateName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PeriodTemplate.PeriodTemplateName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BatchStartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstimatedEndDate)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("BatchDetails", "InstructorProfile",new { id = item.BatchId })" title="DETAIL"><i class="fa fa-list-ul text-green"></i></a>
+                      
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+
+

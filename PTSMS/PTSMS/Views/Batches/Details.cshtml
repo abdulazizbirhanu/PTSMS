@@ -1,0 +1,410 @@
+﻿@model PTSMSDAL.Models.Enrollment.Relations.Batch
+@using PTSMSDAL.Models.Enrollment.Operations
+@using PTSMSDAL.Models.Enrollment.Relations;
+@using PTSMSDAL.Models.Enrollment.View;
+@using PTSMSDAL.Models.Others.View;
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Name = "Batch Details.";
+    ViewBag.TableId = "tblBatchClassList";
+    ViewBag.DefualtSortingColumnIndex = 1;
+}
+<style>
+    #CurriculumChangeModalPopup .modal-dialog {
+        width: 80%;
+    }
+</style>
+<link href="~/Content/BootstrapDataTable/BootstrapDataTableCSS.css" rel="stylesheet" />
+@section scripts
+    {
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/BootstrapDataTables/BootstrapDataTables.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#tblListOfTrainee').DataTable({
+                "order": [[1, "asc"]]
+            });
+
+            $('#tblListOfTrainee').on('click', '.Add-Student', function () {
+
+                var TraineeId = $(this).attr('data-id');
+                var batchClassId = $('#BatchClassId' + TraineeId).val();
+                //alert("TraineeId= " + TraineeId + ' BatchClassId=' + batchClassId);
+                //AddTraineeToBatchClass(int traineeId, int batchClassId
+                var AddTraineeUrl = "/Batches/AddTraineeToBatchClass";
+                $.ajax({
+                    url: AddTraineeUrl,
+                    type: 'GET',
+                    data: {
+                        'traineeId': TraineeId,
+                        'batchClassId': batchClassId
+                    },
+                    success: function (result) {
+                        if (result) {
+                            if (result.Result.status) {
+                                bootbox.alert("Trainee Successfully added into the selected batch class!");
+                            }
+                            else {
+                                bootbox.alert("unable to add trainee into the selected batch class due to : " + result.Result.message);
+                            }
+                        }
+                        else {
+
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Error has occured!!!.");
+                    }
+                });
+            });
+
+            @{
+                List<BatchTraineeView> BatchTraineeViewList = (List<BatchTraineeView>)ViewBag.TraineeList;
+                foreach (var item in BatchTraineeViewList)
+                {
+                    <text>
+            $('#BatchClassId' + '@item.TraineeId').val('@item.BatchClassId');
+            </text>
+                }
+            }
+
+            $('body').on('click', '#btnShowCurriculumChange', function () {
+                var batchId = $(this).attr('data-id');
+
+                var showCurriculumChangeUrl = "/Batches/ShowCurriculumChange";
+
+
+                ///////////////////////////////////
+                showCurriculumChangeUrl = showCurriculumChangeUrl + '?batchId=' + batchId;
+
+                $.get(showCurriculumChangeUrl, function (data) {
+                    $('#CurriculumChange-Container').html(data);
+                    $('#CurriculumChangeModalPopup').modal('show');
+                    //var date = $('#txtEditDate').val();
+                    //$('#txtEvaluationDate').val(date);
+                });
+            });
+
+            $('body').on('click', '.CurriculumChangeClass', function () {
+
+                //alert('Curriculum Change Class');
+                var datas = $(this).attr('data-curriculumChangeData');
+               
+                var dataArray = datas.split('~');
+
+                var parentId = dataArray[0];
+                var currentElementId = dataArray[1];
+                var type = dataArray[2];
+                var operation = dataArray[3];
+                var name = dataArray[4];
+                var batchId = '@Model.BatchId'; 
+                var addURL = "";
+                var revisedURL = "";
+                var deleteURL = "";
+                var addPostData = null;
+                 
+                if (operation == '@Enum.GetName(typeof(CurriculumChangeOperation), CurriculumChangeOperation.Added)') {
+                                    
+                    if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.Category)') {
+                        alert(' ProgramId=' + parentId + ' CategoryId=' + currentElementId + ' batchId=' + batchId);
+
+                        addURL = "/Curriculum/AddCategory";
+                        addPostData = {
+                            'ProgramId': Number(parentId),
+                            'CategoryId': Number(currentElementId),
+                            'batchId': Number(batchId)
+                        };
+
+
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.Course)') {
+                        addURL = "/Curriculum/AddCourse";
+                        addPostData = {
+                            'programCategoryId': parseInt(parentId),
+                            'courseId': currentElementId,
+                            'batchId': batchId
+                        };
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.CourseExam)') {
+                        addURL = "/Curriculum/AddCourseExam";
+                        addPostData = {
+                            'courseCategoryId': parentId,
+                            'examId': currentElementId,
+                            'batchId': batchId
+                        };
+
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.Module)') {
+                        addURL = "/Curriculum/AddCourseModule";
+                        addPostData = {
+                            'courseCategoryId': parentId,
+                            'moduleId': currentElementId,
+                            'batchId': batchId
+                        };
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.ModuleExam)') {
+                        addURL = "/Curriculum/AddModuleExam";
+                        addPostData = {
+                            'courseModuleId': parentId,
+                            'examId': currentElementId,
+                            'batchId': batchId
+                        };
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.Prerequisite)') {
+                        addURL = "/Courses/AddPrerequisite";
+                        addPostData = {
+                            'CourseId': parentId,
+                            'PrerequisiteId': currentElementId
+                        };
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.Lesson)') {
+                        addURL = "/Curriculum/AddLesson";
+                        addPostData = {                           
+                            'programCategoryId': parentId,
+                            'LessonId': currentElementId,
+                            'batchId': batchId
+                        };
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.EvaluationTemplate)') {
+                        addURL = "/Curriculum/AddLessonEvaluationTemplate";
+                        addPostData = {
+                            'lessonCategoryId': parentId,
+                            'evaluationTemplateId': currentElementId,
+                            'batchId': batchId
+                        };
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.EvaluationTemplateCategory)') {
+
+                    } else if (type == '@Enum.GetName(typeof(CurriculumChangeType), CurriculumChangeType.EvaluationCategoryItem)') {
+
+                    }
+
+
+                    $.ajax({
+                        url: addURL,
+                        type: 'GET',
+                        data: addPostData,
+                        success: function (result) {
+                            if (result.Status) {
+                                //location.href = "/Curriculum/index?programId=" + $('#txtProgramId').val() + "&message=" + result.Result.message;
+                            }
+                            else {
+                                bootbox.alert(result.Status);
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Error has occured!!!.");
+                        }
+                    });
+                }
+
+                if (type == '@Enum.GetName(typeof(CurriculumChangeOperation), CurriculumChangeOperation.Deleted)') {
+
+                }
+                if (type == '@Enum.GetName(typeof(CurriculumChangeOperation), CurriculumChangeOperation.Revised)') {
+
+                }
+
+            });
+
+        });
+    </script>
+}
+
+<div>
+    <br />
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Program.ProgramName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Program.ProgramName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.BatchName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BatchName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.BatchStartDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BatchStartDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.EstimatedEndDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.EstimatedEndDate)
+                </dd>
+            </dl>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-4">
+                    <input type="submit" value="Show Curriculum Change" data-id="@Model.BatchId" class="btn btn-info btn-sm" id="btnShowCurriculumChange" name="btnShowCurriculumChange" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BatchId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+<h3>List of batch class</h3>
+<table id="tblBatchClassList" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Batch Name
+            </th>
+            <th>
+                Batch Class Name
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (ViewBag.BatchClassList != null)
+            {
+                int i = 1;
+                List<BatchClass> BatchClassList = (List<BatchClass>)ViewBag.BatchClassList;
+                foreach (BatchClass item in BatchClassList)
+                {
+                    <tr role="row" class="odd">
+                        <td>@i</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Batch.BatchName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BatchClassName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", "BatchClasses", new { id = item.BatchClassId }, new { }) |
+                            @Html.ActionLink("Details", "Details", "BatchClasses", new { id = item.BatchClassId }, new { }) |
+                            @Html.ActionLink("Delete", "Delete", "BatchClasses", new { id = item.BatchClassId }, new { })
+                        </td>
+                    </tr>
+                    i = i + 1;
+                }
+                if (BatchClassList.Count() == 0)
+                {
+                    <div style="color:red">@Html.Raw("The is no Batch Class yet.")</div>
+                }
+            }
+            else
+            {
+                <div style="color:red">@Html.Raw("The is no Batch Class yet.")</div>
+            }
+        }
+    </tbody>
+</table>
+
+<h3>List of trainees</h3>
+<table id="tblListOfTrainee" class="table display dataTable" cellspacing="0" role="grid" width="100%">
+    <thead>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Company Id
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Assign Batch Class
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{   //ViewBag.BatchClassSelectList
+            if (ViewBag.TraineeList != null)
+            {
+                int i = 1;
+                List<BatchTraineeView> BatchTraineeViewList = (List<BatchTraineeView>)ViewBag.TraineeList;
+                foreach (var item in BatchTraineeViewList)
+                {
+                    <tr role="row" class="odd">
+                        <td>@i</td>
+                        <td>
+                            @item.CompanyId
+                        </td>
+                        <td>
+                            @item.FirstName @item.LastName
+                        </td>
+
+                        <td style="width:200px;">
+                            <div class="form-group has-feedback">
+                                <div class="input-group">
+                                    @Html.DropDownList("BatchClassId", (IEnumerable<SelectListItem>)ViewBag.BatchClassSelectList, htmlAttributes: new { id = "BatchClassId" + item.TraineeId, name = "BatchClassId", @class = "form-control" })
+                                    <span class="input-group-addon btn-default Add-Student" data-id="@item.TraineeId">
+                                        <span class="fa fa-plus bg-info">
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            @*TraineeFullName, string CompanyId,string BatchClass*@
+                            @Html.ActionLink("Syllabus", "TraineeSyllabus", new { id = item.TraineeId, TraineeFullName = item.FirstName + " " + item.LastName, CompanyId = item.CompanyId, BatchClass = Html.DisplayFor(model => model.BatchName) }, new { }) |
+                            @Html.ActionLink("Delete", "DeleteBatchTrainee", new { id = item.TraineeId }, new { })
+                        </td>
+                    </tr>
+                    i = i + 1;
+                }
+                if (BatchTraineeViewList.Count() == 0)
+                {
+                    <div style="color:red">@Html.Raw("The is no tainee in this batch.")</div>
+                }
+            }
+            else
+            {
+                <div style="color:red">@Html.Raw("The is no tainee in this batch.")</div>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+<div class="modal modal-fade" id="CurriculumChangeModalPopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title"> Curriculum Change </h5>
+            </div>
+            <div class="modal-body">
+                Press ESC button to exit.
+                <div style="color:red"><lable class="control-label" name="lblCurriculumChangeMessage" id="lblCurriculumChangeMessage"></lable></div>
+
+                <div id="CurriculumChange-Container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

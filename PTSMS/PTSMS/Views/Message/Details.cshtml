@@ -1,0 +1,115 @@
+﻿@model PTSMSDAL.Models.Others.Messaging.Message
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+
+@section scripts{
+
+    <script src="~/Content/AdminLTE/plugins/ckeditor/ckeditor.js"></script>
+    <script src="~/Content/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var Body = $('#Body').val();
+            //alert(muduleObjective);
+            $("#Body").html(Body).text();
+        });
+
+
+        $(window).on('load', function () {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('Body', { toolbar: '1', htmlEncodeOutput: true });
+            CKEDITOR.config.readOnly = true;
+            CKEDITOR.editorConfig = function (config) {
+                config.language = 'en',
+                ignoreEmptyParagraph = true,
+                config.autoParagraph = false,
+                config.allowedContent = true
+            };
+            $(".textarea").wysihtml5();
+        });
+    </script>
+}
+
+
+
+<div><p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.MessageId }) |*@
+    @Html.ActionLink("Back to Inbox", "Index")
+</p>
+    <dl class="dl-horizontal">
+       
+        <dt>
+            @Html.DisplayNameFor(model => model.SenderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SenderName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MessageTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MessageTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+
+            @*<dt>
+                @Html.DisplayNameFor(model => model.Body)
+            </dt>
+
+            <dd>
+                @MvcHtmlString.Create(Html.Encode(@Html.DisplayFor(model => model.Body)).Replace(Environment.NewLine, "<br />"))
+                <br/>
+                @Html.Raw(Model.Body)
+            </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MessageState)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MessageState)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SeenDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SeenDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReadDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReadDate)
+        </dd>
+    </dl>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Body, new { htmlAttributes = new { id = "Body", name = "Body", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
